@@ -24,7 +24,7 @@ alter table rr_shelves add constraint shelves_user_fk
 foreign key (user_id) references rr_users(user_id);
 
 create table rr_saved_books(
-saved_book_id integer primary key not null,
+book_id integer primary key not null,
 shelf_id integer not null,
 user_id integer not null,
 ol_id varchar(11) not null,

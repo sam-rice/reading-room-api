@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,5 +42,16 @@ public class ShelfController {
         String description = (String) shelfMap.get("description");
         Shelf shelf = shelfService.addShelf(userId, title, description);
         return new ResponseEntity<>(shelf, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{shelfId}")
+    public ResponseEntity<Map<String, Boolean>> updateShelf(HttpServletRequest request,
+                                                           @PathVariable("shelfId") Integer shelfId,
+                                                           @RequestBody Shelf shelf) {
+        int userId = (Integer) request.getAttribute("userId");
+        shelfService.updateShelf(userId, shelfId, shelf);
+        Map<String, Boolean> map = new HashMap<>();
+        map.put("success", true);
+        return new ResponseEntity<>(map, HttpStatus.OK);
     }
 }

@@ -36,6 +36,8 @@ public class ShelfRepositoryImpl implements ShelfRepository {
             "FROM rr_shelves s " +
             "LEFT JOIN ShelfBookCount c ON s.shelf_id = c.shelf_id " +
             "WHERE s.user_id = ? AND s.shelf_id = ?";
+    private static final String SQL_UPDATE_SHELF = "UPDATE rr_shelves SET title = ?, description = ? " +
+            "WHERE user_id = ? AND shelf_id = ?";
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -73,7 +75,11 @@ public class ShelfRepositoryImpl implements ShelfRepository {
 
     @Override
     public void updateShelf(Integer userId, Integer shelfId, Shelf shelf) throws RrBadRequestException {
-
+        try {
+            jdbcTemplate.update(SQL_UPDATE_SHELF, new Object[]{shelf.getTitle(), shelf.getDescription(), userId, shelfId});
+        } catch (Exception e) {
+            throw new RrBadRequestException("Invalid request. Failed to update shelf.");
+        }
     }
 
     @Override

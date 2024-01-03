@@ -40,6 +40,6 @@ public class ShelfServiceImpl implements ShelfService {
 
     @Override
     public void updateShelf(Integer userId, Integer shelfId, Shelf shelf) throws RrBadRequestException {
-
+        shelfRepository.updateShelf(userId, shelfId, shelf);
     }
 }
