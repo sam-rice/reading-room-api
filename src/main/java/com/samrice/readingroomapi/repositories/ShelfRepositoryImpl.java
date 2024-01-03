@@ -17,8 +17,16 @@ import java.util.List;
 @Repository
 public class ShelfRepositoryImpl implements ShelfRepository {
 
-    private static final String SQL_CREATE = "INSERT INTO rr_shelves (shelf_id, user_id, title, description) VALUES(NEXTVAL('rr_shelves_seq'), ?, ?, ?)";
-    private static final String SQL_FIND_BY_ID = "WITH ShelfBookCount AS (" +
+    private static final String SQL_CREATE_SHELF = "INSERT INTO rr_shelves (shelf_id, user_id, title, description) VALUES(NEXTVAL('rr_shelves_seq'), ?, ?, ?)";
+    private static final String SQL_FIND_ALL_SHELVES_BY_USER_ID = "SELECT s.*, COALESCE(sb.total_saved_books, 0) AS total_saved_books " +
+            "FROM rr_shelves s " +
+            "LEFT JOIN (" +
+            "    SELECT shelf_id, COUNT(*) AS total_saved_books " +
+            "    FROM rr_saved_books " +
+            "    GROUP BY shelf_id" +
+            ") sb ON s.shelf_id = sb.shelf_id " +
+            "WHERE s.user_id = ?";
+    private static final String SQL_FIND_SHELF_BY_ID = "WITH ShelfBookCount AS (" +
             "    SELECT shelf_id, COUNT(*) AS total_saved_books " +
             "    FROM rr_saved_books " +
             "    WHERE shelf_id = ? " +
@@ -33,25 +41,25 @@ public class ShelfRepositoryImpl implements ShelfRepository {
     JdbcTemplate jdbcTemplate;
 
     @Override
-    public List<Shelf> findAll(Integer userId) throws RrResourceNotFoundException {
-        return null;
+    public List<Shelf> findAllShelvesByUserId(Integer userId) throws RrResourceNotFoundException {
+        return jdbcTemplate.query(SQL_FIND_ALL_SHELVES_BY_USER_ID, new Object[]{userId}, shelfRowMapper);
     }
 
     @Override
-    public Shelf findById(Integer userId, Integer shelfId) throws RrResourceNotFoundException {
+    public Shelf findShelfById(Integer userId, Integer shelfId) throws RrResourceNotFoundException {
         try {
-            return jdbcTemplate.queryForObject(SQL_FIND_BY_ID, new Object[]{shelfId, userId, shelfId}, shelfRowMapper);
+            return jdbcTemplate.queryForObject(SQL_FIND_SHELF_BY_ID, new Object[]{shelfId, userId, shelfId}, shelfRowMapper);
         } catch (Exception e) {
             throw new RrResourceNotFoundException("Shelf not found");
         }
     }
 
     @Override
-    public Integer create(Integer userId, String title, String description) throws RrBadRequestException {
+    public Integer createShelf(Integer userId, String title, String description) throws RrBadRequestException {
         try {
             KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> {
-                PreparedStatement ps = connection.prepareStatement(SQL_CREATE, Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement ps = connection.prepareStatement(SQL_CREATE_SHELF, Statement.RETURN_GENERATED_KEYS);
                 ps.setInt(1, userId);
                 ps.setString(2, title);
                 ps.setString(3, description);
@@ -64,12 +72,12 @@ public class ShelfRepositoryImpl implements ShelfRepository {
     }
 
     @Override
-    public void update(Integer userId, Integer shelfId, Shelf shelf) throws RrBadRequestException {
+    public void updateShelf(Integer userId, Integer shelfId, Shelf shelf) throws RrBadRequestException {
 
     }
 
     @Override
-    public void delete(Integer userId, Integer shelfId) throws RrResourceNotFoundException {
+    public void deleteShelf(Integer userId, Integer shelfId) throws RrResourceNotFoundException {
 
     }
 

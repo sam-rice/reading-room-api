@@ -19,18 +19,18 @@ public class ShelfServiceImpl implements ShelfService {
 
     @Override
     public List<Shelf> fetchAllShelvesByUser(Integer userId) {
-        return null;
+        return shelfRepository.findAllShelvesByUserId(userId);
     }
 
     @Override
-    public Shelf fetchShelfById(Integer userId, Integer shelfId) throws RrResourceNotFoundException {
-        return null;
+    public Shelf fetchShelf(Integer userId, Integer shelfId) throws RrResourceNotFoundException {
+        return shelfRepository.findShelfById(userId, shelfId);
     }
 
     @Override
     public Shelf addShelf(Integer userId, String title, String description) throws RrBadRequestException {
-        int shelfId = shelfRepository.create(userId, title, description);
-        return shelfRepository.findById(userId, shelfId);
+        int shelfId = shelfRepository.createShelf(userId, title, description);
+        return shelfRepository.findShelfById(userId, shelfId);
     }
 
     @Override

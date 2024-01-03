@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface ShelfRepository {
 
-    List<Shelf> findAll(Integer userId) throws RrResourceNotFoundException;
+    List<Shelf> findAllShelvesByUserId(Integer userId) throws RrResourceNotFoundException;
 
-    Shelf findById(Integer userId, Integer shelfId) throws RrResourceNotFoundException;
+    Shelf findShelfById(Integer userId, Integer shelfId) throws RrResourceNotFoundException;
 
-    Integer create(Integer userId, String title, String description) throws RrBadRequestException;
+    Integer createShelf(Integer userId, String title, String description) throws RrBadRequestException;
 
-    void update(Integer userId, Integer shelfId, Shelf shelf) throws RrBadRequestException;
-    void delete(Integer userId, Integer shelfId) throws RrResourceNotFoundException;
+    void updateShelf(Integer userId, Integer shelfId, Shelf shelf) throws RrBadRequestException;
+    void deleteShelf(Integer userId, Integer shelfId) throws RrResourceNotFoundException;
 
 }

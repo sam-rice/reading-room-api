@@ -18,19 +18,20 @@ public class ShelfController {
     @Autowired
     ShelfService shelfService;
 
-//    @GetMapping("")
-//    public ResponseEntity<List<Shelf>> getAllShelves(HttpServletRequest request) {
-//        int userId = (Integer) request.getAttribute("userId");
-//        return shelfService.fetchAllShelvesByUser(userId);
-//    }
+    @GetMapping("")
+    public ResponseEntity<List<Shelf>> getAllShelves(HttpServletRequest request) {
+        int userId = (Integer) request.getAttribute("userId");
+        List<Shelf> allShelves = shelfService.fetchAllShelvesByUser(userId);
+        return new ResponseEntity<>(allShelves, HttpStatus.OK);
+    }
 
-//    @PostMapping("")
-//    public ResponseEntity<Shelf> getShelfById(HttpServletRequest request,
-//                                              @RequestBody Map<String, Object> shelfMap) {
-//        int userId = (Integer) request.getAttribute("userId");
-//        int shelfId = (Integer) shelfMap.get("shelfId");
-//        return shelfService.fetchShelfById(userId, shelfId);
-//    }
+    @GetMapping("/{shelfId}")
+    public ResponseEntity<Shelf> getShelfById(HttpServletRequest request,
+                                              @PathVariable("shelfId") Integer shelfId) {
+        int userId = (Integer) request.getAttribute("userId");
+        Shelf shelf = shelfService.fetchShelf(userId, shelfId);
+        return new ResponseEntity<>(shelf, HttpStatus.OK);
+    }
 
     @PostMapping("")
     public ResponseEntity<Shelf> addShelf(HttpServletRequest request,

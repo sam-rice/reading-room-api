@@ -9,7 +9,7 @@ import java.util.List;
 public interface ShelfService {
     List<Shelf> fetchAllShelvesByUser(Integer userId);
 
-    Shelf fetchShelfById(Integer userId, Integer shelfId) throws RrResourceNotFoundException;
+    Shelf fetchShelf(Integer userId, Integer shelfId) throws RrResourceNotFoundException;
 
     Shelf addShelf(Integer userId, String title, String description) throws RrBadRequestException;
 
