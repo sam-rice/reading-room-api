@@ -13,15 +13,14 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
-import java.util.List;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
 
-    private static final String SQL_CREATE = "INSERT INTO RR_USERS(USER_ID, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD) VALUES(NEXTVAL('RR_USERS_SEQ'), ?, ?, ?, ?)";
-    private static final String SQL_COUNT_BY_EMAIL = "SELECT COUNT(*) FROM RR_USERS WHERE EMAIL = ?";
-    private static final String SQL_FIND_BY_ID = "SELECT USER_ID, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD " + "FROM RR_USERS WHERE USER_ID = ?";
-    private static final String SQL_FIND_BY_EMAIL = "SELECT USER_ID, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD " + "FROM RR_USERS WHERE EMAIL = ?";
+    private static final String SQL_CREATE = "INSERT INTO rr_users(user_id, first_name, last_name, email, password) VALUES(NEXTVAL('rr_users_seq'), ?, ?, ?, ?)";
+    private static final String SQL_COUNT_BY_EMAIL = "SELECT COUNT(*) FROM rr_users WHERE email = ?";
+    private static final String SQL_FIND_BY_ID = "SELECT user_id, first_name, last_name, email, password " + "FROM rr_users WHERE user_id = ?";
+    private static final String SQL_FIND_BY_EMAIL = "SELECT user_id, first_name, last_name, email, password " + "FROM rr_users WHERE email = ?";
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
