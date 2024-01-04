@@ -18,13 +18,13 @@ public class BookServiceImpl implements BookService {
     BookRepository bookRepository;
 
     @Override
-    public List<Book> fetchAllBooksByUser(Integer userId, Integer bookId) {
-        return null;
+    public List<Book> fetchAllBooksByShelf(Integer userId, Integer shelfId) {
+        return bookRepository.findAllBooksByShelfId(userId, shelfId);
     }
 
     @Override
     public Book fetchBookById(Integer userId, Integer shelfId, Integer bookId) throws RrResourceNotFoundException {
-        return null;
+        return bookRepository.findBookById(userId, shelfId, bookId);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void updateBook(Integer userId, Integer shelfId, Integer bookId, Book book) throws RrBadRequestException {
-
+        bookRepository.updateBook(userId, shelfId, bookId, book);
     }
 
     @Override

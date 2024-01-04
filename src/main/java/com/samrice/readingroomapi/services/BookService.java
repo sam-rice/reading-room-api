@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface BookService {
 
-    List<Book> fetchAllBooksByUser(Integer userId, Integer bookId);
+    List<Book> fetchAllBooksByShelf(Integer userId, Integer shelfId);
 
     Book fetchBookById(Integer userId, Integer shelfId, Integer bookId) throws RrResourceNotFoundException;
 
