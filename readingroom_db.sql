@@ -17,8 +17,8 @@ password varchar(255) not null
 create table rr_shelves(
 shelf_id integer primary key not null,
 user_id integer not null,
-title varchar(20) not null,
-description varchar(100) not null
+title varchar(40) not null,
+description varchar(150) not null
 );
 alter table rr_shelves add constraint shelves_user_fk
 foreign key (user_id) references rr_users(user_id);
