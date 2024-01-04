@@ -15,6 +15,6 @@ public interface ShelfRepository {
     Integer createShelf(Integer userId, String title, String description) throws RrBadRequestException;
 
     void updateShelf(Integer userId, Integer shelfId, Shelf shelf) throws RrBadRequestException;
-    void deleteShelf(Integer userId, Integer shelfId) throws RrResourceNotFoundException;
+    void deleteShelfWithAllBooks(Integer userId, Integer shelfId) throws RrResourceNotFoundException;
 
 }

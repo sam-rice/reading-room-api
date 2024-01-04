@@ -21,6 +21,7 @@ public class BookRepositoryImpl implements BookRepository {
     private static final String SQL_FIND_BOOK_BY_ID = "SELECT * FROM rr_saved_books WHERE user_id = ? AND shelf_id = ? AND book_id = ?";
     private static final String SQL_FIND_ALL_BOOKS_BY_SHELF_ID = "SELECT * from rr_saved_books WHERE user_id = ? AND shelf_id = ?";
     private static final String SQL_UPDATE_BOOK = "UPDATE rr_saved_books SET user_note = ? WHERE user_id = ? AND shelf_id = ? AND book_id = ?";
+    private static final String SQL_DELETE_BOOK = "DELETE FROM rr_saved_books WHERE user_id = ? AND shelf_id = ? AND book_id = ?";
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -73,7 +74,10 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public void deleteBook(Integer userId, Integer shelfId, Integer bookId) throws RrResourceNotFoundException {
-
+        int count = jdbcTemplate.update(SQL_DELETE_BOOK, new Object[]{userId, shelfId, bookId});
+        if (count == 0) {
+            throw new RrResourceNotFoundException("Book not found");
+        }
     }
 
     private RowMapper<Book> bookRowMapper = (rs, rowNum) -> {

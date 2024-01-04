@@ -38,6 +38,8 @@ public class ShelfRepositoryImpl implements ShelfRepository {
             "WHERE s.user_id = ? AND s.shelf_id = ?";
     private static final String SQL_UPDATE_SHELF = "UPDATE rr_shelves SET title = ?, description = ? " +
             "WHERE user_id = ? AND shelf_id = ?";
+    private static final String SQL_DELETE_SHELF = "DELETE FROM rr_shelves WHERE user_id = ? AND shelf_id = ?";
+    private static final String SQL_DELETE_ALL_BOOKS_BY_SHELF = "DELETE FROM rr_saved_books WHERE user_id = ? AND shelf_id = ?";
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -83,8 +85,13 @@ public class ShelfRepositoryImpl implements ShelfRepository {
     }
 
     @Override
-    public void deleteShelf(Integer userId, Integer shelfId) throws RrResourceNotFoundException {
+    public void deleteShelfWithAllBooks(Integer userId, Integer shelfId) throws RrResourceNotFoundException {
+        this.deleteAllBooksByShelf(userId, shelfId);
+        jdbcTemplate.update(SQL_DELETE_SHELF, new Object[]{userId, shelfId});
+    }
 
+    private void deleteAllBooksByShelf(Integer userId, Integer shelfId) {
+        jdbcTemplate.update(SQL_DELETE_ALL_BOOKS_BY_SHELF, new Object[]{userId, shelfId});
     }
 
     private RowMapper<Shelf> shelfRowMapper = (rs, rowNum) -> {

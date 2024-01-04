@@ -40,6 +40,6 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void removeBook(Integer userId, Integer shelfId, Integer bookId) throws RrResourceNotFoundException {
-
+        bookRepository.deleteBook(userId, shelfId, bookId);
     }
 }

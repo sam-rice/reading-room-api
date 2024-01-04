@@ -30,7 +30,7 @@ public class ShelfController {
     public ResponseEntity<Shelf> getShelfById(HttpServletRequest request,
                                               @PathVariable("shelfId") Integer shelfId) {
         int userId = (Integer) request.getAttribute("userId");
-        Shelf shelf = shelfService.fetchShelf(userId, shelfId);
+        Shelf shelf = shelfService.fetchShelfById(userId, shelfId);
         return new ResponseEntity<>(shelf, HttpStatus.OK);
     }
 
@@ -50,6 +50,16 @@ public class ShelfController {
                                                            @RequestBody Shelf shelf) {
         int userId = (Integer) request.getAttribute("userId");
         shelfService.updateShelf(userId, shelfId, shelf);
+        Map<String, Boolean> map = new HashMap<>();
+        map.put("success", true);
+        return new ResponseEntity<>(map, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{shelfId}")
+    public ResponseEntity<Map<String, Boolean>> removeShelf(HttpServletRequest request,
+                                                            @PathVariable("shelfId") Integer shelfId) {
+        int userId = (Integer) request.getAttribute("userId");
+        shelfService.removeShelfWithAllBooks(userId, shelfId);
         Map<String, Boolean> map = new HashMap<>();
         map.put("success", true);
         return new ResponseEntity<>(map, HttpStatus.OK);

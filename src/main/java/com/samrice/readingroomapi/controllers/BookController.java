@@ -33,7 +33,7 @@ public class BookController {
         return new ResponseEntity<>(book, HttpStatus.CREATED);
     }
 
-    @GetMapping("{bookId}")
+    @GetMapping("/{bookId}")
     public ResponseEntity<Book> getBookById(HttpServletRequest request,
                                             @PathVariable("shelfId") Integer shelfId,
                                             @PathVariable("bookId") Integer bookId) {
@@ -50,7 +50,7 @@ public class BookController {
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
-    @PutMapping("{bookId}")
+    @PutMapping("/{bookId}")
     public ResponseEntity<Map<String, Boolean>> updateBook(HttpServletRequest request,
                                                            @PathVariable("shelfId") Integer shelfId,
                                                            @PathVariable("bookId") Integer bookId,
@@ -58,6 +58,17 @@ public class BookController {
         int userId = (Integer) request.getAttribute("userId");
         bookService.updateBook(userId, shelfId, bookId, book);
         Map<String, Boolean> map = new HashMap<>();
+        map.put("success", true);
+        return new ResponseEntity<>(map, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{bookId}")
+    public ResponseEntity<Map<String, Boolean>> removeBook(HttpServletRequest request,
+                                                           @PathVariable("shelfId") Integer shelfId,
+                                                           @PathVariable("bookId") Integer bookId) {
+        int userId = (Integer) request.getAttribute("userId");
+        bookService.removeBook(userId, shelfId, bookId);
+        Map<String, Boolean> map = new HashMap();
         map.put("success", true);
         return new ResponseEntity<>(map, HttpStatus.OK);
     }
