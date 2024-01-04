@@ -27,8 +27,11 @@ create table rr_saved_books(
 book_id integer primary key not null,
 shelf_id integer not null,
 user_id integer not null,
-ol_id varchar(11) not null,
-note varchar(100),
+isbn varchar(13) not null,
+ol_key varchar(11),
+title varchar(60) not null,
+author varchar(40),
+user_note text,
 saved_date bigint not null
 );
 alter table rr_saved_books add constraint saved_books_shelf_fk

@@ -23,7 +23,7 @@ public class ShelfServiceImpl implements ShelfService {
     }
 
     @Override
-    public Shelf fetchShelf(Integer userId, Integer shelfId) throws RrResourceNotFoundException {
+    public Shelf fetchShelfById(Integer userId, Integer shelfId) throws RrResourceNotFoundException {
         return shelfRepository.findShelfById(userId, shelfId);
     }
 
@@ -34,8 +34,9 @@ public class ShelfServiceImpl implements ShelfService {
     }
 
     @Override
-    public void removeShelf(Integer userId, Integer shelfId) throws RrResourceNotFoundException {
-
+    public void removeShelfWithAllBooks(Integer userId, Integer shelfId) throws RrResourceNotFoundException {
+        shelfRepository.findShelfById(userId, shelfId);
+        shelfRepository.deleteShelfWithAllBooks(userId, shelfId);
     }
 
     @Override
