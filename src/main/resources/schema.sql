@@ -1,10 +1,9 @@
-drop database readingroomdb;
-drop user readingroom;
-create user readingroom with password 'password';
-create database readingroomdb with template=template0 owner=readingroom;
-\connect readingroomdb;
-alter default privileges grant all on tables to readingroom;
-alter default privileges grant all on sequences to readingroom;
+drop table if exists rr_users cascade;
+drop table if exists rr_shelves cascade;
+drop table if exists rr_saved_books cascade;
+drop sequence if exists rr_users_seq;
+drop sequence if exists rr_shelves_seq;
+drop sequence if exists rr_saved_books_seq;
 
 create table rr_users(
 user_id integer primary key not null,
