@@ -1,6 +1,5 @@
 package com.samrice.readingroomapi.repositories;
 
-import com.samrice.readingroomapi.domain.Shelf;
 import com.samrice.readingroomapi.domain.User;
 import com.samrice.readingroomapi.exceptions.RrAuthException;
 import org.junit.jupiter.api.Test;
@@ -10,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
@@ -45,7 +43,7 @@ public class UserRepositoryIntegrationTests {
     }
 
     @Test
-    public void testThatInvalidUserRegistryDetailsWillThrowAuthException() {
+    public void testThatInvalidUserRegistryDetailsThrowsAuthException() {
         assertThrows(RrAuthException.class, () -> {
             underTest.createUser(null, "Kubrick", "stan@mail.com", "clockwork");
         });
@@ -61,7 +59,7 @@ public class UserRepositoryIntegrationTests {
     }
 
     @Test
-    public void testThatInvalidEmailOrPasswordWillThrowAuthException() {
+    public void testThatInvalidEmailOrPasswordThrowsAuthException() {
         assertThrows(RrAuthException.class, () -> {
             underTest.findByEmailAndPassword("invalidemail", "guitar");
         });

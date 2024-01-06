@@ -2,8 +2,6 @@ package com.samrice.readingroomapi.repositories;
 
 import com.samrice.readingroomapi.domain.Book;
 import com.samrice.readingroomapi.domain.Shelf;
-import com.samrice.readingroomapi.domain.User;
-import com.samrice.readingroomapi.exceptions.RrAuthException;
 import com.samrice.readingroomapi.exceptions.RrBadRequestException;
 import com.samrice.readingroomapi.exceptions.RrResourceNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -15,7 +13,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
@@ -53,15 +50,17 @@ public class ShelfRepositoryIntegrationTests {
     @Test
     public void testThatExistingShelfCanBeQueried() {
         Shelf retrievedShelf = underTest.findShelfById(2, 3);
+        List<Book> relatedBooks = bookRepository.findAllBooksByShelfId(2, 3);
         assertEquals(3, retrievedShelf.getShelfId());
         assertEquals(2, retrievedShelf.getUserId());
         assertEquals("English & Misc. Architecture", retrievedShelf.getTitle());
         assertEquals("Books on historical architecture of the British Isles.", retrievedShelf.getDescription());
         assertEquals(3, retrievedShelf.getTotalSavedBooks());
+        assertEquals(relatedBooks.size(), retrievedShelf.getTotalSavedBooks());
     }
 
     @Test
-    public void testThatInvalidShelfIdThrowsResourceNotFoundException() {
+    public void testThatMissingShelfThrowsResourceNotFoundException() {
         assertThrows(RrResourceNotFoundException.class, () -> {
             underTest.findShelfById(2, 100);
         });
@@ -105,5 +104,4 @@ public class ShelfRepositoryIntegrationTests {
         List<Book> remainingBooks = bookRepository.findAllBooksByShelfId(2, 2);
         assertEquals(remainingBooks.size(), 0);
     }
-
 }

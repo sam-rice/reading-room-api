@@ -29,7 +29,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book addBook(Integer shelfId, Integer userId, String isbn, String olKey, String title, String author, String userNote) throws RrBadRequestException {
-        int bookId = bookRepository.addBook(shelfId, userId, isbn, olKey, title, author, userNote);
+        int bookId = bookRepository.createBook(shelfId, userId, isbn, olKey, title, author, userNote);
         return bookRepository.findBookById(userId, shelfId, bookId);
     }
 
