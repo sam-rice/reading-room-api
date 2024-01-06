@@ -1,5 +1,6 @@
 package com.samrice.readingroomapi.repositories;
 
+import com.samrice.readingroomapi.domain.Shelf;
 import com.samrice.readingroomapi.domain.User;
 import com.samrice.readingroomapi.exceptions.RrAuthException;
 import org.junit.jupiter.api.Test;
@@ -13,31 +14,40 @@ import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
-public class UserRepositoryImplIntegrationTests {
+public class UserRepositoryIntegrationTests {
 
     private UserRepositoryImpl underTest;
 
     @Autowired
-    public UserRepositoryImplIntegrationTests(UserRepositoryImpl underTest) {
+    public UserRepositoryIntegrationTests(UserRepositoryImpl underTest) {
         this.underTest = underTest;
     }
 
     @Test
-    public void testThatUserCanBeCreatedAndRecalled() {
-        Integer newUserId = underTest.create("Stanley", "Kubrick", "stan@mail.com", "clockwork");
+    public void testThatUserCanBeCreatedAndQueried() {
+        Integer newUserId = underTest.createUser("Stanley", "Kubrick", "stan@mail.com", "clockwork");
         assertNotNull(newUserId);
         assertNotEquals(0, newUserId);
         User retrievedUser = underTest.findById(newUserId);
-        assertNotNull(retrievedUser);
         assertEquals("Stanley", retrievedUser.getFirstName());
         assertEquals("Kubrick", retrievedUser.getLastName());
         assertEquals("stan@mail.com", retrievedUser.getEmail());
     }
 
     @Test
+    public void testThatExistingUserCanBeQueried() {
+        User retrievedUser = underTest.findById(2);
+        assertEquals(2, retrievedUser.getUserId());
+        assertEquals("Jimmy", retrievedUser.getFirstName());
+        assertEquals("Page", retrievedUser.getLastName());
+        assertEquals("jimmy@mail.com", retrievedUser.getEmail());
+        assertEquals("$2a$10$DcNMEVuyNGLVB5A7ZQrLve49b4eaZpo6abU3Gkpj87k34V/MzgED6", retrievedUser.getPassword());
+    }
+
+    @Test
     public void testThatInvalidUserRegistryDetailsWillThrowAuthException() {
         assertThrows(RrAuthException.class, () -> {
-            underTest.create(null, "Kubrick", "stan@mail.com", "clockwork");
+            underTest.createUser(null, "Kubrick", "stan@mail.com", "clockwork");
         });
     }
 
@@ -68,8 +78,11 @@ public class UserRepositoryImplIntegrationTests {
 
     @Test
     public void testThatUserCanBeFoundById() {
-        User user = new User(2, "Jimmy", "Page", "jimmy@mail.com", "$2a$10$DcNMEVuyNGLVB5A7ZQrLve49b4eaZpo6abU3Gkpj87k34V/MzgED6");
-        User result = underTest.findById(user.getUserId());
-        assertThat(result.equals(user));
+        User result = underTest.findById(2);
+        assertEquals(2, result.getUserId());
+        assertEquals("Jimmy", result.getFirstName());
+        assertEquals("Page", result.getLastName());
+        assertEquals("jimmy@mail.com", result.getEmail());
+        assertEquals("$2a$10$DcNMEVuyNGLVB5A7ZQrLve49b4eaZpo6abU3Gkpj87k34V/MzgED6", result.getPassword());
     }
 }

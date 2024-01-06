@@ -26,7 +26,7 @@ public class UserRepositoryImpl implements UserRepository {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public Integer create(String firstName, String lastName, String email, String password) throws RrAuthException {
+    public Integer createUser(String firstName, String lastName, String email, String password) throws RrAuthException {
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt(10));
         try {
             KeyHolder keyHolder = new GeneratedKeyHolder();

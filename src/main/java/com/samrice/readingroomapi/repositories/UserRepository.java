@@ -5,7 +5,7 @@ import com.samrice.readingroomapi.exceptions.RrAuthException;
 
 public interface UserRepository {
 
-    Integer create(String firstName, String lastName, String email, String password) throws RrAuthException;
+    Integer createUser(String firstName, String lastName, String email, String password) throws RrAuthException;
 
     User findByEmailAndPassword(String email, String password) throws RrAuthException;
 
