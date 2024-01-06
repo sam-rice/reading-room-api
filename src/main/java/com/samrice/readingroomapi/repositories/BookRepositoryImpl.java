@@ -27,21 +27,7 @@ public class BookRepositoryImpl implements BookRepository {
     JdbcTemplate jdbcTemplate;
 
     @Override
-    public List<Book> findAllBooksByShelfId(Integer userId, Integer shelfId) {
-        return jdbcTemplate.query(SQL_FIND_ALL_BOOKS_BY_SHELF_ID, new Object[]{userId, shelfId}, bookRowMapper);
-    }
-
-    @Override
-    public Book findBookById(Integer userId, Integer shelfId, Integer bookId) throws RrResourceNotFoundException {
-        try {
-            return jdbcTemplate.queryForObject(SQL_FIND_BOOK_BY_ID, new Object[]{userId, shelfId, bookId}, bookRowMapper);
-        } catch (Exception e) {
-            throw new RrResourceNotFoundException("Book not found");
-        }
-    }
-
-    @Override
-    public Integer addBook(Integer shelfId, Integer userId, String isbn, String olKey, String title, String author, String userNote) throws RrBadRequestException {
+    public Integer createBook(Integer shelfId, Integer userId, String isbn, String olKey, String title, String author, String userNote) throws RrBadRequestException {
         try {
             KeyHolder keyHolder = new GeneratedKeyHolder();
             long timestamp = new java.util.Date().getTime();
@@ -61,6 +47,20 @@ public class BookRepositoryImpl implements BookRepository {
         } catch (Exception e) {
             throw new RrBadRequestException("Invalid details. Book not saved.");
         }
+    }
+
+    @Override
+    public Book findBookById(Integer userId, Integer shelfId, Integer bookId) throws RrResourceNotFoundException {
+        try {
+            return jdbcTemplate.queryForObject(SQL_FIND_BOOK_BY_ID, new Object[]{userId, shelfId, bookId}, bookRowMapper);
+        } catch (Exception e) {
+            throw new RrResourceNotFoundException("Book not found");
+        }
+    }
+
+    @Override
+    public List<Book> findAllBooksByShelfId(Integer userId, Integer shelfId) {
+        return jdbcTemplate.query(SQL_FIND_ALL_BOOKS_BY_SHELF_ID, new Object[]{userId, shelfId}, bookRowMapper);
     }
 
     @Override

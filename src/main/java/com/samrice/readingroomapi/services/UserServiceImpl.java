@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
             throw new RrAuthException("Email already in use");
         }
 
-        Integer userId = userRepository.create(firstName, lastName, email, password);
+        Integer userId = userRepository.createUser(firstName, lastName, email, password);
         return userRepository.findById(userId);
     }
 }
