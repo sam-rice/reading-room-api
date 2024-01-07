@@ -7,7 +7,7 @@
   <img src="https://img.shields.io/badge/Docker-%23039BE5.svg?&style=for-the-badge&logo=Docker&logoColor=white" />
 </p>
 
-Reading Room is a REST API for a book cataloging application built with Java/Spring Boot, using the Java JDBC API to connect to a Docker-contained PostgreSQL database. Users have access to a variety of CRUD operations for interacting with `Shelf` entities (to which `Book` entities are associated) and adding/removing books from each shelf. Instructions for registering new users via JSON Web Token, creating/updating/deleting shelves and books, and querying data are outlined below, in addition to project setup instructions. 
+Reading Room is a REST API for a book cataloging application built with Java/Spring Boot, using the Java JDBC API to connect to a Docker-contained PostgreSQL database. Users have access to a variety of CRUD operations for interacting with `Shelf` entities (to which `Book` entities are associated) and adding/removing books from each shelf. Instructions for registering/authenticating users via JSON Web Token, creating/updating/deleting shelves and books, and querying data are outlined below, in addition to project setup instructions. 
 
 The project also includes a JUnit integration test suite for all repository classes, which leverages an H2 in-memory database.
 
