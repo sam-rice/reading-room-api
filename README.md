@@ -7,7 +7,7 @@
   <img src="https://img.shields.io/badge/Docker-%23039BE5.svg?&style=for-the-badge&logo=Docker&logoColor=white" />
 </p>
 
-Reading Room is a REST API for a book cataloging application built with Java/Spring Boot and PostgreSQL. Users have access to a variety of CRUD operations for interacting with `Shelf` entities (collections of `Book` entities) and adding/removing books from each shelf. Instructions for registering new users via JSON Web Token, creating/updating/deleting shelves and books, and querying data are outlined below, in addition to project setup instructions. 
+Reading Room is a REST API for a book cataloging application built with Java/Spring Boot, using the Java JDBC API to connect to a Docker-contained PostgreSQL database. Users have access to a variety of CRUD operations for interacting with `Shelf` entities (to which `Book` entities are associated) and adding/removing books from each shelf. Instructions for registering new users via JSON Web Token, creating/updating/deleting shelves and books, and querying data are outlined below, in addition to project setup instructions. 
 
 The project also includes a JUnit integration test suite for all repository classes, which leverages an H2 in-memory database.
 
@@ -17,7 +17,7 @@ The project also includes a JUnit integration test suite for all repository clas
 
 Running this project requires local installations of [Java Runtime Environment (JRE)](https://www.java.com/en/download/manual.jsp), [Java Development Kit 17 (JDK)](https://www.oracle.com/java/technologies/downloads/), [Docker Desktop](https://www.docker.com/products/docker-desktop/), and an IDE of your choice. Maven is also required and can either be installed locally, or accessed via IDE plugin.
 
-1. Clone your this repository to your machine.
+1. Clone this repository to your machine.
 2. Open Docker Desktop.
 3. From the command line, navigate to the top level of the project repository and run `docker-compose up` to start the Postgres database.
 4. Open the project with your IDE and run the application to spin up the server.
@@ -57,7 +57,7 @@ Demo User:
 #### Register New User
 
 ```http
-  POST /users/register
+  /users/register
 ```
 <table>
   <tbody>
@@ -88,7 +88,7 @@ Demo User:
 #### Login Existing User
 
 ```http
-  POST /users/login
+  /users/login
 ```
 
 <table>
@@ -118,7 +118,7 @@ Demo User:
 #### Get All Shelves by Active User
 
 ```http
-  GET /shelves
+  /shelves
 ```
 <table>
   <tbody>
@@ -149,7 +149,7 @@ Demo User:
 #### Get Shelf by Id
 
 ```http
-  GET /shelves/{shelfId}
+  /shelves/{shelfId}
 ```
 
 <table>
@@ -180,7 +180,7 @@ Demo User:
 #### Create New Shelf
 
 ```http
-  POST /shelves
+  /shelves
 ```
 
 <table>
@@ -214,7 +214,7 @@ Demo User:
 #### Update Shelf
 
 ```http
-  PUT /shelves/{shelfId}
+  /shelves/{shelfId}
 ```
 
 <table>
@@ -242,7 +242,7 @@ Demo User:
 #### Delete Shelf
 
 ```http
-  PUT /shelves/{shelfId}
+  /shelves/{shelfId}
 ```
 
 <table>
@@ -271,7 +271,7 @@ Demo User:
 #### Get All Books From Shelf
 
 ```http
-  GET /shelves/{shelfId}/books
+  /shelves/{shelfId}/books
 ```
 <table>
   <tbody>
@@ -301,12 +301,13 @@ Demo User:
   </tbody>
 </table>
 
+\* Note: `olKey` field is used for integrating with the [Open Library API](https://openlibrary.org/developers/api).
 <br />
 
 #### Get Book by Id
 
 ```http
-  GET /shelves/{shelfId}/books/{bookId}
+  /shelves/{shelfId}/books/{bookId}
 ```
 
 <table>
@@ -341,7 +342,7 @@ Demo User:
 #### Create New Book/Add to Shelf
 
 ```http
-  POST /shelves/{shelfId}/books
+  /shelves/{shelfId}/books
 ```
 
 <table>
@@ -382,7 +383,7 @@ Demo User:
 #### Update Book 
 
 ```http
-  PUT /shelves/{shelfId}/books/{bookId}
+  /shelves/{shelfId}/books/{bookId}
 ```
 
 \* Note: Only `userNote` field can be updated.
@@ -409,7 +410,7 @@ Demo User:
 #### Delete Book
 
 ```http
-  PUT /shelves/{shelfId}/books/{bookId}
+  /shelves/{shelfId}/books/{bookId}
 ```
 
 <table>
