@@ -7,11 +7,13 @@
   <img src="https://img.shields.io/badge/Docker-%23039BE5.svg?&style=for-the-badge&logo=Docker&logoColor=white" />
 </p>
 
-Reading Room API is a REST API for a book cataloging application built with Java/Spring Boot and PostgreSQL. Users can create a "shelf" and add/remove books from each shelf. Endpoints for registering new users via JSON Web Token, adding/removing shelves and books, and reading data are outlined below, in addition to project setup instructions. 
+Reading Room is a REST API for a book cataloging application built with Java/Spring Boot and PostgreSQL. Users have access to a variety of CRUD operations for interacting with `Shelf` entities (collections of `Book` entities) and adding/removing books from each shelf. Instructions for registering new users via JSON Web Token, creating/updating/deleting shelves and books, and querying data are outlined below, in addition to project setup instructions. 
 
 The project also includes a JUnit integration test suite for all repository classes, which leverages an H2 in-memory database.
 
-## Project Setup Instructions
+## Project Instructions
+
+### Setup
 
 Running this project requires local installations of [Java Runtime Environment (JRE)](https://www.java.com/en/download/manual.jsp), [Java Development Kit 17 (JDK)](https://www.oracle.com/java/technologies/downloads/), [Docker Desktop](https://www.docker.com/products/docker-desktop/), and an IDE of your choice. Maven is also required and can either be installed locally, or accessed via IDE plugin.
 
@@ -19,6 +21,26 @@ Running this project requires local installations of [Java Runtime Environment (
 2. Open Docker Desktop.
 3. From the command line, navigate to the top level of the project repository and run `docker-compose up` to start the Postgres database.
 4. Open the project with your IDE and run the application to spin up the server.
+
+### Using the API
+
+All `Book` and `Shelf`-related endpoints require a valid authentication token in the request header to recieve a successful response. To recieve an auth token, use the `/users/register` endpoint to "login" as a user. Auth tokens are valid for 2 hours. Proper header formatting shown below (note the space between "Bearer" and token):
+
+```
+{ "Authorization": "Bearer <Auth Token>" }
+```
+
+Also note that the project is configured to seed all database tables with data for demo purposes. Stopping and starting the server will drop, create, and re-seed the tables.
+
+To quickly get started, login as a demo user, or register a new user.
+
+Demo User:
+```
+{
+  "email": "jimmy@mail.com",
+  "password": "guitar"
+}
+```
 
 ## API Reference
 
@@ -30,7 +52,7 @@ Running this project requires local installations of [Java Runtime Environment (
 
 <br />
 
-### USER Endpoints
+### `User` Endpoints
 
 #### Register New User
 
@@ -53,9 +75,7 @@ Running this project requires local installations of [Java Runtime Environment (
 }</code>
       </td>
       <td>
-<code>{ 
-  "token": &lt;Auth Token&gt;
-}</code>
+<code>{ "token": &lt;Auth Token&gt; }</code>
       </td>
     </tr>
   </tbody>
@@ -65,7 +85,7 @@ Running this project requires local installations of [Java Runtime Environment (
 
 <br />
 
-#### Authenticate Existing User (Login)
+#### Login Existing User
 
 ```http
   POST /users/login
@@ -85,9 +105,325 @@ Running this project requires local installations of [Java Runtime Environment (
 }</code>
       </td>
       <td>
-<code>{ 
-  "token": &lt;Auth Token&gt;
+<code>{ "token": &lt;Auth Token&gt; }</code>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+##
+
+### `Shelf` Endpoints
+
+#### Get All Shelves by Active User
+
+```http
+  GET /shelves
+```
+<table>
+  <tbody>
+    <tr>
+      <td>Method</td><td>Request Body</td><td>Sample Successful Response</td>
+    </tr>
+    <tr>
+      <td><code>GET</code></td>
+      <td>
+        n/a
+      </td>
+      <td>
+<code>[{
+  "shelfId": [number],
+  "userId": [number],
+  "title": [string],
+  "description": [string],
+  "totalSavedBooks": [number]
+},
+...]</code>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<br />
+
+#### Get Shelf by Id
+
+```http
+  GET /shelves/{shelfId}
+```
+
+<table>
+  <tbody>
+    <tr>
+      <td>Method</td><td>Request Body</td><td>Sample Successful Response</td>
+    </tr>
+    <tr>
+      <td><code>GET</code></td>
+      <td>
+<code>n/a</code>
+      </td>
+      <td>
+<code>{
+  "shelfId": [number],
+  "userId": [number],
+  "title": [string],
+  "description": [string],
+  "totalSavedBooks": [number]
 }</code>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<br />
+
+#### Create New Shelf
+
+```http
+  POST /shelves
+```
+
+<table>
+  <tbody>
+    <tr>
+      <td>Method</td><td>Request Body</td><td>Sample Successful Response</td>
+    </tr>
+    <tr>
+      <td><code>POST</code></td>
+      <td>
+<code>{
+  "title": [string],
+  "description": [string]
+}</code>
+      </td>
+      <td>
+<code>{
+  "shelfId": [number],
+  "userId": [number],
+  "title": [string],
+  "description": [string],
+  "totalSavedBooks": [number]
+}</code>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<br />
+
+#### Update Shelf
+
+```http
+  PUT /shelves/{shelfId}
+```
+
+<table>
+  <tbody>
+    <tr>
+      <td>Method</td><td>Request Body</td><td>Sample Successful Response</td>
+    </tr>
+    <tr>
+      <td><code>PUT</code></td>
+      <td>
+<code>{
+  "title": [string],
+  "description": [string]
+}</code>
+      </td>
+      <td>
+<code>{ "success": true }</code>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<br />
+
+#### Delete Shelf
+
+```http
+  PUT /shelves/{shelfId}
+```
+
+<table>
+  <tbody>
+    <tr>
+      <td>Method</td><td>Request Body</td><td>Sample Successful Response</td>
+    </tr>
+    <tr>
+      <td><code>DELETE</code></td>
+      <td>
+<code>n/a</code>
+      </td>
+      <td>
+<code>{ "success": true }</code>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<br />
+
+##
+
+### `Book` Endpoints
+
+#### Get All Books From Shelf
+
+```http
+  GET /shelves/{shelfId}/books
+```
+<table>
+  <tbody>
+    <tr>
+      <td>Method</td><td>Request Body</td><td>Sample Successful Response</td>
+    </tr>
+    <tr>
+      <td><code>GET</code></td>
+      <td>
+        n/a
+      </td>
+      <td>
+<code>[{
+  "bookId": [number],
+  "shelfId": [number],
+  "userId": [number],
+  "isbn": [string],
+  "olKey": [string || null],
+  "title": [string],
+  "author": [string || null],
+  "userNote": [string || null],
+  "savedDate": [number]
+},
+...]</code>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<br />
+
+#### Get Book by Id
+
+```http
+  GET /shelves/{shelfId}/books/{bookId}
+```
+
+<table>
+  <tbody>
+    <tr>
+      <td>Method</td><td>Request Body</td><td>Sample Successful Response</td>
+    </tr>
+    <tr>
+      <td><code>GET</code></td>
+      <td>
+<code>n/a</code>
+      </td>
+      <td>
+<code>{
+  "bookId": [number],
+  "shelfId": [number],
+  "userId": [number],
+  "isbn": [string],
+  "olKey": [string || null],
+  "title": [string],
+  "author": [string || null],
+  "userNote": [string || null],
+  "savedDate": [number]
+}</code>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<br />
+
+#### Create New Book/Add to Shelf
+
+```http
+  POST /shelves/{shelfId}/books
+```
+
+<table>
+  <tbody>
+    <tr>
+      <td>Method</td><td>Request Body</td><td>Sample Successful Response</td>
+    </tr>
+    <tr>
+      <td><code>POST</code></td>
+      <td>
+<code>{
+  "isbn": [string],
+  "olKey": [string || null],
+  "title": [string],
+  "author": [string || null],
+  "userNote": [string || null],
+}</code>
+      </td>
+      <td>
+<code>{
+  "bookId": [number],
+  "shelfId": [number],
+  "userId": [number],
+  "isbn": [string],
+  "olKey": [string || null],
+  "title": [string],
+  "author": [string || null],
+  "userNote": [string || null],
+  "savedDate": [number]
+}</code>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<br />
+
+#### Update Book 
+
+```http
+  PUT /shelves/{shelfId}/books/{bookId}
+```
+
+\* Note: Only `userNote` field can be updated.
+
+<table>
+  <tbody>
+    <tr>
+      <td>Method</td><td>Request Body</td><td>Sample Successful Response</td>
+    </tr>
+    <tr>
+      <td><code>PUT</code></td>
+      <td>
+<code>{ "userNote": [string || null] }</code>
+      </td>
+      <td>
+<code>{ "success": true }</code>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<br />
+
+#### Delete Book
+
+```http
+  PUT /shelves/{shelfId}/books/{bookId}
+```
+
+<table>
+  <tbody>
+    <tr>
+      <td>Method</td><td>Request Body</td><td>Sample Successful Response</td>
+    </tr>
+    <tr>
+      <td><code>DELETE</code></td>
+      <td>
+<code>n/a</code>
+      </td>
+      <td>
+<code>{ "success": true }</code>
       </td>
     </tr>
   </tbody>
