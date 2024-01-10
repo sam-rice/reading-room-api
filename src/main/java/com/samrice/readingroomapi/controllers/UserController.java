@@ -25,24 +25,26 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<Map<String, String>> registerUser(@RequestBody Map<String, Object> userMap) {
+    public ResponseEntity<Map<String, Object>> registerUser(@RequestBody Map<String, Object> userMap) {
         String firstName = (String) userMap.get("firstName");
         String lastName = (String) userMap.get("lastName");
         String email = (String) userMap.get("email");
         String password = (String) userMap.get("password");
         User user = userService.registerUser(firstName, lastName, email, password);
-        return new ResponseEntity<>(generateJWTToken(user), HttpStatus.OK);
+        Map<String, Object> responseMap = this.createResponseMap(user);
+        return new ResponseEntity<>(responseMap, HttpStatus.OK);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> loginUser(@RequestBody Map<String, Object> userMap) {
+    public ResponseEntity<Map<String, Object>> loginUser(@RequestBody Map<String, Object> userMap) {
         String email = (String) userMap.get("email");
         String password = (String) userMap.get("password");
         User user = userService.validateUser(email, password);
-        return new ResponseEntity<>(this.generateJWTToken(user), HttpStatus.OK);
+        Map<String, Object> responseMap = this.createResponseMap(user);
+        return new ResponseEntity<>(responseMap, HttpStatus.OK);
     }
 
-    private Map<String, String> generateJWTToken(User user) {
+    private String generateJWTToken(User user) {
         long timestamp = System.currentTimeMillis();
         String token = Jwts.builder().signWith(SignatureAlgorithm.HS256, Constants.API_SECRET_KEY)
                 .setIssuedAt(new Date(timestamp))
@@ -52,8 +54,18 @@ public class UserController {
                 .claim("lastName", user.getLastName())
                 .claim("email", user.getEmail())
                 .compact();
-        Map<String, String> map = new HashMap<>();
-        map.put("token", token);
-        return map;
+        return token;
+    }
+
+    private Map<String, Object> createResponseMap(User user) {
+        Map<String, Object> responseMap = new HashMap<>();
+        Map<String, Object> userData = new HashMap<>();
+        userData.put("userId", user.getUserId());
+        userData.put("firstName", user.getFirstName());
+        userData.put("lastName", user.getLastName());
+        userData.put("email", user.getEmail());
+        responseMap.put("token", this.generateJWTToken(user));
+        responseMap.put("userData", userData);
+        return responseMap;
     }
 }
