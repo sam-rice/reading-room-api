@@ -15,7 +15,7 @@ The project also includes a JUnit integration test suite for all repository clas
 
 ### Setup
 
-Running this project requires local installations of [Java Runtime Environment (JRE)](https://www.java.com/en/download/manual.jsp), [Java Development Kit 17 (JDK)](https://www.oracle.com/java/technologies/downloads/), [Docker Desktop](https://www.docker.com/products/docker-desktop/), and an IDE of your choice. Maven is also required and can either be installed locally, or accessed via IDE plugin.
+Running this project requires local installations of [JRE](https://www.java.com/en/download/manual.jsp), [JDK 17](https://www.oracle.com/java/technologies/downloads/), [Docker Desktop](https://www.docker.com/products/docker-desktop/), and an IDE of your choice. Maven is also required and can either be installed locally, or accessed via IDE plugin.
 
 1. Clone this repository to your machine.
 2. Open Docker Desktop.
