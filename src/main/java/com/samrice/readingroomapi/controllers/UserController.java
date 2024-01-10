@@ -64,8 +64,8 @@ public class UserController {
         userData.put("firstName", user.getFirstName());
         userData.put("lastName", user.getLastName());
         userData.put("email", user.getEmail());
-        responseMap.put("token", generateJWTToken(user));
-        responseMap.put("data", userData);
+        responseMap.put("token", this.generateJWTToken(user));
+        responseMap.put("userData", userData);
         return responseMap;
     }
 }
