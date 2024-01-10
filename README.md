@@ -75,7 +75,15 @@ Demo User:
 }</code>
       </td>
       <td>
-<code>{ "token": &lt;Auth Token&gt; }</code>
+<code>{
+  "userData": {
+    "firstName": [string],
+    "lastName": [string],
+    "userId": [number],
+    "email": [string]
+  },
+  "token": &lt;Auth Token&gt;
+}</code>
       </td>
     </tr>
   </tbody>
@@ -105,7 +113,15 @@ Demo User:
 }</code>
       </td>
       <td>
-<code>{ "token": &lt;Auth Token&gt; }</code>
+<code>{
+  "userData": {
+    "firstName": [string],
+    "lastName": [string],
+    "userId": [number],
+    "email": [string]
+  },
+  "token": &lt;Auth Token&gt;
+}</code>
       </td>
     </tr>
   </tbody>
