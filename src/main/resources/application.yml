@@ -1,0 +1,18 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  info:
+    env:
+      enabled: true
+
+spring:
+  profiles:
+    active: dev
+
+info:
+  application:
+    name: reading-room-api
+    description: REST API for Reading Room web application
+    author: Sam Rice
