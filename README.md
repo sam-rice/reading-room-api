@@ -39,7 +39,7 @@ All `Book` and `Shelf`-related endpoints require a valid authentication token in
 { "Authorization": "Bearer <Auth Token>" }
 ```
 
-To get started, log in as an existing demo user or register a new user.
+To get started, login as an existing demo user or register a new user.
 
 Demo User:
 ```
@@ -93,7 +93,7 @@ Demo User:
     "userId": [number],
     "email": [string]
   },
-  "token": &lt;Auth Token&gt;
+  "token": [string]
 }</code>
       </td>
     </tr>
@@ -131,7 +131,7 @@ Demo User:
     "userId": [number],
     "email": [string]
   },
-  "token": &lt;Auth Token&gt;
+  "token": [string]
 }</code>
       </td>
     </tr>
