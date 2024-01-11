@@ -5,22 +5,31 @@
   <img src="https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=spring&logoColor=white" />
   <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" />
   <img src="https://img.shields.io/badge/Docker-%23039BE5.svg?&style=for-the-badge&logo=Docker&logoColor=white" />
+  <img src="https://img.shields.io/badge/Heroku-430098?style=for-the-badge&logo=heroku&logoColor=white" />
 </p>
 
-Reading Room is a REST API for a book cataloging application built with Java/Spring Boot, using the Java JDBC API to connect to a Docker-contained PostgreSQL database. Users have access to a variety of CRUD operations for interacting with `Shelf` entities (to which `Book` entities are associated) and adding/removing books from each shelf. Instructions for registering/authenticating users via JSON Web Token, creating/updating/deleting shelves and books, and querying data are outlined below, in addition to project setup instructions. 
+Reading Room is a REST API for a book cataloging application built with Java/Spring Boot, using the Java JDBC API to connect to a Docker-contained PostgreSQL database. Users have access to a variety of CRUD operations for interacting with `Shelf` entities (to which `Book` entities are associated) and adding/removing books from each shelf. 
+
+The API is deployed via Heroku and configured with unrestricted access for demoing purposes. See base URL below for demoing the API with Postman. Instructions for registering/authenticating users via JSON Web Token, creating/updating/deleting shelves and books, and querying data are also outlined below, in addition to project setup instructions for running the application locally. 
 
 The project also includes a JUnit integration test suite for all repository classes, which leverages an H2 in-memory database.
 
+<br />
+
 ## Project Instructions
 
-### Setup
+### Local Setup
 
-Running this project requires local installations of [JRE](https://www.java.com/en/download/manual.jsp), [JDK 17](https://www.oracle.com/java/technologies/downloads/), [Docker Desktop](https://www.docker.com/products/docker-desktop/), and an IDE of your choice. Maven is also required and can either be installed locally, or accessed via IDE plugin.
+Running this project and/or integration tests locally requires installations of [JRE](https://www.java.com/en/download/manual.jsp), [JDK 17](https://www.oracle.com/java/technologies/downloads/), [Docker Desktop](https://www.docker.com/products/docker-desktop/), and an IDE of your choice. Maven is also required and can either be installed locally, or accessed via IDE plugin.
 
 1. Clone this repository to your machine.
 2. Open Docker Desktop.
 3. From the command line, navigate to the top level of the project repository and run `docker-compose up` to start the Postgres database.
 4. Open the project with your IDE and run the application to spin up the server.
+
+Note that when running locally, the project is configured to seed all database tables with data for demo purposes. Stopping and starting the server will drop, create, and re-seed the tables.
+
+<br />
 
 ### Using the API
 
@@ -30,9 +39,7 @@ All `Book` and `Shelf`-related endpoints require a valid authentication token in
 { "Authorization": "Bearer <Auth Token>" }
 ```
 
-Also note that the project is configured to seed all database tables with data for demo purposes. Stopping and starting the server will drop, create, and re-seed the tables.
-
-To quickly get started, login as a demo user, or register a new user.
+To get started, log in as an existing demo user or register a new user.
 
 Demo User:
 ```
@@ -42,12 +49,16 @@ Demo User:
 }
 ```
 
+<br />
+
 ## API Reference
 
 #### Base URL
 
 ```http
-  http://localhost:8080/api
+  DEPLOYED: https://reading-room-api-d84cba6ce967.herokuapp.com/api
+
+  LOCAL: http://localhost:8080/api
 ```
 
 <br />
