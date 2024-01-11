@@ -10,15 +10,13 @@
 
 Reading Room is a REST API for a book cataloging application built with Java/Spring Boot, using the Java JDBC API to connect to a Docker-contained PostgreSQL database. Users have access to a variety of CRUD operations for interacting with `Shelf` entities (to which `Book` entities are associated) and adding/removing books from each shelf. 
 
-The API is deployed via Heroku and configured with unrestricted access for demoing purposes. See base URL below for demoing the API with Postman. Instructions for registering/authenticating users via JSON Web Token, creating/updating/deleting shelves and books, and querying data are also outlined below, in addition to project setup instructions for running the application locally. 
+The API is deployed via Heroku and configured with unrestricted access for demoing purposes. See API Reference below for demoing the API with Postman. Instructions for registering/authenticating users via JSON Web Token, creating/updating/deleting shelves and books, and querying data are also outlined below, in addition to project setup instructions for running the application locally. 
 
 The project also includes a JUnit integration test suite for all repository classes, which leverages an H2 in-memory database.
 
 <br />
 
-## Project Instructions
-
-### Local Setup
+## Local Setup Instructions
 
 Running this project and/or integration tests locally requires installations of [JRE](https://www.java.com/en/download/manual.jsp), [JDK 17](https://www.oracle.com/java/technologies/downloads/), [Docker Desktop](https://www.docker.com/products/docker-desktop/), and an IDE of your choice. Maven is also required and can either be installed locally, or accessed via IDE plugin.
 
@@ -30,6 +28,8 @@ Running this project and/or integration tests locally requires installations of 
 Note that when running locally, the project is configured to seed all database tables with data for demo purposes. Stopping and starting the server will drop, create, and re-seed the tables.
 
 <br />
+
+## API Reference
 
 ### Using the API
 
@@ -51,7 +51,7 @@ Demo User:
 
 <br />
 
-## API Reference
+## Endpoints
 
 #### Base URL
 
@@ -139,6 +139,8 @@ Demo User:
 </table>
 
 ##
+
+<br />
 
 ### `Shelf` Endpoints
 
@@ -289,9 +291,9 @@ Demo User:
   </tbody>
 </table>
 
-<br />
-
 ##
+
+<br />
 
 ### `Book` Endpoints
 
