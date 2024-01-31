@@ -78,7 +78,7 @@ public class ShelfRepositoryImpl implements ShelfRepository {
     @Override
     public void updateShelf(Integer userId, Integer shelfId, Shelf shelf) throws RrBadRequestException {
         try {
-            jdbcTemplate.update(SQL_UPDATE_SHELF, new Object[]{shelf.getTitle(), shelf.getDescription(), userId, shelfId});
+            jdbcTemplate.update(SQL_UPDATE_SHELF, new Object[]{shelf.title(), shelf.description(), userId, shelfId});
         } catch (Exception e) {
             throw new RrBadRequestException("Invalid request. Failed to update shelf.");
         }

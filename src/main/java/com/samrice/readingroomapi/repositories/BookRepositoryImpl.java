@@ -66,7 +66,8 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public void updateBook(Integer userId, Integer shelfId, Integer bookId, Book book) throws RrBadRequestException {
         try {
-            jdbcTemplate.update(SQL_UPDATE_BOOK, new Object[]{book.getUserNote(), userId, shelfId, bookId});
+//            jdbcTemplate.update(SQL_UPDATE_BOOK, new Object[]{book.getUserNote(), userId, shelfId, bookId});
+            jdbcTemplate.update(SQL_UPDATE_BOOK, new Object[]{book.userNote(), userId, shelfId, bookId});
         } catch (Exception e) {
             throw new RrBadRequestException("Invalid details. Book not updated.");
         }

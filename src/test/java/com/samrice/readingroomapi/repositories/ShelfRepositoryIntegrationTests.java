@@ -33,11 +33,11 @@ public class ShelfRepositoryIntegrationTests {
         assertNotNull(newShelfId);
         assertNotEquals(0, newShelfId);
         Shelf retrievedShelf = underTest.findShelfById(2, newShelfId);
-        assertEquals(newShelfId, retrievedShelf.getShelfId());
-        assertEquals(2, retrievedShelf.getUserId());
-        assertEquals("Jimmy's New Shelf", retrievedShelf.getTitle());
-        assertEquals("A description.", retrievedShelf.getDescription());
-        assertEquals(0, retrievedShelf.getTotalSavedBooks());
+        assertEquals(newShelfId, retrievedShelf.shelfId());
+        assertEquals(2, retrievedShelf.userId());
+        assertEquals("Jimmy's New Shelf", retrievedShelf.title());
+        assertEquals("A description.", retrievedShelf.description());
+        assertEquals(0, retrievedShelf.totalSavedBooks());
     }
 
     @Test
@@ -51,12 +51,12 @@ public class ShelfRepositoryIntegrationTests {
     public void testThatExistingShelfCanBeQueried() {
         Shelf retrievedShelf = underTest.findShelfById(2, 3);
         List<Book> relatedBooks = bookRepository.findAllBooksByShelfId(2, 3);
-        assertEquals(3, retrievedShelf.getShelfId());
-        assertEquals(2, retrievedShelf.getUserId());
-        assertEquals("English & Misc. Architecture", retrievedShelf.getTitle());
-        assertEquals("Books on historical architecture of the British Isles.", retrievedShelf.getDescription());
-        assertEquals(3, retrievedShelf.getTotalSavedBooks());
-        assertEquals(relatedBooks.size(), retrievedShelf.getTotalSavedBooks());
+        assertEquals(3, retrievedShelf.shelfId());
+        assertEquals(2, retrievedShelf.userId());
+        assertEquals("English & Misc. Architecture", retrievedShelf.title());
+        assertEquals("Books on historical architecture of the British Isles.", retrievedShelf.description());
+        assertEquals(3, retrievedShelf.totalSavedBooks());
+        assertEquals(relatedBooks.size(), retrievedShelf.totalSavedBooks());
     }
 
     @Test
@@ -71,11 +71,11 @@ public class ShelfRepositoryIntegrationTests {
         List<Shelf> shelves = underTest.findAllShelvesByUserId(3);
         assertEquals(shelves.size(), 1);
         Shelf shelf = shelves.get(0);
-        assertEquals(6, shelf.getShelfId());
-        assertEquals(3, shelf.getUserId());
-        assertEquals("Drinking, Farming, and Farm Equipment", shelf.getTitle());
-        assertEquals("All the books I own.", shelf.getDescription());
-        assertEquals(1, shelf.getTotalSavedBooks());
+        assertEquals(6, shelf.shelfId());
+        assertEquals(3, shelf.userId());
+        assertEquals("Drinking, Farming, and Farm Equipment", shelf.title());
+        assertEquals("All the books I own.", shelf.description());
+        assertEquals(1, shelf.totalSavedBooks());
     }
 
     @Test
@@ -83,11 +83,11 @@ public class ShelfRepositoryIntegrationTests {
         Shelf newShelf = new Shelf(4, 2, "Updated Title", "Updated description.", 3);
         underTest.updateShelf(2, 4, newShelf);
         Shelf returned = underTest.findShelfById(2, 4);
-        assertEquals(4, returned.getShelfId());
-        assertEquals(2, returned.getUserId());
-        assertEquals("Updated Title", returned.getTitle());
-        assertEquals("Updated description.", returned.getDescription());
-        assertEquals(2, returned.getTotalSavedBooks());
+        assertEquals(4, returned.shelfId());
+        assertEquals(2, returned.userId());
+        assertEquals("Updated Title", returned.title());
+        assertEquals("Updated description.", returned.description());
+        assertEquals(2, returned.totalSavedBooks());
     }
 
     @Test
