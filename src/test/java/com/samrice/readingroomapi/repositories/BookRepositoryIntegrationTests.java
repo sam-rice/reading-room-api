@@ -76,18 +76,18 @@ public class BookRepositoryIntegrationTests {
 
     @Test
     public void testThatBookCanBeUpdated() {
-        Book changedBook = new Book(10_005, 3, 2, "9780300101775", null, "Bath", "Michael Forsyth", "Updated user note.", 1704341387500L);
+        Book changedBook = new Book(10_005, 3, 2, "9781899858286", "OL820369W", "Bath", "Thom Gorst", "Updated user note.", 1704341381405L);
         underTest.updateBook(2, 3, 10_005, changedBook);
         Book retrievedBook = underTest.findBookById(2, 3, 10_005);
         assertEquals(10_005, retrievedBook.getBookId());
         assertEquals(3, retrievedBook.getShelfId());
         assertEquals(2, retrievedBook.getUserId());
-        assertEquals("9780300101775", retrievedBook.getIsbn());
-        assertNull(retrievedBook.getOlKey());
+        assertEquals("9781899858286", retrievedBook.getIsbn());
+        assertEquals("OL820369W", retrievedBook.getOlKey());
         assertEquals("Bath", retrievedBook.getTitle());
-        assertEquals("Michael Forsyth", retrievedBook.getAuthor());
+        assertEquals("Thom Gorst", retrievedBook.getAuthor());
         assertEquals("Updated user note.", retrievedBook.getUserNote());
-        assertEquals(1704341387500L, retrievedBook.getSavedDate());
+        assertEquals(1704341381405L, retrievedBook.getSavedDate());
     }
 
     @Test
