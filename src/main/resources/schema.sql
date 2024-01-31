@@ -27,9 +27,9 @@ book_id integer primary key not null,
 shelf_id integer not null,
 user_id integer not null,
 isbn varchar(13) not null,
-ol_key varchar(11),
+ol_key varchar(11) not null,
 title varchar(60) not null,
-author varchar(40),
+author varchar(40) not null,
 user_note text,
 saved_date bigint not null
 );
