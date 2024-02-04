@@ -25,11 +25,8 @@ public class BookController {
                                         @RequestBody Map<String, Object> bookMap) {
         int userId = (Integer) request.getAttribute("userId");
         String isbn = (String) bookMap.get("isbn");
-        String olKey = (String) bookMap.get("olKey");
-        String title = (String) bookMap.get("title");
-        String author = (String) bookMap.get("author");
         String userNote = (String) bookMap.get("userNote");
-        Book book = bookService.addBook(shelfId, userId, isbn, olKey, title, author, userNote);
+        Book book = bookService.addBook(shelfId, userId, isbn, userNote);
         return new ResponseEntity<>(book, HttpStatus.CREATED);
     }
 
