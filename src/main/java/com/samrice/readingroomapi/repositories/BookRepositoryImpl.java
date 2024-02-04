@@ -19,7 +19,7 @@ public class BookRepositoryImpl implements BookRepository {
 
     private static final String SQL_CREATE_BOOK = "INSERT INTO rr_saved_books (book_id, shelf_id, user_id, isbn, title, author, user_note, saved_date) VALUES(NEXTVAL('rr_saved_books_seq'), ?, ?, ?, ?, ?, ?, ?)";
     private static final String SQL_FIND_BOOK_BY_ID = "SELECT * FROM rr_saved_books WHERE user_id = ? AND shelf_id = ? AND book_id = ?";
-    private static final String SQL_FIND_ALL_BOOKS_BY_SHELF_ID = "SELECT * from rr_saved_books WHERE user_id = ? AND shelf_id = ?";
+    private static final String SQL_FIND_ALL_BOOKS_BY_SHELF_ID = "SELECT * from rr_saved_books WHERE user_id = ? AND shelf_id = ? ORDER BY book_id ASC";
     private static final String SQL_UPDATE_BOOK = "UPDATE rr_saved_books SET user_note = ? WHERE user_id = ? AND shelf_id = ? AND book_id = ?";
     private static final String SQL_DELETE_BOOK = "DELETE FROM rr_saved_books WHERE user_id = ? AND shelf_id = ? AND book_id = ?";
 
@@ -65,7 +65,6 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public void updateBook(Integer userId, Integer shelfId, Integer bookId, Book book) throws RrBadRequestException {
         try {
-//            jdbcTemplate.update(SQL_UPDATE_BOOK, new Object[]{book.getUserNote(), userId, shelfId, bookId});
             jdbcTemplate.update(SQL_UPDATE_BOOK, new Object[]{book.userNote(), userId, shelfId, bookId});
         } catch (Exception e) {
             throw new RrBadRequestException("Invalid details. Book not updated.");
