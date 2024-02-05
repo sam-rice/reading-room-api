@@ -1,6 +1,6 @@
 # Reading Room API
 
-<p align="left">
+<p>
   <img src="https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" />
   <img src="https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=spring&logoColor=white" />
   <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" />
@@ -8,7 +8,7 @@
   <img src="https://img.shields.io/badge/Heroku-430098?style=for-the-badge&logo=heroku&logoColor=white" />
 </p>
 
-Reading Room is a REST API for a book cataloging application built with Java/Spring Boot, using the Java JDBC API to connect to a Docker-contained PostgreSQL database. Users have access to a variety of CRUD operations for interacting with `Shelf` entities (to which `Book` entities are associated) and adding/removing books from each shelf.
+Reading Room is a REST API for a book cataloging application built with Java/Spring Boot, Docker, and PostgreSQL. Users have access to a variety of CRUD operations for interacting with `Shelf` entities (to which `Book` entities are associated) and adding/removing books from each shelf. The API leverages the [Open Library API](https://openlibrary.org/developers/api) to aggregate individual book data, only requiring the client to provide a valid 13 or 10-digit ISBN. 
 
 The API is deployed via Heroku and configured with unrestricted access for demoing purposes. See API Reference below for demoing the API with Postman. Instructions for registering/authenticating users via JSON Web Token, creating/updating/deleting shelves and books, and querying data are also outlined below, in addition to project setup instructions for running the application locally. 
 
@@ -318,9 +318,9 @@ Demo User:
   "shelfId": [number],
   "userId": [number],
   "isbn": [string],
-  "olKey": [string || null],
   "title": [string],
   "author": [string || null],
+  "coverUrl": [string],
   "userNote": [string || null],
   "savedDate": [number]
 },
@@ -330,7 +330,6 @@ Demo User:
   </tbody>
 </table>
 
-\* Note: `olKey` field is used for integrating with the [Open Library API](https://openlibrary.org/developers/api).
 <br />
 
 #### Get Book by Id
@@ -355,9 +354,9 @@ Demo User:
   "shelfId": [number],
   "userId": [number],
   "isbn": [string],
-  "olKey": [string || null],
   "title": [string],
   "author": [string || null],
+  "coverUrl": [string],
   "userNote": [string || null],
   "savedDate": [number]
 }</code>
@@ -384,9 +383,6 @@ Demo User:
       <td>
 <code>{
   "isbn": [string],
-  "olKey": [string || null],
-  "title": [string],
-  "author": [string || null],
   "userNote": [string || null],
 }</code>
       </td>
@@ -396,9 +392,9 @@ Demo User:
   "shelfId": [number],
   "userId": [number],
   "isbn": [string],
-  "olKey": [string || null],
   "title": [string],
   "author": [string || null],
+  "coverUrl": [string],
   "userNote": [string || null],
   "savedDate": [number]
 }</code>

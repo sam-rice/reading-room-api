@@ -26,37 +26,37 @@ public class BookRepositoryIntegrationTests {
 
     @Test
     public void testThatBookCanBeCreatedAndQueried() {
-        Integer bookId = underTest.createBook(3, 2, "0000000000000", "OL1234567W", "Book Title", "Author Name", "Something about this book.");
+        Integer bookId = underTest.createBook(3, 2, "0000000000000", "Book Title", "Author Name", "Something about this book.");
         Book newBook = underTest.findBookById(2, 3, bookId);
-        assertEquals(bookId, newBook.getBookId());
-        assertEquals(3, newBook.getShelfId());
-        assertEquals(2, newBook.getUserId());
-        assertEquals("0000000000000", newBook.getIsbn());
-        assertEquals("OL1234567W", newBook.getOlKey());
-        assertEquals("Book Title", newBook.getTitle());
-        assertEquals("Author Name", newBook.getAuthor());
-        assertEquals("Something about this book.", newBook.getUserNote());
+        assertEquals(bookId, newBook.bookId());
+        assertEquals(3, newBook.shelfId());
+        assertEquals(2, newBook.userId());
+        assertEquals("0000000000000", newBook.isbn());
+        assertEquals("Book Title", newBook.title());
+        assertEquals("Author Name", newBook.author());
+        assertEquals("https://covers.openlibrary.org/b/isbn/0000000000000-L.jpg", newBook.coverUrl());
+        assertEquals("Something about this book.", newBook.userNote());
     }
 
     @Test
     public void testThatInvalidBookCreationDetailsThrowsBadRequestException() {
         assertThrows(RrBadRequestException.class, () -> {
-            underTest.createBook(3, 2, "0000000000000", "OL1234567W", null, "Author Name", "Something about this book.");
+            underTest.createBook(3, 2, "0000000000000", null, "Author Name", "Something about this book.");
         });
     }
 
     @Test
     public void testThatExistingBookCanBeQueried() {
         Book retrievedBook = underTest.findBookById(2, 3, 10_003);
-        assertEquals(10_003, retrievedBook.getBookId());
-        assertEquals(3, retrievedBook.getShelfId());
-        assertEquals(2, retrievedBook.getUserId());
-        assertEquals("9780470868089", retrievedBook.getIsbn());
-        assertEquals("OL8208787W", retrievedBook.getOlKey());
-        assertEquals("Philip Webb: Pioneer of Arts & Crafts Architecture", retrievedBook.getTitle());
-        assertEquals("Sheila Kirk", retrievedBook.getAuthor());
-        assertEquals("A great resource for info on the red house.", retrievedBook.getUserNote());
-        assertEquals(1704341375550L, retrievedBook.getSavedDate());
+        assertEquals(10_003, retrievedBook.bookId());
+        assertEquals(3, retrievedBook.shelfId());
+        assertEquals(2, retrievedBook.userId());
+        assertEquals("9780470868089", retrievedBook.isbn());
+        assertEquals("Philip Webb: Pioneer of Arts & Crafts Architecture", retrievedBook.title());
+        assertEquals("Sheila Kirk", retrievedBook.author());
+        assertEquals("https://covers.openlibrary.org/b/isbn/9780470868089-L.jpg", retrievedBook.coverUrl());
+        assertEquals("A great resource for info on the red house.", retrievedBook.userNote());
+        assertEquals(1704341375550L, retrievedBook.savedDate());
     }
 
     @Test
@@ -70,24 +70,24 @@ public class BookRepositoryIntegrationTests {
     public void testThatAllBooksCanBeQueriedByShelfId() {
         List<Book> books = underTest.findAllBooksByShelfId(2, 4);
         assertEquals(books.size(), 2);
-        assertEquals(books.get(0).getBookId(), 10_006);
-        assertEquals(books.get(1).getBookId(), 10_007);
+        assertEquals(books.get(0).bookId(), 10_006);
+        assertEquals(books.get(1).bookId(), 10_007);
     }
 
     @Test
     public void testThatBookCanBeUpdated() {
-        Book changedBook = new Book(10_005, 3, 2, "9780300101775", null, "Bath", "Michael Forsyth", "Updated user note.", 1704341387500L);
+        Book changedBook = new Book(10_005, 3, 2, "9781899858286", "Bath", "Thom Gorst", "https://www.example.com/coverurl", "Updated user note.", 1704341381405L);
         underTest.updateBook(2, 3, 10_005, changedBook);
         Book retrievedBook = underTest.findBookById(2, 3, 10_005);
-        assertEquals(10_005, retrievedBook.getBookId());
-        assertEquals(3, retrievedBook.getShelfId());
-        assertEquals(2, retrievedBook.getUserId());
-        assertEquals("9780300101775", retrievedBook.getIsbn());
-        assertNull(retrievedBook.getOlKey());
-        assertEquals("Bath", retrievedBook.getTitle());
-        assertEquals("Michael Forsyth", retrievedBook.getAuthor());
-        assertEquals("Updated user note.", retrievedBook.getUserNote());
-        assertEquals(1704341387500L, retrievedBook.getSavedDate());
+        assertEquals(10_005, retrievedBook.bookId());
+        assertEquals(3, retrievedBook.shelfId());
+        assertEquals(2, retrievedBook.userId());
+        assertEquals("9781899858286", retrievedBook.isbn());
+        assertEquals("Bath", retrievedBook.title());
+        assertEquals("Thom Gorst", retrievedBook.author());
+        assertEquals("https://covers.openlibrary.org/b/isbn/9781899858286-L.jpg", retrievedBook.coverUrl());
+        assertEquals("Updated user note.", retrievedBook.userNote());
+        assertEquals(1704341381405L, retrievedBook.savedDate());
     }
 
     @Test

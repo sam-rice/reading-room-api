@@ -12,7 +12,7 @@ public interface BookService {
 
     Book fetchBookById(Integer userId, Integer shelfId, Integer bookId) throws RrResourceNotFoundException;
 
-    Book addBook(Integer shelfId, Integer userId, String isbn, String olKey, String title, String author, String userNote) throws RrBadRequestException;
+    Book addBook(Integer shelfId, Integer userId, String isbn, String userNote) throws RrBadRequestException;
 
     void updateBook(Integer userId, Integer shelfId, Integer bookId, Book book) throws RrBadRequestException;
 
