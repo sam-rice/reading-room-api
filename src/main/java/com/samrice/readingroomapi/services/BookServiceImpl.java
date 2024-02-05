@@ -41,7 +41,7 @@ public class BookServiceImpl implements BookService {
     public Book addBook(Integer shelfId, Integer userId, String isbn, String userNote) throws RrBadRequestException {
         try {
             ObjectMapper mapper = new ObjectMapper();
-            String bookEndpoint = Constants.OPEN_LIBRARY_API_BOOKS_BASE_URL + isbn + ".json";
+            String bookEndpoint = Constants.OPEN_LIBRARY_API_BOOKS_BASE_URL + "/" + isbn + ".json";
             ResponseEntity<String> bookResponse = restTemplate.getForEntity(bookEndpoint, String.class);
             JsonNode bookRoot = mapper.readTree(bookResponse.getBody());
             String bookTitle = mapper.readTree(bookResponse.getBody()).get("title").asText();
