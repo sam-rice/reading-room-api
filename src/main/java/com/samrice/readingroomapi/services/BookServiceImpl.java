@@ -42,8 +42,9 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book addBook(Integer shelfId, Integer userId, String isbn, String userNote) throws RrBadRequestException {
         try {
-            BookResult bookResult = getBookResult(isbn);
-            int bookId = bookRepository.createBook(shelfId, userId, isbn, bookResult.bookTitle(), bookResult.authorName(), userNote);
+            String formattedIsbn = isbn.replace("-", "").replace("—", "");
+            BookResult bookResult = getBookResult(formattedIsbn);
+            int bookId = bookRepository.createBook(shelfId, userId, formattedIsbn, bookResult.bookTitle(), bookResult.authorName(), userNote);
             return bookRepository.findBookById(userId, shelfId, bookId);
 
         } catch (Exception e) {
