@@ -1,6 +1,6 @@
 package com.samrice.readingroomapi.repositories;
 
-import com.samrice.readingroomapi.domain.Book;
+import com.samrice.readingroomapi.domains.Book;
 import com.samrice.readingroomapi.exceptions.RrBadRequestException;
 import com.samrice.readingroomapi.exceptions.RrResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

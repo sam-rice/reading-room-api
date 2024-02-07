@@ -1,6 +1,6 @@
 package com.samrice.readingroomapi.services;
 
-import com.samrice.readingroomapi.domain.User;
+import com.samrice.readingroomapi.domains.User;
 import com.samrice.readingroomapi.exceptions.RrAuthException;
 import com.samrice.readingroomapi.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package com.samrice.readingroomapi.services;
 
-import com.samrice.readingroomapi.domain.Book;
+import com.samrice.readingroomapi.domains.Book;
 import com.samrice.readingroomapi.exceptions.RrBadRequestException;
 import com.samrice.readingroomapi.exceptions.RrResourceNotFoundException;
 

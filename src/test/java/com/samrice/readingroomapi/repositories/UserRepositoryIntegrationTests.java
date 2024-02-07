@@ -1,6 +1,6 @@
 package com.samrice.readingroomapi.repositories;
 
-import com.samrice.readingroomapi.domain.User;
+import com.samrice.readingroomapi.domains.User;
 import com.samrice.readingroomapi.exceptions.RrAuthException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

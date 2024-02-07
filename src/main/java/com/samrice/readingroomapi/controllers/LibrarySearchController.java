@@ -1,6 +1,6 @@
 package com.samrice.readingroomapi.controllers;
 
-import com.samrice.readingroomapi.librarysearchresponses.SearchedAuthor;
+import com.samrice.readingroomapi.dtos.SearchedAuthorDto;
 import com.samrice.readingroomapi.services.LibrarySearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,8 +20,12 @@ public class LibrarySearchController {
     LibrarySearchService librarySearchService;
 
     @GetMapping("/authors")
-    public ResponseEntity<List<SearchedAuthor>> searchAuthors(@RequestParam String q) {
-        List<SearchedAuthor> authors = librarySearchService.searchAuthors(q);
+    public ResponseEntity<List<SearchedAuthorDto>> searchAuthors(
+            @RequestParam(value = "q") String authorName,
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false) Integer pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "15", required = false) Integer pageSize
+    ) {
+        List<SearchedAuthorDto> authors = librarySearchService.searchAuthors(authorName, pageNo, pageSize);
         return new ResponseEntity<>(authors, HttpStatus.OK);
     }
 

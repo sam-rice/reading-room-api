@@ -1,6 +1,6 @@
 package com.samrice.readingroomapi.controllers;
 
-import com.samrice.readingroomapi.domain.Shelf;
+import com.samrice.readingroomapi.domains.Shelf;
 import com.samrice.readingroomapi.services.ShelfService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;

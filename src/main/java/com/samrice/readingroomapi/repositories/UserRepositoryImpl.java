@@ -1,6 +1,6 @@
 package com.samrice.readingroomapi.repositories;
 
-import com.samrice.readingroomapi.domain.User;
+import com.samrice.readingroomapi.domains.User;
 import com.samrice.readingroomapi.exceptions.RrAuthException;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;

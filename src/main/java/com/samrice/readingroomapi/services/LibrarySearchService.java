@@ -1,11 +1,11 @@
 package com.samrice.readingroomapi.services;
 
 import com.samrice.readingroomapi.exceptions.RrBadRequestException;
-import com.samrice.readingroomapi.librarysearchresponses.SearchedAuthor;
+import com.samrice.readingroomapi.dtos.SearchedAuthorDto;
 
 import java.util.List;
 
 public interface LibrarySearchService {
 
-    List<SearchedAuthor> searchAuthors(String authorName) throws RrBadRequestException;
+    List<SearchedAuthorDto> searchAuthors(String authorName, Integer pageNo, Integer pageSize) throws RrBadRequestException;
 }

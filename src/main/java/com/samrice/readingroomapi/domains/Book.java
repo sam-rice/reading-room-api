@@ -1,4 +1,4 @@
-package com.samrice.readingroomapi.domain;
+package com.samrice.readingroomapi.domains;
 
 import org.springframework.data.annotation.Id;
 
