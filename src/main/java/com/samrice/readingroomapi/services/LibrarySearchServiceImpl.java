@@ -12,14 +12,17 @@ import com.samrice.readingroomapi.pojos.OpenLibraryAuthorDetails;
 import com.samrice.readingroomapi.pojos.OpenLibraryAuthorWorks;
 import com.samrice.readingroomapi.pojos.OpenLibraryWork;
 import com.samrice.readingroomapi.utilities.Json;
+import com.samrice.readingroomapi.utilities.OpenLibraryCleaner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -53,26 +56,30 @@ public class LibrarySearchServiceImpl implements LibrarySearchService {
         JsonNode root = Json.parse(response.getBody());
         OpenLibraryAuthorDetails authorDetails = Json.fromJson(root, OpenLibraryAuthorDetails.class);
         String photoUrl = "https://covers.openlibrary.org/a/olid/" + authorDetails.photos().get(0) + "-L.jpg";
-        String formattedAuthorKey = authorDetails.key().substring(authorDetails.key().indexOf("/", authorDetails.key().indexOf("/") + 1) + 1);
+        String formattedAuthorKey = OpenLibraryCleaner.formatKey(authorDetails.key());
         AuthorWorksResult result = getAuthorWorks(formattedAuthorKey, authorDetails.name());
-        return new AuthorDetailsDto(authorDetails.name(), authorDetails.bio(), photoUrl, authorDetails.birth_date(), authorDetails.death_date(), result.workCount(), result.works());
+        return new AuthorDetailsDto(formattedAuthorKey, authorDetails.name(), authorDetails.bio(), photoUrl, authorDetails.birth_date(), authorDetails.death_date(), result.workCount(), result.works());
     }
 
     private AuthorWorksResult getAuthorWorks(String authorKey, String authorName) throws JsonProcessingException {
-        String endpoint = Constants.OPEN_LIBRARY_AUTHORS_BASE_URL + "/" + authorKey + "/works.json";
+        String endpoint = Constants.OPEN_LIBRARY_AUTHORS_BASE_URL + "/" + authorKey + "/works.json?limit=1000";
         ResponseEntity<String> response = restTemplate.getForEntity(endpoint, String.class);
         JsonNode root = Json.parse(response.getBody());
         OpenLibraryAuthorWorks works = Json.fromJson(root, OpenLibraryAuthorWorks.class);
         List<BookResultDto> worksList = works.entries()
                 .stream()
-                .map(w -> mapToBookResultDto(w, authorName)).toList();
+                .map(w -> mapToBookResultDto(w, authorName, authorKey)).toList();
         return new AuthorWorksResult(works.size(), worksList);
     }
 
-    private BookResultDto mapToBookResultDto(OpenLibraryWork work, String authorName) {
+    private BookResultDto mapToBookResultDto(OpenLibraryWork work, String authorName, String authorKey) {
         String key = work.key().replaceFirst("/works/", "");
         String coverUrl = work.covers() != null ? "https://covers.openlibrary.org/a/olid/" + work.covers().get(0).toString() + "-L.jpg" : null;
-        return new BookResultDto(key, work.title(), authorName, coverUrl);
+        HashMap<String, String> author = new HashMap<>();
+        author.put("name", authorName);
+        author.put("key", authorKey);
+        Boolean byMultipleAuthors = work.authors().size() > 1;
+        return new BookResultDto(key, work.title(), author, byMultipleAuthors, coverUrl);
     }
 
     private record AuthorWorksResult(Integer workCount, List<BookResultDto> works){}

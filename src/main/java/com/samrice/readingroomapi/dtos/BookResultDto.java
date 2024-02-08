@@ -1,6 +1,6 @@
 package com.samrice.readingroomapi.dtos;
 
-import java.util.List;
+import java.util.HashMap;
 
-public record BookResultDto(String key, String title, String authorName, String coverUrl) {
+public record BookResultDto(String key, String title, HashMap<String, String> primaryAuthor, Boolean byMultipleAuthors, String coverUrl) {
 }
