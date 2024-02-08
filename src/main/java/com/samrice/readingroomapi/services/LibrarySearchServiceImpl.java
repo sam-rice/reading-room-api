@@ -8,13 +8,16 @@ import com.samrice.readingroomapi.dtos.AuthorDetailsDto;
 import com.samrice.readingroomapi.dtos.BookResultDto;
 import com.samrice.readingroomapi.exceptions.RrBadRequestException;
 import com.samrice.readingroomapi.dtos.AuthorResultDto;
+import com.samrice.readingroomapi.pojos.OpenLibraryAuthorDetails;
+import com.samrice.readingroomapi.pojos.OpenLibraryAuthorWorks;
+import com.samrice.readingroomapi.pojos.OpenLibraryWork;
+import com.samrice.readingroomapi.utilities.Json;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -45,37 +48,31 @@ public class LibrarySearchServiceImpl implements LibrarySearchService {
     }
 
     private AuthorDetailsDto getAuthorDetails(String authorKey) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
         String endpoint = Constants.OPEN_LIBRARY_AUTHORS_BASE_URL + "/" + authorKey + ".json";
         ResponseEntity<String> response = restTemplate.getForEntity(endpoint, String.class);
-        JsonNode root = mapper.readTree(response.getBody());
-        String authorName = root.get("name").toString();
-        AuthorWorksResult authorWorks  = getAuthorWorks(authorKey, authorName);
-        return new AuthorDetailsDto("Name", "bio", "photoUrl", "birth", "death", authorWorks.workCount(), authorWorks.works());
+        JsonNode root = Json.parse(response.getBody());
+        OpenLibraryAuthorDetails authorDetails = Json.fromJson(root, OpenLibraryAuthorDetails.class);
+        String photoUrl = "https://covers.openlibrary.org/a/olid/" + authorDetails.photos().get(0) + "-L.jpg";
+        String formattedAuthorKey = authorDetails.key().substring(authorDetails.key().indexOf("/", authorDetails.key().indexOf("/") + 1) + 1);
+        AuthorWorksResult result = getAuthorWorks(formattedAuthorKey, authorDetails.name());
+        return new AuthorDetailsDto(authorDetails.name(), authorDetails.bio(), photoUrl, authorDetails.birth_date(), authorDetails.death_date(), result.workCount(), result.works());
     }
 
     private AuthorWorksResult getAuthorWorks(String authorKey, String authorName) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
         String endpoint = Constants.OPEN_LIBRARY_AUTHORS_BASE_URL + "/" + authorKey + "/works.json";
         ResponseEntity<String> response = restTemplate.getForEntity(endpoint, String.class);
-        JsonNode root = mapper.readTree(response.getBody());
-        Integer worksCount = root.get("size").asInt();
-        List<LinkedHashMap> parsedWorksMap = mapper.convertValue(root.get("entries"), List.class);
-        List<BookResultDto> worksList = parsedWorksMap
+        JsonNode root = Json.parse(response.getBody());
+        OpenLibraryAuthorWorks works = Json.fromJson(root, OpenLibraryAuthorWorks.class);
+        List<BookResultDto> worksList = works.entries()
                 .stream()
                 .map(w -> mapToBookResultDto(w, authorName)).toList();
-        return new AuthorWorksResult(worksCount, worksList);
+        return new AuthorWorksResult(works.size(), worksList);
     }
 
-    private BookResultDto mapToBookResultDto(LinkedHashMap book, String authorName) {
-        String key = book.get("key").toString().replaceFirst("/works/", "");
-        String title = book.get("title").toString();
-//        String photoCode = ("covers").toString();
-//        String coverUrl = "https://covers.openlibrary.org/a/olid/" + photoCode.get(0).toString() + "-L.jpg";
-
-        BookResultDto test = new BookResultDto(key, title, authorName, "coverUrl");
-        System.out.println("HERE HERE: " + test);
-        return test;
+    private BookResultDto mapToBookResultDto(OpenLibraryWork work, String authorName) {
+        String key = work.key().replaceFirst("/works/", "");
+        String coverUrl = work.covers() != null ? "https://covers.openlibrary.org/a/olid/" + work.covers().get(0).toString() + "-L.jpg" : null;
+        return new BookResultDto(key, work.title(), authorName, coverUrl);
     }
 
     private record AuthorWorksResult(Integer workCount, List<BookResultDto> works){}
