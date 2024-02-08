@@ -2,11 +2,13 @@ package com.samrice.readingroomapi.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.samrice.readingroomapi.domains.Book;
 import com.samrice.readingroomapi.exceptions.RrBadRequestException;
 import com.samrice.readingroomapi.exceptions.RrResourceNotFoundException;
+import com.samrice.readingroomapi.pojos.IndividualAuthorPojo;
+import com.samrice.readingroomapi.pojos.OpenLibraryWork;
 import com.samrice.readingroomapi.repositories.BookRepository;
+import com.samrice.readingroomapi.utilities.Json;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -37,11 +39,10 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book addBook(Integer shelfId, Integer userId, String isbn, String userNote) throws RrBadRequestException {
+    public Book addBook(Integer shelfId, Integer userId, String key, String userNote) throws RrBadRequestException {
         try {
-            String formattedIsbn = isbn.replace("-", "").replace("—", "");
-            BookResult bookResult = getBookResult(formattedIsbn);
-            int bookId = bookRepository.createBook(shelfId, userId, formattedIsbn, bookResult.bookTitle(), bookResult.authorName(), userNote);
+            BookResult bookResult = getBookResult(key);
+            int bookId = bookRepository.createBook(shelfId, userId, key, bookResult.isbn(), bookResult.bookTitle(), bookResult.authorName(), userNote);
             return bookRepository.findBookById(userId, shelfId, bookId);
 
         } catch (Exception e) {
@@ -59,29 +60,28 @@ public class BookServiceImpl implements BookService {
         bookRepository.deleteBook(userId, shelfId, bookId);
     }
 
-    private record BookResult(String bookTitle, String authorName) {
+    private record BookResult(String bookTitle, String authorName, String isbn) {
     }
 
-    private BookResult getBookResult(String isbn) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        String bookEndpoint = Constants.OPEN_LIBRARY_BOOKS_BASE_URL + "/" + isbn + ".json";
+    private BookResult getBookResult(String key) throws JsonProcessingException {
+        String bookEndpoint = Constants.OPEN_LIBRARY_WORKS_BASE_URL + "/" + key + ".json";
         ResponseEntity<String> bookResponse = restTemplate.getForEntity(bookEndpoint, String.class);
-        JsonNode bookRoot = mapper.readTree(bookResponse.getBody());
-        String bookTitle = bookRoot.get("title").asText();
-        List<Object> authorsList = mapper.convertValue(bookRoot.get("authors"), List.class);
+        JsonNode root = Json.parse(bookResponse.getBody());
+        OpenLibraryWork workResult = Json.fromJson(root, OpenLibraryWork.class);
+        String formattedIsbn = !workResult.isbn_13().isEmpty() ? workResult.isbn_13().get(0).replace("-", "").replace("—", "") : null;
+
+//        List<Object> authorsList = mapper.convertValue(bookRoot.get("authors"), List.class);
         //remove authorsList param
-        String authorName = getAuthorName(bookRoot, authorsList);
-        return new BookResult(bookTitle, authorName);
+        String authorName = getAuthorName(workResult.key(), workResult.authors());
+        return new BookResult(workResult.title(), authorName, formattedIsbn);
     }
 
-    private String getAuthorName(JsonNode bookRoot, List<Object> authorsList) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
+    private String getAuthorName(String key, List<IndividualAuthorPojo> authorsList) throws JsonProcessingException {
         String authorName = null;
         if (authorsList != null && !authorsList.isEmpty()) {
-            String authorKey = bookRoot.get("authors").get(0).get("key").asText();
-            String authorEndpoint = Constants.OPEN_LIBRARY_BASE_URL + authorKey + ".json";
+            String authorEndpoint = Constants.OPEN_LIBRARY_BASE_URL + key + ".json";
             ResponseEntity<String> authorResponse = restTemplate.getForEntity(authorEndpoint, String.class);
-            JsonNode authorRoot = mapper.readTree(authorResponse.getBody());
+            JsonNode authorRoot = Json.parse(authorResponse.getBody());
             JsonNode personalNameField = authorRoot.get("personal_name");
             JsonNode nameField = authorRoot.get("name");
             authorName = personalNameField != null ? personalNameField.asText() : nameField != null ? nameField.asText() : null;
