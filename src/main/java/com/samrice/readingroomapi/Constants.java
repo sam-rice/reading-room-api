@@ -7,4 +7,5 @@ public class Constants {
     public static final String OPEN_LIBRARY_BASE_URL = "https://openlibrary.org";
     public static final String OPEN_LIBRARY_BOOKS_BASE_URL = "https://openlibrary.org/isbn";
     public static final String OPEN_LIBRARY_SEARCH_BASE_URL = "https://openlibrary.org/search";
+    public static final String OPEN_LIBRARY_AUTHORS_BASE_URL = "https://openlibrary.org/authors";
 }

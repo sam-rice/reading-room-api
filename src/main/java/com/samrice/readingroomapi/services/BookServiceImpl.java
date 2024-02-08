@@ -69,6 +69,7 @@ public class BookServiceImpl implements BookService {
         JsonNode bookRoot = mapper.readTree(bookResponse.getBody());
         String bookTitle = bookRoot.get("title").asText();
         List<Object> authorsList = mapper.convertValue(bookRoot.get("authors"), List.class);
+        //remove authorsList param
         String authorName = getAuthorName(bookRoot, authorsList);
         return new BookResult(bookTitle, authorName);
     }
