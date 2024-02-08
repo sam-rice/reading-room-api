@@ -2,15 +2,12 @@ package com.samrice.readingroomapi.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.samrice.readingroomapi.Constants;
 import com.samrice.readingroomapi.dtos.AuthorDetailsDto;
 import com.samrice.readingroomapi.dtos.BookResultDto;
 import com.samrice.readingroomapi.exceptions.RrBadRequestException;
 import com.samrice.readingroomapi.dtos.AuthorResultDto;
-import com.samrice.readingroomapi.pojos.OpenLibraryAuthorDetails;
-import com.samrice.readingroomapi.pojos.OpenLibraryAuthorWorks;
-import com.samrice.readingroomapi.pojos.OpenLibraryWork;
+import com.samrice.readingroomapi.pojos.*;
 import com.samrice.readingroomapi.utilities.Json;
 import com.samrice.readingroomapi.utilities.OpenLibraryCleaner;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Transactional
-public class LibrarySearchServiceImpl implements LibrarySearchService {
+public class OpenLibraryAuthorServiceImpl implements OpenLibraryAuthorService {
 
     @Autowired
     RestTemplate restTemplate;
@@ -85,25 +80,17 @@ public class LibrarySearchServiceImpl implements LibrarySearchService {
     private record AuthorWorksResult(Integer workCount, List<BookResultDto> works){}
 
     private List<AuthorResultDto> getAllAuthorResults(String authorName) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
         String endpoint = Constants.OPEN_LIBRARY_SEARCH_BASE_URL + "/authors.json?q=" + authorName;
         ResponseEntity<String> response = restTemplate.getForEntity(endpoint, String.class);
-        JsonNode root = mapper.readTree(response.getBody());
-        List<LinkedHashMap> parsedAuthorsMap = mapper.convertValue(root.get("docs"), List.class);
-        return parsedAuthorsMap
+        JsonNode root = Json.parse(response.getBody());
+        OpenLibraryAuthorSearch authorResults = Json.fromJson(root, OpenLibraryAuthorSearch.class);
+        return authorResults.docs()
                 .stream()
-                .filter(a -> Integer.parseInt(a.get("work_count").toString()) != 0)
+                .filter(a -> a.work_count() != 0)
                 .map(a -> mapToAuthorResultDto(a)).toList();
     }
 
-    private AuthorResultDto mapToAuthorResultDto(LinkedHashMap author) {
-        String key = author.get("key").toString();
-        String name = author.get("name").toString();
-        String birthDate = author.get("birth_date") != null ? author.get("birth_date").toString() : null;
-        String deathDate = author.get("death_date") != null ? author.get("death_date").toString() : null;
-        String topWork = author.get("top_work") != null ? author.get("top_work").toString() : null;
-        Integer workCount = Integer.parseInt(author.get("work_count").toString());
-        List<String> topSubjects = (List<String>) author.get("top_subjects");
-        return new AuthorResultDto(key, name, birthDate, deathDate, topWork, workCount, topSubjects);
+    private AuthorResultDto mapToAuthorResultDto(OpenLibraryAuthorResult author) {
+        return new AuthorResultDto(author.key(), author.name(), author.birth_date(), author.death_date(), author.top_work(), author.work_count(), author.top_subjects());
     }
 }
