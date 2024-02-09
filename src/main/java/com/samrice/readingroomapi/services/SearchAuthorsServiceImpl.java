@@ -30,17 +30,17 @@ public class SearchAuthorsServiceImpl implements SearchAuthorsService {
     }
 
     @Override
-    public AuthorDetailsDto getAuthor(String authorKey) throws RrBadRequestException {
+    public AuthorDetailsDto getAuthor(String key) throws RrBadRequestException {
         try {
-            return getAuthorDetails(authorKey);
+            return getAuthorDetails(key);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RrBadRequestException("Invalid author key.");
         }
     }
 
-    private AuthorDetailsDto getAuthorDetails(String authorKey) throws JsonProcessingException {
-        String endpoint = OpenLibraryUtils.AUTHORS_BASE_URL + "/" + authorKey + ".json";
+    private AuthorDetailsDto getAuthorDetails(String key) throws JsonProcessingException {
+        String endpoint = OpenLibraryUtils.AUTHORS_BASE_URL + "/" + key + ".json";
         AuthorDetailsPojo authorDetails = OpenLibraryUtils.getPojoFromEndpoint(endpoint, AuthorDetailsPojo.class);
         String photoUrl = OpenLibraryUtils.getPhotoUrl(authorDetails.photos());
         String formattedAuthorKey = OpenLibraryUtils.formatKey(authorDetails.key());
