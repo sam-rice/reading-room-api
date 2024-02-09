@@ -15,17 +15,17 @@ import java.util.List;
 public class SearchAuthorsController {
 
     @Autowired
-    SearchAuthorsService librarySearchService;
+    SearchAuthorsService searchAuthorsService;
 
     @GetMapping("")
-    public ResponseEntity<List<AuthorResultDto>> searchAuthors(@RequestParam(value = "q") String authorName) {
-        List<AuthorResultDto> authors = librarySearchService.searchAuthors(authorName);
+    public ResponseEntity<List<AuthorResultDto>> searchAuthors(@RequestParam(value = "q") String query) {
+        List<AuthorResultDto> authors = searchAuthorsService.searchAuthors(query);
         return new ResponseEntity<>(authors, HttpStatus.OK);
     }
 
     @GetMapping("/{key}")
     public ResponseEntity<AuthorDetailsDto> getAuthor(@PathVariable("key") String authorKey) {
-        AuthorDetailsDto author = librarySearchService.getAuthor(authorKey);
+        AuthorDetailsDto author = searchAuthorsService.getAuthor(authorKey);
         return new ResponseEntity<>(author, HttpStatus.OK);
     }
 }
