@@ -44,7 +44,7 @@ public class BookServiceImpl implements BookService {
     public Book addBook(Integer shelfId, Integer userId, String key, String userNote) throws RrBadRequestException {
         try {
             BookResult bookResult = getBookResult(key);
-            int bookId = bookRepository.createBook(shelfId, userId, key, bookResult.isbn(), bookResult.bookTitle(), bookResult.authorsList(), userNote);
+            int bookId = bookRepository.createBook(shelfId, userId, key, bookResult.bookTitle(), bookResult.authorsList(), bookResult.coverUrl(), userNote);
             return bookRepository.findBookById(userId, shelfId, bookId);
         } catch (Exception e) {
             e.printStackTrace();
@@ -62,16 +62,18 @@ public class BookServiceImpl implements BookService {
         bookRepository.deleteBook(userId, shelfId, bookId);
     }
 
-    private record BookResult(String bookTitle, List<BasicAuthor> authorsList, String isbn) {
+    private record BookResult(String bookTitle, List<BasicAuthor> authorsList, String coverUrl) {
     }
 
     private BookResult getBookResult(String key) throws JsonProcessingException {
         String endpoint = OpenLibraryUtils.WORKS_BASE_URL + "/" + key + ".json";
         WorkPojo workResult = OpenLibraryUtils.getPojoFromEndpoint(endpoint, WorkPojo.class);
-        String formattedIsbn = OpenLibraryUtils.formatIsbn(workResult.isbn_13());
+        String coverUrl = workResult.covers() != null && !workResult.covers().isEmpty() ?
+                "https://covers.openlibrary.org/b/id/" + workResult.covers().get(0) + "-L.jpg"
+                : null;
         List<String> authorKeys = workResult.authors().stream().map(a -> a.author().get("key")).toList();
         List<BasicAuthor> authors = getBasicInfoForAllAuthors(authorKeys);
-        return new BookResult(workResult.title(), authors, formattedIsbn);
+        return new BookResult(workResult.title(), authors, coverUrl);
     }
 
     private List<BasicAuthor> getBasicInfoForAllAuthors(List<String> authorKeys) {

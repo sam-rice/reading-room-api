@@ -22,7 +22,7 @@ import java.util.List;
 @Repository
 public class BookRepositoryImpl implements BookRepository {
 
-    private static final String SQL_CREATE_BOOK = "INSERT INTO rr_saved_books (book_id, shelf_id, user_id, ol_key, isbn, title, authors, user_note, saved_date) VALUES(NEXTVAL('rr_saved_books_seq'), ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String SQL_CREATE_BOOK = "INSERT INTO rr_saved_books (book_id, shelf_id, user_id, ol_key, title, authors, cover_url, user_note, saved_date) VALUES(NEXTVAL('rr_saved_books_seq'), ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String SQL_FIND_BOOK_BY_ID = "SELECT * FROM rr_saved_books WHERE user_id = ? AND shelf_id = ? AND book_id = ?";
     private static final String SQL_FIND_ALL_BOOKS_BY_SHELF_ID = "SELECT * from rr_saved_books WHERE user_id = ? AND shelf_id = ? ORDER BY book_id ASC";
     private static final String SQL_UPDATE_BOOK = "UPDATE rr_saved_books SET user_note = ? WHERE user_id = ? AND shelf_id = ? AND book_id = ?";
@@ -35,7 +35,7 @@ public class BookRepositoryImpl implements BookRepository {
     ObjectMapper mapper;
 
     @Override
-    public Integer createBook(Integer shelfId, Integer userId, String olKey, String isbn, String title, List<BasicAuthor> authorsList, String userNote) throws RrBadRequestException {
+    public Integer createBook(Integer shelfId, Integer userId, String olKey, String title, List<BasicAuthor> authorsList, String coverUrl, String userNote) throws RrBadRequestException {
         try {
             String stringifiedAuthorList = Json.toJsonString(authorsList);
             KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -45,9 +45,9 @@ public class BookRepositoryImpl implements BookRepository {
                 ps.setInt(1, shelfId);
                 ps.setInt(2, userId);
                 ps.setString(3, olKey);
-                ps.setString(4, isbn);
-                ps.setString(5, title);
-                ps.setObject(6, stringifiedAuthorList, java.sql.Types.OTHER);
+                ps.setString(4, title);
+                ps.setObject(5, stringifiedAuthorList, java.sql.Types.OTHER);
+                ps.setString(6, coverUrl);
                 ps.setString(7, userNote);
                 ps.setLong(8, timestamp);
                 return ps;
@@ -91,11 +91,10 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     private RowMapper<Book> bookRowMapper = (rs, rowNum) -> {
-        String coverUrl = "https://covers.openlibrary.org/b/olid/" + rs.getString("ol_key") + "-L.jpg";
         try {
             String authorsJson = rs.getString("authors");
             List<BasicAuthor> authorsList = mapper.readValue(authorsJson, new TypeReference<List<BasicAuthor>>() {});
-            return new Book(rs.getInt("book_id"), rs.getInt("shelf_id"), rs.getInt("user_id"), rs.getString("ol_key"), rs.getString("isbn"), rs.getString("title"), authorsList, coverUrl, rs.getString("user_note"), rs.getLong("saved_date"));
+            return new Book(rs.getInt("book_id"), rs.getInt("shelf_id"), rs.getInt("user_id"), rs.getString("ol_key"), rs.getString("title"), authorsList, rs.getString("cover_url"), rs.getString("user_note"), rs.getLong("saved_date"));
         } catch (JsonProcessingException e) {
             throw new RrBadRequestException(e.getMessage());
         }

@@ -2,5 +2,5 @@ package com.samrice.readingroomapi.pojos.openlibraryresponses;
 
 import java.util.Map;
 
-public record IndividualAuthorPojo(Map<String, String> author) {
+public record SimpleAuthorPojo(Map<String, String> author) {
 }
