@@ -1,10 +1,7 @@
 package com.samrice.readingroomapi.utilities;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+import com.fasterxml.jackson.databind.*;
 
 public class Json {
 
@@ -23,5 +20,9 @@ public class Json {
 
     public static <T> T fromJson(JsonNode node, Class<T> clazz) throws JsonProcessingException {
         return objectMapper.treeToValue(node, clazz);
+    }
+
+    public static String toJsonString(Object obj) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(obj);
     }
 }

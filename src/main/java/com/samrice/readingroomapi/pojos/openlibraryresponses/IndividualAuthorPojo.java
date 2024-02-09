@@ -1,4 +1,4 @@
-package com.samrice.readingroomapi.pojos;
+package com.samrice.readingroomapi.pojos.openlibraryresponses;
 
 import java.util.Map;
 
