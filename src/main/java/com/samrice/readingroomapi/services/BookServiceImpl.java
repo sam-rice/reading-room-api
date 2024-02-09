@@ -2,21 +2,20 @@ package com.samrice.readingroomapi.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.samrice.readingroomapi.domains.Author;
+import com.samrice.readingroomapi.domains.BasicAuthor;
 import com.samrice.readingroomapi.domains.Book;
 import com.samrice.readingroomapi.exceptions.RrBadRequestException;
 import com.samrice.readingroomapi.exceptions.RrResourceNotFoundException;
 import com.samrice.readingroomapi.pojos.openlibraryresponses.AuthorDetailsPojo;
 import com.samrice.readingroomapi.pojos.openlibraryresponses.WorkPojo;
 import com.samrice.readingroomapi.repositories.BookRepository;
+import com.samrice.readingroomapi.utilities.OpenLibraryUtils;
 import com.samrice.readingroomapi.utilities.Json;
-import com.samrice.readingroomapi.utilities.OpenLibraryCleaner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
-import com.samrice.readingroomapi.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +47,7 @@ public class BookServiceImpl implements BookService {
             int bookId = bookRepository.createBook(shelfId, userId, key, bookResult.isbn(), bookResult.bookTitle(), bookResult.authorsList(), userNote);
             return bookRepository.findBookById(userId, shelfId, bookId);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RrBadRequestException("Something went wrong. Could not find additional book info.");
         }
     }
@@ -62,36 +62,35 @@ public class BookServiceImpl implements BookService {
         bookRepository.deleteBook(userId, shelfId, bookId);
     }
 
-    private record BookResult(String bookTitle, List<Author> authorsList, String isbn) {
+    private record BookResult(String bookTitle, List<BasicAuthor> authorsList, String isbn) {
     }
 
     private BookResult getBookResult(String key) throws JsonProcessingException {
-        String bookEndpoint = Constants.OPEN_LIBRARY_WORKS_BASE_URL + "/" + key + ".json";
-        ResponseEntity<String> bookResponse = restTemplate.getForEntity(bookEndpoint, String.class);
-        JsonNode root = Json.parse(bookResponse.getBody());
-        WorkPojo workResult = Json.fromJson(root, WorkPojo.class);
-        String formattedIsbn = OpenLibraryCleaner.formatIsbn(workResult.isbn_13());
+        String endpoint = OpenLibraryUtils.WORKS_BASE_URL + "/" + key + ".json";
+        WorkPojo workResult = OpenLibraryUtils.getPojoFromEndpoint(endpoint, WorkPojo.class);
+        String formattedIsbn = OpenLibraryUtils.formatIsbn(workResult.isbn_13());
         List<String> authorKeys = workResult.authors().stream().map(a -> a.author().get("key")).toList();
-        List<Author> authors = getBasicInfoForAllAuthors(authorKeys);
+        List<BasicAuthor> authors = getBasicInfoForAllAuthors(authorKeys);
         return new BookResult(workResult.title(), authors, formattedIsbn);
     }
 
-    private List<Author> getBasicInfoForAllAuthors(List<String> authorKeys) {
-        List<Author> authors = new ArrayList<>();
+    private List<BasicAuthor> getBasicInfoForAllAuthors(List<String> authorKeys) {
+        List<BasicAuthor> authors = new ArrayList<>();
         if (authorKeys != null && !authorKeys.isEmpty()) {
             for (String key : authorKeys) {
                 try {
-                    String formattedKey = OpenLibraryCleaner.formatKey(key);
-                    String endpoint = Constants.OPEN_LIBRARY_BASE_URL + key + ".json";
+                    String formattedKey = OpenLibraryUtils.formatKey(key);
+                    String endpoint = OpenLibraryUtils.BASE_URL + key + ".json";
                     ResponseEntity<String> authorResponse = restTemplate.getForEntity(endpoint, String.class);
                     if (authorResponse.getStatusCode().is2xxSuccessful()) {
                         JsonNode root = Json.parse(authorResponse.getBody());
                         AuthorDetailsPojo author = Json.fromJson(root, AuthorDetailsPojo.class);
-                        authors.add(new Author(author.name(), formattedKey));
+                        authors.add(new BasicAuthor(author.name(), formattedKey));
                     } else {
-                        authors.add(new Author(null, formattedKey));
+                        authors.add(new BasicAuthor(null, formattedKey));
                     }
                 } catch (Exception e) {
+                    e.printStackTrace();
                     throw new RrBadRequestException("Something went wrong. Failed to get author details.");
                 }
             }
@@ -99,3 +98,4 @@ public class BookServiceImpl implements BookService {
         return authors;
     }
 }
+

@@ -6,7 +6,7 @@ import com.samrice.readingroomapi.dtos.AuthorResultDto;
 
 import java.util.List;
 
-public interface OpenLibraryAuthorService {
+public interface SearchAuthorsService {
 
     List<AuthorResultDto> searchAuthors(String authorName) throws RrBadRequestException;
 

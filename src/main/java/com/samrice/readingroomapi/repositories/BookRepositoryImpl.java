@@ -3,7 +3,7 @@ package com.samrice.readingroomapi.repositories;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.samrice.readingroomapi.domains.Author;
+import com.samrice.readingroomapi.domains.BasicAuthor;
 import com.samrice.readingroomapi.domains.Book;
 import com.samrice.readingroomapi.exceptions.RrBadRequestException;
 import com.samrice.readingroomapi.exceptions.RrResourceNotFoundException;
@@ -35,7 +35,7 @@ public class BookRepositoryImpl implements BookRepository {
     ObjectMapper mapper;
 
     @Override
-    public Integer createBook(Integer shelfId, Integer userId, String olKey, String isbn, String title, List<Author> authorsList, String userNote) throws RrBadRequestException {
+    public Integer createBook(Integer shelfId, Integer userId, String olKey, String isbn, String title, List<BasicAuthor> authorsList, String userNote) throws RrBadRequestException {
         try {
             String stringifiedAuthorList = Json.toJsonString(authorsList);
             KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -54,6 +54,7 @@ public class BookRepositoryImpl implements BookRepository {
             }, keyHolder);
             return (Integer) keyHolder.getKeys().get("BOOK_ID");
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RrBadRequestException("Invalid details. Book could not be saved.");
         }
     }
@@ -90,10 +91,10 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     private RowMapper<Book> bookRowMapper = (rs, rowNum) -> {
-        String coverUrl = "https://covers.openlibrary.org/b/isbn/" + rs.getString("isbn") + "-L.jpg";
+        String coverUrl = "https://covers.openlibrary.org/b/olid/" + rs.getString("ol_key") + "-L.jpg";
         try {
             String authorsJson = rs.getString("authors");
-            List<Author> authorsList = mapper.readValue(authorsJson, new TypeReference<List<Author>>() {});
+            List<BasicAuthor> authorsList = mapper.readValue(authorsJson, new TypeReference<List<BasicAuthor>>() {});
             return new Book(rs.getInt("book_id"), rs.getInt("shelf_id"), rs.getInt("user_id"), rs.getString("ol_key"), rs.getString("isbn"), rs.getString("title"), authorsList, coverUrl, rs.getString("user_note"), rs.getLong("saved_date"));
         } catch (JsonProcessingException e) {
             throw new RrBadRequestException(e.getMessage());

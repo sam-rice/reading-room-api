@@ -24,7 +24,7 @@ public class BookController {
                                         @PathVariable("shelfId") Integer shelfId,
                                         @RequestBody Map<String, Object> bookMap) {
         int userId = (Integer) request.getAttribute("userId");
-        String key = (String) bookMap.get("olKey");
+        String key = (String) bookMap.get("key");
         String userNote = (String) bookMap.get("userNote");
         Book book = bookService.addBook(shelfId, userId, key, userNote);
         return new ResponseEntity<>(book, HttpStatus.CREATED);
