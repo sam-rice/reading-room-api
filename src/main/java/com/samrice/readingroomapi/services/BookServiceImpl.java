@@ -68,9 +68,7 @@ public class BookServiceImpl implements BookService {
     private BookResult getBookResult(String key) throws JsonProcessingException {
         String endpoint = OpenLibraryUtils.WORKS_BASE_URL + "/" + key + ".json";
         WorkPojo workResult = OpenLibraryUtils.getPojoFromEndpoint(endpoint, WorkPojo.class);
-        String coverUrl = workResult.covers() != null && !workResult.covers().isEmpty() ?
-                "https://covers.openlibrary.org/b/id/" + workResult.covers().get(0) + "-L.jpg"
-                : null;
+        String coverUrl = OpenLibraryUtils.getPhotoUrl(workResult.covers());
         List<String> authorKeys = workResult.authors().stream().map(a -> a.author().get("key")).toList();
         List<BasicAuthor> authors = getBasicInfoForAllAuthors(authorKeys);
         return new BookResult(workResult.title(), authors, coverUrl);

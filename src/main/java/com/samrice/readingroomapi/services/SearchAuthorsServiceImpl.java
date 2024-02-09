@@ -24,6 +24,7 @@ public class SearchAuthorsServiceImpl implements SearchAuthorsService {
         try {
             return getAllAuthorResults(authorName);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RrBadRequestException("Something went wrong. Failed to query authors.");
         }
     }
@@ -33,16 +34,15 @@ public class SearchAuthorsServiceImpl implements SearchAuthorsService {
         try {
             return getAuthorDetails(authorKey);
         } catch (Exception e) {
-            throw new RrBadRequestException("Something went wrong. Failed to find author details.");
+            e.printStackTrace();
+            throw new RrBadRequestException("Invalid author key.");
         }
     }
 
     private AuthorDetailsDto getAuthorDetails(String authorKey) throws JsonProcessingException {
         String endpoint = OpenLibraryUtils.AUTHORS_BASE_URL + "/" + authorKey + ".json";
         AuthorDetailsPojo authorDetails = OpenLibraryUtils.getPojoFromEndpoint(endpoint, AuthorDetailsPojo.class);
-        String photoUrl = Optional.ofNullable(authorDetails.photos())
-                .map(photos -> !photos.isEmpty() ? "https://covers.openlibrary.org/a/olid/" + photos.get(0) + "-L.jpg" : null)
-                .orElse(null);
+        String photoUrl = OpenLibraryUtils.getPhotoUrl(authorDetails.photos());
         String formattedAuthorKey = OpenLibraryUtils.formatKey(authorDetails.key());
         String bio = Optional.ofNullable(authorDetails.bio())
                 .map(value -> value instanceof String ? (String) value : ((Map<?, ?>) value).get("value").toString())
@@ -63,10 +63,8 @@ public class SearchAuthorsServiceImpl implements SearchAuthorsService {
     }
 
     private BookResultDto mapToBookResultDto(WorkPojo work, String authorName, String authorKey) {
-        String key = work.key().replaceFirst("/works/", "");
-        String coverUrl = Optional.ofNullable(work.covers())
-                .map(covers -> !covers.isEmpty() ? "https://covers.openlibrary.org/a/olid/" + work.covers().get(0).toString() + "-L.jpg" : null)
-                .orElse(null);
+        String key = OpenLibraryUtils.formatKey(authorKey);
+        String coverUrl = OpenLibraryUtils.getPhotoUrl(work.covers());
         HashMap<String, String> author = new HashMap<>();
         author.put("name", authorName);
         author.put("key", authorKey);

@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Optional;
 
 public class OpenLibraryUtils {
     public static final String BASE_URL = "https://openlibrary.org";
@@ -25,7 +26,9 @@ public class OpenLibraryUtils {
         return key.substring(key.indexOf("/", key.indexOf("/") + 1) + 1);
     }
 
-    public static String formatIsbn(List<String> isbn) {
-        return isbn != null && !isbn.isEmpty() ? isbn.get(0).replace("-", "").replace("—", "") : null;
+    public static String getPhotoUrl(List<Integer> covers) {
+        return Optional.ofNullable(covers)
+                .map(c -> !c.isEmpty() ? "https://covers.openlibrary.org/b/id/" + c.get(0) + "-L.jpg" : null)
+                .orElse(null);
     }
 }
