@@ -39,6 +39,25 @@ public class SearchAuthorsServiceImpl implements SearchAuthorsService {
         }
     }
 
+    private List<AuthorResultDto> getAllAuthorResults(String query) throws JsonProcessingException {
+        String endpoint = OpenLibraryUtils.SEARCH_BASE_URL + "/authors.json?q=" + query;
+        AuthorSearchPojo results = OpenLibraryUtils.getPojoFromEndpoint(endpoint, AuthorSearchPojo.class);
+        return results.docs()
+                .stream()
+                .filter(a -> a.work_count() != 0)
+                .map(a -> mapToAuthorResultDto(a)).toList();
+    }
+
+    private AuthorResultDto mapToAuthorResultDto(AuthorResultPojo author) {
+        return new AuthorResultDto(author.key(),
+                author.name(),
+                author.birth_date(),
+                author.death_date(),
+                author.top_work(),
+                author.work_count(),
+                author.top_subjects());
+    }
+
     private AuthorDetailsDto getAuthorDetails(String key) throws JsonProcessingException {
         String endpoint = OpenLibraryUtils.AUTHORS_BASE_URL + "/" + key + ".json";
         AuthorDetailsPojo authorDetails = OpenLibraryUtils.getPojoFromEndpoint(endpoint, AuthorDetailsPojo.class);
@@ -77,23 +96,4 @@ public class SearchAuthorsServiceImpl implements SearchAuthorsService {
     }
 
     private record AuthorWorksResult(Integer workCount, List<AuthorWorkDto> works){}
-
-    private List<AuthorResultDto> getAllAuthorResults(String query) throws JsonProcessingException {
-        String endpoint = OpenLibraryUtils.SEARCH_BASE_URL + "/authors.json?q=" + query;
-        AuthorSearchPojo results = OpenLibraryUtils.getPojoFromEndpoint(endpoint, AuthorSearchPojo.class);
-        return results.docs()
-                .stream()
-                .filter(a -> a.work_count() != 0)
-                .map(a -> mapToAuthorResultDto(a)).toList();
-    }
-
-    private AuthorResultDto mapToAuthorResultDto(AuthorResultPojo author) {
-        return new AuthorResultDto(author.key(),
-                author.name(),
-                author.birth_date(),
-                author.death_date(),
-                author.top_work(),
-                author.work_count(),
-                author.top_subjects());
-    }
 }

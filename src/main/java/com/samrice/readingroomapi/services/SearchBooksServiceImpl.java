@@ -75,5 +75,4 @@ public class SearchBooksServiceImpl implements SearchBooksService{
                 coverUrl,
                 bookDetails.subjects());
     }
-
 }
