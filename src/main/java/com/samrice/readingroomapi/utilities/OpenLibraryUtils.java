@@ -2,9 +2,14 @@ package com.samrice.readingroomapi.utilities;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.samrice.readingroomapi.domains.BasicAuthor;
+import com.samrice.readingroomapi.exceptions.RrBadRequestException;
+import com.samrice.readingroomapi.pojos.openlibraryresponses.AuthorDetailsPojo;
+import com.samrice.readingroomapi.pojos.openlibraryresponses.BasicAuthorPojo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,5 +35,29 @@ public class OpenLibraryUtils {
         return Optional.ofNullable(covers)
                 .map(c -> !c.isEmpty() ? "https://covers.openlibrary.org/b/id/" + c.get(0) + "-L.jpg" : null)
                 .orElse(null);
+    }
+
+    public static List<BasicAuthor> getBasicInfoForAllAuthors(List<BasicAuthorPojo> authorPojos) {
+        List<BasicAuthor> authors = new ArrayList<>();
+        if (authorPojos != null && !authorPojos.isEmpty()) {
+            for (BasicAuthorPojo authorPojo : authorPojos) {
+                try {
+                    String formattedKey = OpenLibraryUtils.formatKey(authorPojo.author().get("key"));
+                    String endpoint = OpenLibraryUtils.AUTHORS_BASE_URL + "/" + formattedKey + ".json";
+                    ResponseEntity<String> authorResponse = restTemplate.getForEntity(endpoint, String.class);
+                    if (authorResponse.getStatusCode().is2xxSuccessful()) {
+                        JsonNode root = Json.parse(authorResponse.getBody());
+                        AuthorDetailsPojo author = Json.fromJson(root, AuthorDetailsPojo.class);
+                        authors.add(new BasicAuthor(author.name(), formattedKey));
+                    } else {
+                        authors.add(new BasicAuthor(null, formattedKey));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw new RrBadRequestException("Something went wrong. Failed to get author details.");
+                }
+            }
+        }
+        return authors;
     }
 }
