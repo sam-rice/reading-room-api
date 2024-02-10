@@ -62,13 +62,12 @@ public class SearchAuthorsServiceImpl implements SearchAuthorsService {
         String endpoint = OpenLibraryUtils.AUTHORS_BASE_URL + "/" + key + ".json";
         AuthorDetailsPojo authorDetails = OpenLibraryUtils.getPojoFromEndpoint(endpoint, AuthorDetailsPojo.class);
         String photoUrl = OpenLibraryUtils.getPhotoUrl(authorDetails.photos());
-        String formattedAuthorKey = OpenLibraryUtils.formatKey(authorDetails.key());
         String bio = Optional.ofNullable(authorDetails.bio())
                 .map(value -> value instanceof String ? (String) value : ((Map<?, ?>) value).get("value").toString())
                 .orElse(null);
 
-        AuthorWorksResult result = getAuthorWorks(formattedAuthorKey, authorDetails.name());
-        return new AuthorDetailsDto(formattedAuthorKey,
+        AuthorWorksResult result = getAuthorWorks(key, authorDetails.name());
+        return new AuthorDetailsDto(key,
                 authorDetails.name(),
                 bio,
                 photoUrl,
@@ -88,11 +87,11 @@ public class SearchAuthorsServiceImpl implements SearchAuthorsService {
     }
 
     private AuthorWorkDto mapToAuthorWorkDto(AuthorWorkPojo work, String authorName, String authorKey) {
-        String key = OpenLibraryUtils.formatKey(authorKey);
+        String formattedKey = OpenLibraryUtils.formatKey(work.key());
         String coverUrl = OpenLibraryUtils.getPhotoUrl(work.covers());
         BasicAuthor author = new BasicAuthor(authorName, authorKey);
         Boolean byMultipleAuthors = work.authors().size() > 1;
-        return new AuthorWorkDto(key, work.title(), author, byMultipleAuthors, coverUrl);
+        return new AuthorWorkDto(formattedKey, work.title(), author, byMultipleAuthors, coverUrl);
     }
 
     private record AuthorWorksResult(Integer workCount, List<AuthorWorkDto> works){}
