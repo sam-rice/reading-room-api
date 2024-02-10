@@ -336,13 +336,11 @@ Demo User:
   "userId": [number],
   "key": [string],
   "title": [string],
-  "authors": [
-    [{
+  "authors": [{
       name: [string || null],
       key: [string]
     },
-    ...] || null
-  ],
+    ...] || null,
   "coverUrl": [string || null],
   "userNote": [string || null],
   "savedDate": [number]
@@ -378,13 +376,11 @@ Demo User:
   "userId": [number],
   "key": [string],
   "title": [string],
-  "authors": [
-    [{
+  "authors": [{
       name: [string || null],
       key: [string]
     },
-    ...] || null
-  ],
+    ...] || null,
   "coverUrl": [string || null],
   "userNote": [string || null],
   "savedDate": [number]
@@ -411,7 +407,7 @@ Demo User:
       <td><code>POST</code></td>
       <td>
 <code>{
-  "isbn": [string],
+  "key": [string],
   "userNote": [string || null],
 }</code>
       </td>
@@ -422,13 +418,11 @@ Demo User:
   "userId": [number],
   "key": [string],
   "title": [string],
-  "authors": [
-    [{
+  "authors": [{
       name: [string || null],
       key: [string]
     },
-    ...] || null
-  ],
+    ...] || null,
   "coverUrl": [string || null],
   "userNote": [string || null],
   "savedDate": [number]
@@ -560,8 +554,10 @@ Note: query parameters in endpoints should replace whitespace with `%20`
     "title": [string],
     "primaryAuthor": {
       "name": [string],
-      "key": [string]
-    } || null],
+      "key": [string]  
+    },
+    ...] || null,
+  "byMultipleAuthors": [boolean]
 }</code>
       </td>
     </tr>
@@ -597,7 +593,7 @@ Note: query parameters in endpoints should replace whitespace with `%20`
       "name": [string],
       "key": [string]
     }, 
-    ...] || null]
+    ...] || null,
   "coverUrl": [string || null],
   "tags": [string[] || null]
 },
@@ -630,12 +626,11 @@ Note: query parameters in endpoints should replace whitespace with `%20`
   "title": [string],
   "description": [string || null],
   "publishDate": [string || null],
-  "authors": [
-    [{
+  "authors": [{
       "name": [string],
       "key": [string]
     }, 
-    ...] || null]
+    ...] || null
   "coverUrl": [string || null],
   "tags": [string[] || null]
 }</code>
