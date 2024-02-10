@@ -35,7 +35,13 @@ public class BookRepositoryImpl implements BookRepository {
     ObjectMapper mapper;
 
     @Override
-    public Integer createBook(Integer shelfId, Integer userId, String olKey, String title, List<BasicAuthor> authorsList, String coverUrl, String userNote) throws RrBadRequestException {
+    public Integer createBook(Integer shelfId,
+                              Integer userId,
+                              String olKey,
+                              String title,
+                              List<BasicAuthor> authorsList,
+                              String coverUrl,
+                              String userNote) throws RrBadRequestException {
         try {
             String stringifiedAuthorList = Json.toJsonString(authorsList);
             KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -94,7 +100,15 @@ public class BookRepositoryImpl implements BookRepository {
         try {
             String authorsJson = rs.getString("authors");
             List<BasicAuthor> authorsList = mapper.readValue(authorsJson, new TypeReference<List<BasicAuthor>>() {});
-            return new Book(rs.getInt("book_id"), rs.getInt("shelf_id"), rs.getInt("user_id"), rs.getString("ol_key"), rs.getString("title"), authorsList, rs.getString("cover_url"), rs.getString("user_note"), rs.getLong("saved_date"));
+            return new Book(rs.getInt("book_id"),
+                    rs.getInt("shelf_id"),
+                    rs.getInt("user_id"),
+                    rs.getString("ol_key"),
+                    rs.getString("title"),
+                    authorsList,
+                    rs.getString("cover_url"),
+                    rs.getString("user_note"),
+                    rs.getLong("saved_date"));
         } catch (JsonProcessingException e) {
             throw new RrBadRequestException(e.getMessage());
         }

@@ -4,5 +4,12 @@ import com.samrice.readingroomapi.domains.BasicAuthor;
 
 import java.util.List;
 
-public record BookDetailsDto(String title, String description, String publishDate, List<BasicAuthor> authors, String coverUrl, List<String> tags) {
+public record BookDetailsDto(
+        String title,
+        String description,
+        String publishDate,
+        List<BasicAuthor> authors,
+        String coverUrl,
+        List<String> tags
+) {
 }

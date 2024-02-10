@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class OpenLibraryUtils {
-    public static final String BASE_URL = "https://openlibrary.org";
     public static final String WORKS_BASE_URL = "https://openlibrary.org/works";
     public static final String SEARCH_BASE_URL = "https://openlibrary.org/search";
     public static final String AUTHORS_BASE_URL = "https://openlibrary.org/authors";
@@ -42,8 +41,8 @@ public class OpenLibraryUtils {
         if (authorPojos != null && !authorPojos.isEmpty()) {
             for (BasicAuthorPojo authorPojo : authorPojos) {
                 try {
-                    String formattedKey = OpenLibraryUtils.formatKey(authorPojo.author().get("key"));
-                    String endpoint = OpenLibraryUtils.AUTHORS_BASE_URL + "/" + formattedKey + ".json";
+                    String formattedKey = formatKey(authorPojo.author().get("key"));
+                    String endpoint = AUTHORS_BASE_URL + "/" + formattedKey + ".json";
                     ResponseEntity<String> authorResponse = restTemplate.getForEntity(endpoint, String.class);
                     if (authorResponse.getStatusCode().is2xxSuccessful()) {
                         JsonNode root = Json.parse(authorResponse.getBody());

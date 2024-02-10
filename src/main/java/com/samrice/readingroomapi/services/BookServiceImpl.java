@@ -5,13 +5,12 @@ import com.samrice.readingroomapi.domains.BasicAuthor;
 import com.samrice.readingroomapi.domains.Book;
 import com.samrice.readingroomapi.exceptions.RrBadRequestException;
 import com.samrice.readingroomapi.exceptions.RrResourceNotFoundException;
-import com.samrice.readingroomapi.pojos.openlibraryresponses.WorkPojo;
+import com.samrice.readingroomapi.pojos.openlibraryresponses.AuthorWorkPojo;
 import com.samrice.readingroomapi.repositories.BookRepository;
 import com.samrice.readingroomapi.utilities.OpenLibraryUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
 
 import java.util.List;
@@ -37,7 +36,13 @@ public class BookServiceImpl implements BookService {
     public Book addBook(Integer shelfId, Integer userId, String key, String userNote) throws RrBadRequestException {
         try {
             BookResult bookResult = getBookResult(key);
-            int bookId = bookRepository.createBook(shelfId, userId, key, bookResult.bookTitle(), bookResult.authorsList(), bookResult.coverUrl(), userNote);
+            int bookId = bookRepository.createBook(shelfId,
+                    userId,
+                    key,
+                    bookResult.bookTitle(),
+                    bookResult.authorsList(),
+                    bookResult.coverUrl(),
+                    userNote);
             return bookRepository.findBookById(userId, shelfId, bookId);
         } catch (Exception e) {
             e.printStackTrace();
@@ -60,7 +65,7 @@ public class BookServiceImpl implements BookService {
 
     private BookResult getBookResult(String key) throws JsonProcessingException {
         String endpoint = OpenLibraryUtils.WORKS_BASE_URL + "/" + key + ".json";
-        WorkPojo workResult = OpenLibraryUtils.getPojoFromEndpoint(endpoint, WorkPojo.class);
+        AuthorWorkPojo workResult = OpenLibraryUtils.getPojoFromEndpoint(endpoint, AuthorWorkPojo.class);
         String coverUrl = OpenLibraryUtils.getPhotoUrl(workResult.covers());
         List<BasicAuthor> authors = OpenLibraryUtils.getBasicInfoForAllAuthors(workResult.authors());
         return new BookResult(workResult.title(), authors, coverUrl);

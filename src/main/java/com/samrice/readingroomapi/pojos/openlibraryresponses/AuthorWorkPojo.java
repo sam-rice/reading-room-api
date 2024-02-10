@@ -2,12 +2,12 @@ package com.samrice.readingroomapi.pojos.openlibraryresponses;
 
 import java.util.List;
 
-public record BookDetailsPojo(
+public record AuthorWorkPojo(
         String title,
-        String description,
-        List<Integer> covers,
-        String first_publish_date,
+        List<String> subjects,
+        String key,
         List<BasicAuthorPojo> authors,
-        List<String> subjects
+        List<Integer> covers
 ) {
 }
+

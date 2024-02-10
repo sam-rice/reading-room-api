@@ -68,6 +68,10 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     private RowMapper<User> userRowMapper = (rs, rowNum) -> {
-        return new User(rs.getInt("USER_ID"), rs.getString("FIRST_NAME"), rs.getString("LAST_NAME"), rs.getString("EMAIL"), rs.getString("PASSWORD"));
+        return new User(rs.getInt("USER_ID"),
+                rs.getString("FIRST_NAME"),
+                rs.getString("LAST_NAME"),
+                rs.getString("EMAIL"),
+                rs.getString("PASSWORD"));
     };
 }
