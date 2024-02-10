@@ -16,6 +16,23 @@ The project also includes a JUnit integration test suite for all repository clas
 
 <br />
 
+## Table of Contents
+
+- [Local Setup Instructions](#local-setup-instructions)
+- [API Reference](#api-reference)
+  - [Usage Overview](#usage-overview)
+  - [Persistence Endpoints](#persistence-endpoints)
+    - [User](#user-endpoints)
+    - [Shelf](#shelf-endpoints)
+    - [Book](#book-endpoints)
+  - [Library Search Endpoints](#library-search-endpoints)
+    - [Author Search by Name](#author-search-by-name)
+    - [Author Details](#author-details)
+    - [Book Search by Title](#book-search-by-title)
+    - [Book Details](#book-details)
+
+<br />
+
 ## Local Setup Instructions
 
 Running this project and/or integration tests locally requires installations of [JRE](https://www.java.com/en/download/manual.jsp), [JDK 17](https://www.oracle.com/java/technologies/downloads/), [Docker Desktop](https://www.docker.com/products/docker-desktop/), and an IDE of your choice. Maven is also required and can either be installed locally, or accessed via IDE plugin.
@@ -31,7 +48,7 @@ Note that when running locally, the project is configured to seed all database t
 
 ## API Reference
 
-### Using the API
+### Usage Overview
 
 All `Book` and `Shelf`-related endpoints require a valid authentication token in the request header to recieve a successful response. To recieve an auth token, use the `/users/register` endpoint to "login" as a user. Auth tokens are valid for 2 hours. Proper header formatting shown below (note the space between "Bearer" and token):
 
@@ -51,8 +68,6 @@ Demo User:
 
 <br />
 
-## Endpoints
-
 #### Base URL
 
 ```http
@@ -62,6 +77,8 @@ Demo User:
 ```
 
 <br />
+
+## Persistence Endpoints
 
 ### `User` Endpoints
 
@@ -317,10 +334,16 @@ Demo User:
   "bookId": [number],
   "shelfId": [number],
   "userId": [number],
-  "isbn": [string],
+  "key": [string],
   "title": [string],
-  "author": [string || null],
-  "coverUrl": [string],
+  "authors": [
+    [{
+      name: [string || null],
+      key: [string]
+    },
+    ...] || null
+  ],
+  "coverUrl": [string || null],
   "userNote": [string || null],
   "savedDate": [number]
 },
@@ -353,10 +376,16 @@ Demo User:
   "bookId": [number],
   "shelfId": [number],
   "userId": [number],
-  "isbn": [string],
+  "key": [string],
   "title": [string],
-  "author": [string || null],
-  "coverUrl": [string],
+  "authors": [
+    [{
+      name: [string || null],
+      key: [string]
+    },
+    ...] || null
+  ],
+  "coverUrl": [string || null],
   "userNote": [string || null],
   "savedDate": [number]
 }</code>
@@ -391,10 +420,16 @@ Demo User:
   "bookId": [number],
   "shelfId": [number],
   "userId": [number],
-  "isbn": [string],
+  "key": [string],
   "title": [string],
-  "author": [string || null],
-  "coverUrl": [string],
+  "authors": [
+    [{
+      name: [string || null],
+      key: [string]
+    },
+    ...] || null
+  ],
+  "coverUrl": [string || null],
   "userNote": [string || null],
   "savedDate": [number]
 }</code>
@@ -454,3 +489,159 @@ Demo User:
     </tr>
   </tbody>
 </table>
+
+<br />
+
+## Library Search Endpoints
+
+Note: query parameters in endpoints should replace whitespace with `%20`
+
+### Author Search Endpoints
+
+#### Author Search by Name
+
+```http
+  /search/authors?q={authorName}
+```
+<table>
+  <tbody>
+    <tr>
+      <td>Method</td><td>Request Body</td><td>Sample Successful Response</td>
+    </tr>
+    <tr>
+      <td><code>GET</code></td>
+      <td>
+<code>n/a</code>
+      </td>
+      <td>
+<code>[{
+  "key": [string],
+  "name": [string],
+  "birthDate": [string || null],
+  "deathDate": [string || null],
+  "topWork": [string || null],
+  "workCount": [number],
+  "topSubjects": [string[] || null]
+},
+...]</code>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<br />
+
+#### Author Details
+
+```http
+  /search/authors/{authorKey}
+```
+<table>
+  <tbody>
+    <tr>
+      <td>Method</td><td>Request Body</td><td>Sample Successful Response</td>
+    </tr>
+    <tr>
+      <td><code>GET</code></td>
+      <td>
+<code>n/a</code>
+      </td>
+      <td>
+<code>{
+  "key": [string],
+  "name": [string],
+  "bio": [string || null],
+  "photoUrl": [string || null],
+  "birthDate": [string || null],
+  "deathDate": [string || null],
+  "workCount": [number],
+  "works": [{
+    "key": [string],
+    "title": [string],
+    "primaryAuthor": {
+      "name": [string],
+      "key": [string]
+    } || null],
+}</code>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<br />
+
+### Book Search Endpoints
+
+#### Book Search by Title
+
+```http
+  /search/books?q={bookTitle}
+```
+<table>
+  <tbody>
+    <tr>
+      <td>Method</td><td>Request Body</td><td>Sample Successful Response</td>
+    </tr>
+    <tr>
+      <td><code>GET</code></td>
+      <td>
+<code>n/a</code>
+      </td>
+      <td>
+<code>[{
+  "key": [string],
+  "title": [string],
+  "publishYear": [number],
+  "editionCount": [number],
+  "authors": [{
+      "name": [string],
+      "key": [string]
+    }, 
+    ...] || null]
+  "coverUrl": [string || null],
+  "tags": [string[] || null]
+},
+...]</code>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<br />
+
+#### Book Details
+
+```http
+  /search/books/{bookKey}
+```
+<table>
+  <tbody>
+    <tr>
+      <td>Method</td><td>Request Body</td><td>Sample Successful Response</td>
+    </tr>
+    <tr>
+      <td><code>GET</code></td>
+      <td>
+<code>n/a</code>
+      </td>
+      <td>
+<code>{
+  "key": [string],
+  "title": [string],
+  "description": [string || null],
+  "publishDate": [string || null],
+  "authors": [
+    [{
+      "name": [string],
+      "key": [string]
+    }, 
+    ...] || null]
+  "coverUrl": [string || null],
+  "tags": [string[] || null]
+}</code>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<br />

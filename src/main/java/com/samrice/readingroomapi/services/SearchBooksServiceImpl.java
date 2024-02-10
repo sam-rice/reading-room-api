@@ -68,7 +68,8 @@ public class SearchBooksServiceImpl implements SearchBooksService{
         BookDetailsPojo bookDetails = OpenLibraryUtils.getPojoFromEndpoint(endpoint, BookDetailsPojo.class);
         String coverUrl = OpenLibraryUtils.getPhotoUrl(bookDetails.covers());
         List<BasicAuthor> authors = OpenLibraryUtils.getBasicInfoForAllAuthors(bookDetails.authors());
-        return new BookDetailsDto(bookDetails.title(),
+        return new BookDetailsDto(key,
+                bookDetails.title(),
                 bookDetails.description(),
                 bookDetails.first_publish_date(),
                 authors,

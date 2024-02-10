@@ -9,7 +9,7 @@ public record BookResultDto(
         String title,
         Integer publishYear,
         Integer editionCount,
-        List<BasicAuthor> author,
+        List<BasicAuthor> authors,
         String coverUrl,
         List<String> tags
 ) {
