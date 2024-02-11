@@ -8,9 +8,9 @@
   <img src="https://img.shields.io/badge/Heroku-430098?style=for-the-badge&logo=heroku&logoColor=white" />
 </p>
 
-Reading Room is a REST API for a book cataloging application built with Java/Spring Boot, Docker, and PostgreSQL. Users have access to a variety of CRUD operations for interacting with `Shelf` entities (to which `Book` entities are associated) and adding/removing books from each shelf. The API leverages the [Open Library API](https://openlibrary.org/developers/api) to aggregate individual book data, only requiring the client to provide a valid 13 or 10-digit ISBN. 
+Reading Room is a REST API for a book cataloguing application built with Java/Spring Boot, Docker, and PostgreSQL. Individual users can be registered—and once authenticated—create, modify, or delete "shelves" from their virtual library. Books can be added and removed from a user's shelf, and can be browsed through via the app's [Library Search endpoints](#library-search-endpoints). The API leverages the [Open Library API](https://openlibrary.org/developers/api) for all book and author data.
 
-The API is deployed via Heroku and configured with unrestricted access for demoing purposes. See API Reference below for demoing the API with Postman. Instructions for registering/authenticating users via JSON Web Token, creating/updating/deleting shelves and books, and querying data are also outlined below, in addition to project setup instructions for running the application locally. 
+The API is deployed via Heroku and configured with unrestricted access for demoing purposes. See [API Reference](#api-reference) below for demoing the API with Postman. Instructions for registering/authenticating users via JSON Web Token, creating/updating/deleting shelves and books, and querying data are also outlined below, in addition to [project setup instructions](#local-setup-instructions) for running the application locally. 
 
 The project also includes a JUnit integration test suite for all repository classes, which leverages an H2 in-memory database.
 
@@ -50,7 +50,7 @@ Note that when running locally, the project is configured to seed all database t
 
 ### Usage Overview
 
-All `Book` and `Shelf`-related endpoints require a valid authentication token in the request header to recieve a successful response. To recieve an auth token, use the `/users/register` endpoint to "login" as a user. Auth tokens are valid for 2 hours. Proper header formatting shown below (note the space between "Bearer" and token):
+All [persistence endpoints](#persistence-endpoints) require a valid authentication token in the request header to recieve a successful response. To recieve an auth token, use the `/users/register` endpoint to "login" as a user. Auth tokens are valid for 2 hours. Proper header formatting shown below (note the space between "Bearer" and token):
 
 ```
 { "Authorization": "Bearer <Auth Token>" }
@@ -65,6 +65,12 @@ Demo User:
   "password": "guitar"
 }
 ```
+
+### A Note on Semantics
+
+The [Open Library API](https://openlibrary.org/developers/api) refers to an author's individual works as "works," while treating individual editions of a work as "books." The current version of this application simply treats an author's individual works as "books" and does not expose data unique to any specific edition. As a result, the code for this project includes POJO interfaces for JSON deserialization that refer to works and books according to Open Library's semantics. This is important to keep in mind for understanding the source code of this project. For example, a JSON response from Open Library being recieved by this API may start as a "work," and once deserialized, be morphed into a "book" along with other data returned from a set of aggregated requests to Open Library.
+
+Any book saved to a user's shelf includes a `bookId` and `key` field. A `bookId` is unique to every saved book, while a `key` is used for integrating with Open Library, and is used for fetching a book's details via the [book details endpoint](#book-details). For example, a user could save several "copies" of one book—all of which have the same `key` field—that each have a unique `bookId`.
 
 <br />
 
