@@ -8,7 +8,7 @@
   <img src="https://img.shields.io/badge/Heroku-430098?style=for-the-badge&logo=heroku&logoColor=white" />
 </p>
 
-Reading Room is a REST API for a book cataloguing application built with Java/Spring Boot, Docker, and PostgreSQL. Individual users can be registered—and once authenticated—create, modify, or delete "shelves" from their virtual library. Books can be added and removed from a user's shelf, and can be browsed through via the app's [Library Search endpoints](#library-search-endpoints). The API leverages the [Open Library API](https://openlibrary.org/developers/api) for all book and author data.
+Reading Room is a REST API for a book cataloging application built with Java/Spring Boot, Docker, and PostgreSQL. Individual users can be registered—and once authenticated—create, modify, or delete "shelves" from their virtual library. Books can be added and removed from a user's shelf, and can be browsed through via the app's [Library Search endpoints](#library-search-endpoints). The API leverages the [Open Library API](https://openlibrary.org/developers/api) for all book and author data.
 
 The API is deployed via Heroku and configured with unrestricted access for demoing purposes. See [API Reference](#api-reference) below for demoing the API with Postman. Instructions for registering/authenticating users via JSON Web Token, creating/updating/deleting shelves and books, and querying data are also outlined below, in addition to [project setup instructions](#local-setup-instructions) for running the application locally. 
 
