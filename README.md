@@ -96,7 +96,7 @@ Any book saved to a user's shelf includes a `bookId` and `key` field. A `bookId`
 <table>
   <tbody>
     <tr>
-      <td>Method</td><td>Request Body</td><td>Sample Successful Response</td>
+      <td>Method</td><td>Request Body</td><td>Successful Response</td>
     </tr>
     <tr>
       <td><code>POST</code></td>
@@ -136,7 +136,7 @@ Any book saved to a user's shelf includes a `bookId` and `key` field. A `bookId`
 <table>
   <tbody>
     <tr>
-      <td>Method</td><td>Request Body</td><td>Sample Successful Response</td>
+      <td>Method</td><td>Request Body</td><td>Successful Response</td>
     </tr>
     <tr>
       <td><code>POST</code></td>
@@ -175,7 +175,7 @@ Any book saved to a user's shelf includes a `bookId` and `key` field. A `bookId`
 <table>
   <tbody>
     <tr>
-      <td>Method</td><td>Request Body</td><td>Sample Successful Response</td>
+      <td>Method</td><td>Request Body</td><td>Successful Response</td>
     </tr>
     <tr>
       <td><code>GET</code></td>
@@ -207,7 +207,7 @@ Any book saved to a user's shelf includes a `bookId` and `key` field. A `bookId`
 <table>
   <tbody>
     <tr>
-      <td>Method</td><td>Request Body</td><td>Sample Successful Response</td>
+      <td>Method</td><td>Request Body</td><td>Successful Response</td>
     </tr>
     <tr>
       <td><code>GET</code></td>
@@ -238,7 +238,7 @@ Any book saved to a user's shelf includes a `bookId` and `key` field. A `bookId`
 <table>
   <tbody>
     <tr>
-      <td>Method</td><td>Request Body</td><td>Sample Successful Response</td>
+      <td>Method</td><td>Request Body</td><td>Successful Response</td>
     </tr>
     <tr>
       <td><code>POST</code></td>
@@ -272,7 +272,7 @@ Any book saved to a user's shelf includes a `bookId` and `key` field. A `bookId`
 <table>
   <tbody>
     <tr>
-      <td>Method</td><td>Request Body</td><td>Sample Successful Response</td>
+      <td>Method</td><td>Request Body</td><td>Successful Response</td>
     </tr>
     <tr>
       <td><code>PUT</code></td>
@@ -300,7 +300,7 @@ Any book saved to a user's shelf includes a `bookId` and `key` field. A `bookId`
 <table>
   <tbody>
     <tr>
-      <td>Method</td><td>Request Body</td><td>Sample Successful Response</td>
+      <td>Method</td><td>Request Body</td><td>Successful Response</td>
     </tr>
     <tr>
       <td><code>DELETE</code></td>
@@ -328,7 +328,7 @@ Any book saved to a user's shelf includes a `bookId` and `key` field. A `bookId`
 <table>
   <tbody>
     <tr>
-      <td>Method</td><td>Request Body</td><td>Sample Successful Response</td>
+      <td>Method</td><td>Request Body</td><td>Successful Response</td>
     </tr>
     <tr>
       <td><code>GET</code></td>
@@ -368,7 +368,7 @@ Any book saved to a user's shelf includes a `bookId` and `key` field. A `bookId`
 <table>
   <tbody>
     <tr>
-      <td>Method</td><td>Request Body</td><td>Sample Successful Response</td>
+      <td>Method</td><td>Request Body</td><td>Successful Response</td>
     </tr>
     <tr>
       <td><code>GET</code></td>
@@ -407,7 +407,7 @@ Any book saved to a user's shelf includes a `bookId` and `key` field. A `bookId`
 <table>
   <tbody>
     <tr>
-      <td>Method</td><td>Request Body</td><td>Sample Successful Response</td>
+      <td>Method</td><td>Request Body</td><td>Successful Response</td>
     </tr>
     <tr>
       <td><code>POST</code></td>
@@ -451,7 +451,7 @@ Any book saved to a user's shelf includes a `bookId` and `key` field. A `bookId`
 <table>
   <tbody>
     <tr>
-      <td>Method</td><td>Request Body</td><td>Sample Successful Response</td>
+      <td>Method</td><td>Request Body</td><td>Successful Response</td>
     </tr>
     <tr>
       <td><code>PUT</code></td>
@@ -476,7 +476,7 @@ Any book saved to a user's shelf includes a `bookId` and `key` field. A `bookId`
 <table>
   <tbody>
     <tr>
-      <td>Method</td><td>Request Body</td><td>Sample Successful Response</td>
+      <td>Method</td><td>Request Body</td><td>Successful Response</td>
     </tr>
     <tr>
       <td><code>DELETE</code></td>
@@ -506,7 +506,7 @@ Note: query parameters in endpoints should replace whitespace with `%20`
 <table>
   <tbody>
     <tr>
-      <td>Method</td><td>Request Body</td><td>Sample Successful Response</td>
+      <td>Method</td><td>Request Body</td><td>Successful Response</td>
     </tr>
     <tr>
       <td><code>GET</code></td>
@@ -539,7 +539,7 @@ Note: query parameters in endpoints should replace whitespace with `%20`
 <table>
   <tbody>
     <tr>
-      <td>Method</td><td>Request Body</td><td>Sample Successful Response</td>
+      <td>Method</td><td>Request Body</td><td>Successful Response</td>
     </tr>
     <tr>
       <td><code>GET</code></td>
@@ -582,7 +582,7 @@ Note: query parameters in endpoints should replace whitespace with `%20`
 <table>
   <tbody>
     <tr>
-      <td>Method</td><td>Request Body</td><td>Sample Successful Response</td>
+      <td>Method</td><td>Request Body</td><td>Successful Response</td>
     </tr>
     <tr>
       <td><code>GET</code></td>
@@ -619,7 +619,7 @@ Note: query parameters in endpoints should replace whitespace with `%20`
 <table>
   <tbody>
     <tr>
-      <td>Method</td><td>Request Body</td><td>Sample Successful Response</td>
+      <td>Method</td><td>Request Body</td><td>Successful Response</td>
     </tr>
     <tr>
       <td><code>GET</code></td>
