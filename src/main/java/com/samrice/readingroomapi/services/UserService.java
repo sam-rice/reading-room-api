@@ -1,6 +1,6 @@
 package com.samrice.readingroomapi.services;
 
-import com.samrice.readingroomapi.domain.User;
+import com.samrice.readingroomapi.domains.User;
 import com.samrice.readingroomapi.exceptions.RrAuthException;
 
 public interface UserService {

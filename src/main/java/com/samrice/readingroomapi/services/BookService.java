@@ -1,6 +1,6 @@
 package com.samrice.readingroomapi.services;
 
-import com.samrice.readingroomapi.domain.Book;
+import com.samrice.readingroomapi.domains.Book;
 import com.samrice.readingroomapi.exceptions.RrBadRequestException;
 import com.samrice.readingroomapi.exceptions.RrResourceNotFoundException;
 
@@ -12,7 +12,7 @@ public interface BookService {
 
     Book fetchBookById(Integer userId, Integer shelfId, Integer bookId) throws RrResourceNotFoundException;
 
-    Book addBook(Integer shelfId, Integer userId, String isbn, String userNote) throws RrBadRequestException;
+    Book addBook(Integer shelfId, Integer userId, String key, String userNote) throws RrBadRequestException;
 
     void updateBook(Integer userId, Integer shelfId, Integer bookId, Book book) throws RrBadRequestException;
 

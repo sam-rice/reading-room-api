@@ -1,6 +1,6 @@
 package com.samrice.readingroomapi.repositories;
 
-import com.samrice.readingroomapi.domain.User;
+import com.samrice.readingroomapi.domains.User;
 import com.samrice.readingroomapi.exceptions.RrAuthException;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +68,10 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     private RowMapper<User> userRowMapper = (rs, rowNum) -> {
-        return new User(rs.getInt("USER_ID"), rs.getString("FIRST_NAME"), rs.getString("LAST_NAME"), rs.getString("EMAIL"), rs.getString("PASSWORD"));
+        return new User(rs.getInt("USER_ID"),
+                rs.getString("FIRST_NAME"),
+                rs.getString("LAST_NAME"),
+                rs.getString("EMAIL"),
+                rs.getString("PASSWORD"));
     };
 }

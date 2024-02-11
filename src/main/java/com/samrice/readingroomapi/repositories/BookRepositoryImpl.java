@@ -1,8 +1,13 @@
 package com.samrice.readingroomapi.repositories;
 
-import com.samrice.readingroomapi.domain.Book;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.samrice.readingroomapi.domains.BasicAuthor;
+import com.samrice.readingroomapi.domains.Book;
 import com.samrice.readingroomapi.exceptions.RrBadRequestException;
 import com.samrice.readingroomapi.exceptions.RrResourceNotFoundException;
+import com.samrice.readingroomapi.utilities.Json;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,7 +22,7 @@ import java.util.List;
 @Repository
 public class BookRepositoryImpl implements BookRepository {
 
-    private static final String SQL_CREATE_BOOK = "INSERT INTO rr_saved_books (book_id, shelf_id, user_id, isbn, title, author, user_note, saved_date) VALUES(NEXTVAL('rr_saved_books_seq'), ?, ?, ?, ?, ?, ?, ?)";
+    private static final String SQL_CREATE_BOOK = "INSERT INTO rr_saved_books (book_id, shelf_id, user_id, ol_key, title, authors, cover_url, user_note, saved_date) VALUES(NEXTVAL('rr_saved_books_seq'), ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String SQL_FIND_BOOK_BY_ID = "SELECT * FROM rr_saved_books WHERE user_id = ? AND shelf_id = ? AND book_id = ?";
     private static final String SQL_FIND_ALL_BOOKS_BY_SHELF_ID = "SELECT * from rr_saved_books WHERE user_id = ? AND shelf_id = ? ORDER BY book_id ASC";
     private static final String SQL_UPDATE_BOOK = "UPDATE rr_saved_books SET user_note = ? WHERE user_id = ? AND shelf_id = ? AND book_id = ?";
@@ -26,24 +31,36 @@ public class BookRepositoryImpl implements BookRepository {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    ObjectMapper mapper;
+
     @Override
-    public Integer createBook(Integer shelfId, Integer userId, String isbn, String title, String author, String userNote) throws RrBadRequestException {
+    public Integer createBook(Integer shelfId,
+                              Integer userId,
+                              String olKey,
+                              String title,
+                              List<BasicAuthor> authorsList,
+                              String coverUrl,
+                              String userNote) throws RrBadRequestException {
         try {
+            String stringifiedAuthorList = Json.toJsonString(authorsList);
             KeyHolder keyHolder = new GeneratedKeyHolder();
             long timestamp = new java.util.Date().getTime();
             jdbcTemplate.update(connection -> {
                 PreparedStatement ps = connection.prepareStatement(SQL_CREATE_BOOK, Statement.RETURN_GENERATED_KEYS);
                 ps.setInt(1, shelfId);
                 ps.setInt(2, userId);
-                ps.setString(3, isbn);
+                ps.setString(3, olKey);
                 ps.setString(4, title);
-                ps.setString(5, author);
-                ps.setString(6, userNote);
-                ps.setLong(7, timestamp);
+                ps.setObject(5, stringifiedAuthorList, java.sql.Types.OTHER);
+                ps.setString(6, coverUrl);
+                ps.setString(7, userNote);
+                ps.setLong(8, timestamp);
                 return ps;
             }, keyHolder);
             return (Integer) keyHolder.getKeys().get("BOOK_ID");
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RrBadRequestException("Invalid details. Book could not be saved.");
         }
     }
@@ -80,7 +97,20 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     private RowMapper<Book> bookRowMapper = (rs, rowNum) -> {
-        String coverUrl = "https://covers.openlibrary.org/b/isbn/" + rs.getString("isbn") + "-L.jpg";
-      return new Book(rs.getInt("book_id"), rs.getInt("shelf_id"), rs.getInt("user_id"), rs.getString("isbn"), rs.getString("title"), rs.getString("author"), coverUrl, rs.getString("user_note"), rs.getLong("saved_date"));
+        try {
+            String authorsJson = rs.getString("authors");
+            List<BasicAuthor> authorsList = mapper.readValue(authorsJson, new TypeReference<List<BasicAuthor>>() {});
+            return new Book(rs.getInt("book_id"),
+                    rs.getInt("shelf_id"),
+                    rs.getInt("user_id"),
+                    rs.getString("ol_key"),
+                    rs.getString("title"),
+                    authorsList,
+                    rs.getString("cover_url"),
+                    rs.getString("user_note"),
+                    rs.getLong("saved_date"));
+        } catch (JsonProcessingException e) {
+            throw new RrBadRequestException(e.getMessage());
+        }
     };
 }

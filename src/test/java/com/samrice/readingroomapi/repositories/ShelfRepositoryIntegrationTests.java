@@ -1,7 +1,7 @@
 package com.samrice.readingroomapi.repositories;
 
-import com.samrice.readingroomapi.domain.Book;
-import com.samrice.readingroomapi.domain.Shelf;
+import com.samrice.readingroomapi.domains.Book;
+import com.samrice.readingroomapi.domains.Shelf;
 import com.samrice.readingroomapi.exceptions.RrBadRequestException;
 import com.samrice.readingroomapi.exceptions.RrResourceNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -33,6 +33,7 @@ public class ShelfRepositoryIntegrationTests {
         assertNotNull(newShelfId);
         assertNotEquals(0, newShelfId);
         Shelf retrievedShelf = underTest.findShelfById(2, newShelfId);
+
         assertEquals(newShelfId, retrievedShelf.shelfId());
         assertEquals(2, retrievedShelf.userId());
         assertEquals("Jimmy's New Shelf", retrievedShelf.title());
@@ -51,6 +52,7 @@ public class ShelfRepositoryIntegrationTests {
     public void testThatExistingShelfCanBeQueried() {
         Shelf retrievedShelf = underTest.findShelfById(2, 3);
         List<Book> relatedBooks = bookRepository.findAllBooksByShelfId(2, 3);
+
         assertEquals(3, retrievedShelf.shelfId());
         assertEquals(2, retrievedShelf.userId());
         assertEquals("English & Misc. Architecture", retrievedShelf.title());
@@ -71,6 +73,7 @@ public class ShelfRepositoryIntegrationTests {
         List<Shelf> shelves = underTest.findAllShelvesByUserId(3);
         assertEquals(shelves.size(), 1);
         Shelf shelf = shelves.get(0);
+
         assertEquals(6, shelf.shelfId());
         assertEquals(3, shelf.userId());
         assertEquals("Drinking, Farming, and Farm Equipment", shelf.title());
@@ -83,6 +86,7 @@ public class ShelfRepositoryIntegrationTests {
         Shelf newShelf = new Shelf(4, 2, "Updated Title", "Updated description.", 3);
         underTest.updateShelf(2, 4, newShelf);
         Shelf returned = underTest.findShelfById(2, 4);
+
         assertEquals(4, returned.shelfId());
         assertEquals(2, returned.userId());
         assertEquals("Updated Title", returned.title());
@@ -102,6 +106,7 @@ public class ShelfRepositoryIntegrationTests {
     public void testThatShelfCanBeDeletedWithAllItsBooks() {
         underTest.deleteShelfWithAllBooks(2, 2);
         List<Book> remainingBooks = bookRepository.findAllBooksByShelfId(2, 2);
+
         assertEquals(remainingBooks.size(), 0);
     }
 }

@@ -1,4 +1,4 @@
-package com.samrice.readingroomapi.domain;
+package com.samrice.readingroomapi.domains;
 
 public class User {
 

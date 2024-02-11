@@ -1,7 +1,7 @@
 package com.samrice.readingroomapi.controllers;
 
 import com.samrice.readingroomapi.Constants;
-import com.samrice.readingroomapi.domain.User;
+import com.samrice.readingroomapi.domains.User;
 import com.samrice.readingroomapi.services.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

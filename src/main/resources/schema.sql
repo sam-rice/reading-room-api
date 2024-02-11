@@ -26,9 +26,10 @@ create table rr_saved_books(
 book_id integer primary key not null,
 shelf_id integer not null,
 user_id integer not null,
-isbn varchar(13) not null,
+ol_key varchar(12) not null,
 title varchar(60) not null,
-author varchar(40),
+authors json,
+cover_url varchar(50),
 user_note text,
 saved_date bigint not null
 );

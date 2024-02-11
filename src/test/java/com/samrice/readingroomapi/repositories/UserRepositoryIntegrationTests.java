@@ -1,6 +1,6 @@
 package com.samrice.readingroomapi.repositories;
 
-import com.samrice.readingroomapi.domain.User;
+import com.samrice.readingroomapi.domains.User;
 import com.samrice.readingroomapi.exceptions.RrAuthException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,6 +27,7 @@ public class UserRepositoryIntegrationTests {
         assertNotNull(newUserId);
         assertNotEquals(0, newUserId);
         User retrievedUser = underTest.findById(newUserId);
+
         assertEquals("Stanley", retrievedUser.getFirstName());
         assertEquals("Kubrick", retrievedUser.getLastName());
         assertEquals("stan@mail.com", retrievedUser.getEmail());
@@ -35,6 +36,7 @@ public class UserRepositoryIntegrationTests {
     @Test
     public void testThatExistingUserCanBeQueried() {
         User retrievedUser = underTest.findById(2);
+
         assertEquals(2, retrievedUser.getUserId());
         assertEquals("Jimmy", retrievedUser.getFirstName());
         assertEquals("Page", retrievedUser.getLastName());
@@ -52,6 +54,7 @@ public class UserRepositoryIntegrationTests {
     @Test
     public void testThatUserCanBeFoundByEmailAndPassword() {
         User authenticatedUser = underTest.findByEmailAndPassword("jimmy@mail.com", "guitar");
+
         assertEquals(2, authenticatedUser.getUserId());
         assertEquals("Jimmy", authenticatedUser.getFirstName());
         assertEquals("Page", authenticatedUser.getLastName());
@@ -71,12 +74,14 @@ public class UserRepositoryIntegrationTests {
     @Test
     public void testThatPreviouslyUsedEmailsCanBeCounted() {
         Integer result = underTest.getCountByEmail("jimmy@mail.com");
+
         assertEquals(result, 1);
     }
 
     @Test
     public void testThatUserCanBeFoundById() {
         User result = underTest.findById(2);
+
         assertEquals(2, result.getUserId());
         assertEquals("Jimmy", result.getFirstName());
         assertEquals("Page", result.getLastName());
