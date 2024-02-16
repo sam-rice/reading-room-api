@@ -520,7 +520,6 @@ Note: query parameters in endpoints should replace whitespace with `%20`
   "birthDate": [string || null],
   "deathDate": [string || null],
   "topBook": [string || null],
-  "bookCount": [number],
   "topSubjects": [string[] || null]
 },
 ...]</code>
@@ -554,7 +553,6 @@ Note: query parameters in endpoints should replace whitespace with `%20`
   "photoUrl": [string || null],
   "birthDate": [string || null],
   "deathDate": [string || null],
-  "bookCount": [number],
   "books": [{
     "key": [string],
     "title": [string],
