@@ -558,13 +558,15 @@ Note: query parameters in endpoints should replace whitespace with `%20`
   "books": [{
     "key": [string],
     "title": [string],
+    "publishDate": [string],
     "primaryAuthor": {
       "name": [string],
       "key": [string]  
     },
     ...] || null,
   "byMultipleAuthors": [boolean],
-  "coverUrl": [string || null]
+  "coverUrl": [string || null],
+  "subjects": [string[] || null]
 }</code>
       </td>
     </tr>
