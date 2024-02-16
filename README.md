@@ -563,10 +563,11 @@ Note: query parameters in endpoints should replace whitespace with `%20`
       "name": [string],
       "key": [string]  
     },
+    "byMultipleAuthors": [boolean],
+    "coverUrl": [string || null],
+    "subjects": [string[] || null]
+  },
     ...] || null,
-  "byMultipleAuthors": [boolean],
-  "coverUrl": [string || null],
-  "subjects": [string[] || null]
 }</code>
       </td>
     </tr>
