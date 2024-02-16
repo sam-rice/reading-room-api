@@ -7,7 +7,8 @@ public record AuthorWorkPojo(
         List<String> subjects,
         String key,
         List<BasicAuthorPojo> authors,
-        List<Integer> covers
+        List<Integer> covers,
+        String first_publish_date
 ) {
 }
 

@@ -9,7 +9,6 @@ public record AuthorDetailsDto(
         String photoUrl,
         String birthDate,
         String deathDate,
-        Integer workCount,
-        List<AuthorWorkDto> works
+        List<AuthorBookDto> books
 ) {
 }

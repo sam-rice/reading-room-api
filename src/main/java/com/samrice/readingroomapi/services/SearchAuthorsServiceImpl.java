@@ -3,7 +3,7 @@ package com.samrice.readingroomapi.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.samrice.readingroomapi.domains.BasicAuthor;
 import com.samrice.readingroomapi.dtos.AuthorDetailsDto;
-import com.samrice.readingroomapi.dtos.AuthorWorkDto;
+import com.samrice.readingroomapi.dtos.AuthorBookDto;
 import com.samrice.readingroomapi.exceptions.RrBadRequestException;
 import com.samrice.readingroomapi.dtos.AuthorResultDto;
 import com.samrice.readingroomapi.pojos.openlibraryresponses.*;
@@ -54,7 +54,6 @@ public class SearchAuthorsServiceImpl implements SearchAuthorsService {
                 author.birth_date(),
                 author.death_date(),
                 author.top_work(),
-                author.work_count(),
                 author.top_subjects());
     }
 
@@ -66,33 +65,33 @@ public class SearchAuthorsServiceImpl implements SearchAuthorsService {
                 .map(value -> value instanceof String ? (String) value : ((Map<?, ?>) value).get("value").toString())
                 .orElse(null);
 
-        AuthorWorksResult result = getAuthorWorks(key, authorDetails.name());
+        AuthorBooksResult result = getAuthorBooks(key, authorDetails.name());
         return new AuthorDetailsDto(key,
                 authorDetails.name(),
                 bio,
                 photoUrl,
                 authorDetails.birth_date(),
                 authorDetails.death_date(),
-                result.workCount(),
                 result.works());
     }
 
-    private AuthorWorksResult getAuthorWorks(String authorKey, String authorName) throws JsonProcessingException {
+    private AuthorBooksResult getAuthorBooks(String authorKey, String authorName) throws JsonProcessingException {
         String endpoint = OpenLibraryUtils.AUTHORS_BASE_URL + "/" + authorKey + "/works.json?limit=1000";
         AuthorWorksPojo works = OpenLibraryUtils.getPojoFromEndpoint(endpoint, AuthorWorksPojo.class);
-        List<AuthorWorkDto> worksList = works.entries()
+        List<AuthorBookDto> booksList = works.entries()
                 .stream()
-                .map(w -> mapToAuthorWorkDto(w, authorName, authorKey)).toList();
-        return new AuthorWorksResult(works.size(), worksList);
+                .filter(w -> w.first_publish_date() != null)
+                .map(w -> mapToAuthorBookDto(w, authorName, authorKey)).toList();
+        return new AuthorBooksResult(works.size(), booksList);
     }
 
-    private AuthorWorkDto mapToAuthorWorkDto(AuthorWorkPojo work, String authorName, String authorKey) {
+    private AuthorBookDto mapToAuthorBookDto(AuthorWorkPojo work, String authorName, String authorKey) {
         String formattedKey = OpenLibraryUtils.formatKey(work.key());
         String coverUrl = OpenLibraryUtils.getPhotoUrl(work.covers());
         BasicAuthor author = new BasicAuthor(authorName, authorKey);
         Boolean byMultipleAuthors = work.authors().size() > 1;
-        return new AuthorWorkDto(formattedKey, work.title(), author, byMultipleAuthors, coverUrl);
+        return new AuthorBookDto(formattedKey, work.title(), work.first_publish_date(), author, byMultipleAuthors, coverUrl, work.subjects());
     }
 
-    private record AuthorWorksResult(Integer workCount, List<AuthorWorkDto> works){}
+    private record AuthorBooksResult(Integer workCount, List<AuthorBookDto> works){}
 }
