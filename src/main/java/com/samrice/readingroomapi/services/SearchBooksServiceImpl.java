@@ -43,6 +43,7 @@ public class SearchBooksServiceImpl implements SearchBooksService{
         BookSearchPojo results = OpenLibraryUtils.getPojoFromEndpoint(endpoint, BookSearchPojo.class);
         return results.docs()
                 .stream()
+                .filter(b -> b.first_publish_year() != null)
                 .map(b -> mapToBookResultDto(b)).toList();
     }
 

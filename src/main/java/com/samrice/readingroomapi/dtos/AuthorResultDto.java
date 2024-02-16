@@ -7,8 +7,7 @@ public record AuthorResultDto(
         String name,
         String birthDate,
         String deathDate,
-        String topWork,
-        Integer workCount,
+        String topBook,
         List<String> topSubjects
 ) {
 }
