@@ -1,6 +1,7 @@
 package com.samrice.readingroomapi.controllers;
 
 import com.samrice.readingroomapi.domains.Shelf;
+import com.samrice.readingroomapi.dtos.ShelfDto;
 import com.samrice.readingroomapi.services.ShelfService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,27 +21,27 @@ public class ShelfController {
     ShelfService shelfService;
 
     @GetMapping("")
-    public ResponseEntity<List<Shelf>> getAllShelves(HttpServletRequest request) {
+    public ResponseEntity<List<ShelfDto>> getAllShelves(HttpServletRequest request) {
         int userId = (Integer) request.getAttribute("userId");
-        List<Shelf> allShelves = shelfService.fetchAllShelvesByUser(userId);
+        List<ShelfDto> allShelves = shelfService.fetchAllShelvesByUser(userId);
         return new ResponseEntity<>(allShelves, HttpStatus.OK);
     }
 
     @GetMapping("/{shelfId}")
-    public ResponseEntity<Shelf> getShelfById(HttpServletRequest request,
+    public ResponseEntity<ShelfDto> getShelfById(HttpServletRequest request,
                                               @PathVariable("shelfId") Integer shelfId) {
         int userId = (Integer) request.getAttribute("userId");
-        Shelf shelf = shelfService.fetchShelfById(userId, shelfId);
+        ShelfDto shelf = shelfService.fetchShelfById(userId, shelfId);
         return new ResponseEntity<>(shelf, HttpStatus.OK);
     }
 
     @PostMapping("")
-    public ResponseEntity<Shelf> addShelf(HttpServletRequest request,
+    public ResponseEntity<ShelfDto> addShelf(HttpServletRequest request,
                                           @RequestBody Map<String, Object> shelfMap) {
         int userId = (Integer) request.getAttribute("userId");
         String title = (String) shelfMap.get("title");
         String description = (String) shelfMap.get("description");
-        Shelf shelf = shelfService.addShelf(userId, title, description);
+        ShelfDto shelf = shelfService.addShelf(userId, title, description);
         return new ResponseEntity<>(shelf, HttpStatus.CREATED);
     }
 

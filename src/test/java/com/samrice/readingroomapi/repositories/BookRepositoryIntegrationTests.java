@@ -126,4 +126,11 @@ public class BookRepositoryIntegrationTests {
 
         assertEquals(returnedBooks.size(), 1);
     }
+
+    @Test
+    public void testThatFirstBookWithCoverUrlCanBeQueried() {
+        Book bookWithCover = underTest.findFirstSavedBookOnShelf(2, 4);
+        assertEquals(10_007, bookWithCover.bookId());
+        assertEquals("https://covers.openlibrary.org/b/id/13344966-L.jpg", bookWithCover.coverUrl());
+    }
 }

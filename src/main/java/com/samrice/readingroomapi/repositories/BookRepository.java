@@ -18,4 +18,6 @@ public interface BookRepository {
     void updateBook(Integer userId, Integer shelfId, Integer bookId, Book book) throws RrBadRequestException;
 
     void deleteBook(Integer userId, Integer shelfId, Integer bookId) throws RrResourceNotFoundException;
+
+    Book findFirstSavedBookOnShelf(Integer userId, Integer shelfId) throws RrResourceNotFoundException;
 }

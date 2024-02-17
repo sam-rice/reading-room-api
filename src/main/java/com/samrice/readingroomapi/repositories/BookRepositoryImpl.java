@@ -27,6 +27,7 @@ public class BookRepositoryImpl implements BookRepository {
     private static final String SQL_FIND_ALL_BOOKS_BY_SHELF_ID = "SELECT * from rr_saved_books WHERE user_id = ? AND shelf_id = ? ORDER BY book_id ASC";
     private static final String SQL_UPDATE_BOOK = "UPDATE rr_saved_books SET user_note = ? WHERE user_id = ? AND shelf_id = ? AND book_id = ?";
     private static final String SQL_DELETE_BOOK = "DELETE FROM rr_saved_books WHERE user_id = ? AND shelf_id = ? AND book_id = ?";
+    private static final String SQL_FIND_FIRST_SAVED_BOOK_ON_SHELF = "SELECT sb.* FROM rr_saved_books sb WHERE sb.user_id= ? AND sb.shelf_id = ? AND sb.cover_url IS NOT NULL ORDER BY sb.book_id LIMIT 1";
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -68,7 +69,9 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public Book findBookById(Integer userId, Integer shelfId, Integer bookId) throws RrResourceNotFoundException {
         try {
-            return jdbcTemplate.queryForObject(SQL_FIND_BOOK_BY_ID, new Object[]{userId, shelfId, bookId}, bookRowMapper);
+            return jdbcTemplate.queryForObject(SQL_FIND_BOOK_BY_ID,
+                    new Object[]{userId, shelfId, bookId},
+                    bookRowMapper);
         } catch (Exception e) {
             throw new RrResourceNotFoundException("Book not found");
         }
@@ -96,10 +99,19 @@ public class BookRepositoryImpl implements BookRepository {
         }
     }
 
+    @Override
+    public Book findFirstSavedBookOnShelf(Integer userId, Integer shelfId) throws RrResourceNotFoundException {
+        List<Book> books = jdbcTemplate.query(SQL_FIND_FIRST_SAVED_BOOK_ON_SHELF,
+                new Object[]{userId, shelfId},
+                bookRowMapper);
+        return books.isEmpty() ? null : books.get(0);
+    }
+
     private RowMapper<Book> bookRowMapper = (rs, rowNum) -> {
         try {
             String authorsJson = rs.getString("authors");
-            List<BasicAuthor> authorsList = mapper.readValue(authorsJson, new TypeReference<List<BasicAuthor>>() {});
+            List<BasicAuthor> authorsList = mapper.readValue(authorsJson, new TypeReference<List<BasicAuthor>>() {
+            });
             return new Book(rs.getInt("book_id"),
                     rs.getInt("shelf_id"),
                     rs.getInt("user_id"),
