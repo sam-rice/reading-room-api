@@ -1,8 +1,11 @@
 package com.samrice.readingroomapi.services;
 
+import com.samrice.readingroomapi.domains.Book;
 import com.samrice.readingroomapi.domains.Shelf;
+import com.samrice.readingroomapi.dtos.ShelfDto;
 import com.samrice.readingroomapi.exceptions.RrBadRequestException;
 import com.samrice.readingroomapi.exceptions.RrResourceNotFoundException;
+import com.samrice.readingroomapi.repositories.BookRepository;
 import com.samrice.readingroomapi.repositories.ShelfRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,20 +20,45 @@ public class ShelfServiceImpl implements ShelfService {
     @Autowired
     ShelfRepository shelfRepository;
 
+    @Autowired
+    BookRepository bookRepository;
+
     @Override
-    public List<Shelf> fetchAllShelvesByUser(Integer userId) {
-        return shelfRepository.findAllShelvesByUserId(userId);
+    public List<ShelfDto> fetchAllShelvesByUser(Integer userId) {
+        List<Shelf> shelves = shelfRepository.findAllShelvesByUserId(userId);
+        return shelves.stream().map(s -> {
+            Book firstSavedBook = bookRepository.findFirstSavedBookOnShelf(s.userId(), s.shelfId());
+            return new ShelfDto(s.shelfId(),
+                    s.userId(),
+                    s.title(),
+                    s.description(),
+                    s.totalSavedBooks(),
+                    firstSavedBook != null ? firstSavedBook.coverUrl() : null);
+        }).toList();
     }
 
     @Override
-    public Shelf fetchShelfById(Integer userId, Integer shelfId) throws RrResourceNotFoundException {
-        return shelfRepository.findShelfById(userId, shelfId);
+    public ShelfDto fetchShelfById(Integer userId, Integer shelfId) throws RrResourceNotFoundException {
+        Shelf shelf = shelfRepository.findShelfById(userId, shelfId);
+        Book firstSavedBook = bookRepository.findFirstSavedBookOnShelf(userId, shelfId);
+        return new ShelfDto(shelf.shelfId(),
+                shelf.userId(),
+                shelf.title(),
+                shelf.description(),
+                shelf.totalSavedBooks(),
+                firstSavedBook != null ? firstSavedBook.coverUrl() : null);
     }
 
     @Override
-    public Shelf addShelf(Integer userId, String title, String description) throws RrBadRequestException {
+    public ShelfDto addShelf(Integer userId, String title, String description) throws RrBadRequestException {
         int shelfId = shelfRepository.createShelf(userId, title, description);
-        return shelfRepository.findShelfById(userId, shelfId);
+        Shelf shelf = shelfRepository.findShelfById(userId, shelfId);
+        return new ShelfDto(shelf.shelfId(),
+                shelf.userId(),
+                shelf.title(),
+                shelf.description(),
+                shelf.totalSavedBooks(),
+                null);
     }
 
     @Override
