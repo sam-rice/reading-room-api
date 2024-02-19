@@ -11,6 +11,6 @@ public record BookResultDto(
         Integer editionCount,
         List<BasicAuthor> authors,
         String coverUrl,
-        List<String> tags
+        List<String> subjects
 ) {
 }
