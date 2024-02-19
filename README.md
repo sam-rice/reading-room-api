@@ -70,7 +70,7 @@ Demo User:
 
 The [Open Library API](https://openlibrary.org/developers/api) refers to an author's individual works as "works," while treating individual editions of a work as "books." The current version of this application simply treats an author's individual works as "books" and does not expose data unique to any specific edition. As a result, the code for this project includes POJO interfaces for JSON deserialization that refer to works and books according to Open Library's semantics. This is important to keep in mind for understanding the source code of this project. For example, a JSON response from Open Library being recieved by this API may start as a "work," and once deserialized, be morphed into a "book" along with other data returned from a set of aggregated requests to Open Library.
 
-Any book saved to a user's shelf includes a `bookId` and `key` field. A `bookId` is unique to every saved book, while a `key` is used for integrating with Open Library, and is used for fetching a book's details via the [book details endpoint](#book-details). For example, a user could save several "copies" of one book—all of which have the same `key` field—that each have a unique `bookId`.
+Any book saved to a user's shelf includes a `bookId` and `libraryKey` field. A `bookId` is unique to every saved book, while a `libraryKey` is used for integrating with Open Library, and is used for fetching a book's details via the [book details endpoint](#book-details). For example, a user could save several "copies" of one book—all of which have the same `libraryKey` field—that each have a unique `bookId`.
 
 <br />
 
@@ -340,11 +340,11 @@ Any book saved to a user's shelf includes a `bookId` and `key` field. A `bookId`
   "bookId": [number],
   "shelfId": [number],
   "userId": [number],
-  "key": [string],
+  "libraryKey": [string],
   "title": [string],
   "authors": [{
       name: [string || null],
-      key: [string]
+      libraryKey: [string]
     },
     ...] || null,
   "coverUrl": [string || null],
@@ -380,11 +380,11 @@ Any book saved to a user's shelf includes a `bookId` and `key` field. A `bookId`
   "bookId": [number],
   "shelfId": [number],
   "userId": [number],
-  "key": [string],
+  "libraryKey": [string],
   "title": [string],
   "authors": [{
       name: [string || null],
-      key: [string]
+      libraryKey: [string]
     },
     ...] || null,
   "coverUrl": [string || null],
@@ -413,7 +413,7 @@ Any book saved to a user's shelf includes a `bookId` and `key` field. A `bookId`
       <td><code>POST</code></td>
       <td>
 <code>{
-  "key": [string],
+  "libraryKey": [string],
   "userNote": [string || null],
 }</code>
       </td>
@@ -422,11 +422,11 @@ Any book saved to a user's shelf includes a `bookId` and `key` field. A `bookId`
   "bookId": [number],
   "shelfId": [number],
   "userId": [number],
-  "key": [string],
+  "libraryKey": [string],
   "title": [string],
   "authors": [{
       name: [string || null],
-      key: [string]
+      libraryKey: [string]
     },
     ...] || null,
   "coverUrl": [string || null],
@@ -515,7 +515,7 @@ Note: query parameters in endpoints should replace whitespace with `%20`
       </td>
       <td>
 <code>[{
-  "key": [string],
+  "libraryKey": [string],
   "name": [string],
   "birthDate": [string || null],
   "deathDate": [string || null],
@@ -533,7 +533,7 @@ Note: query parameters in endpoints should replace whitespace with `%20`
 #### Author Details
 
 ```http
-  /search/authors/{authorKey}
+  /search/authors/{authorLibraryKey}
 ```
 <table>
   <tbody>
@@ -547,19 +547,19 @@ Note: query parameters in endpoints should replace whitespace with `%20`
       </td>
       <td>
 <code>{
-  "key": [string],
+  "libraryKey": [string],
   "name": [string],
   "bio": [string || null],
   "photoUrl": [string || null],
   "birthDate": [string || null],
   "deathDate": [string || null],
   "books": [{
-    "key": [string],
+    "libraryKey": [string],
     "title": [string],
     "publishDate": [string],
     "primaryAuthor": {
       "name": [string],
-      "key": [string]  
+      "libraryKey": [string]  
     },
     "byMultipleAuthors": [boolean],
     "coverUrl": [string || null],
@@ -593,17 +593,17 @@ Note: query parameters in endpoints should replace whitespace with `%20`
       </td>
       <td>
 <code>[{
-  "key": [string],
+  "libraryKey": [string],
   "title": [string],
   "publishYear": [number],
   "editionCount": [number],
   "authors": [{
       "name": [string],
-      "key": [string]
+      "libraryKey": [string]
     }, 
     ...] || null,
   "coverUrl": [string || null],
-  "tags": [string[] || null]
+  "subjects": [string[] || null]
 },
 ...]</code>
       </td>
@@ -616,7 +616,7 @@ Note: query parameters in endpoints should replace whitespace with `%20`
 #### Book Details
 
 ```http
-  /search/books/{bookKey}
+  /search/books/{bookLibraryKey}
 ```
 <table>
   <tbody>
@@ -630,17 +630,17 @@ Note: query parameters in endpoints should replace whitespace with `%20`
       </td>
       <td>
 <code>{
-  "key": [string],
+  "libraryKey": [string],
   "title": [string],
   "description": [string || null],
   "publishDate": [string || null],
   "authors": [{
       "name": [string],
-      "key": [string]
+      "libraryKey": [string]
     }, 
     ...] || null
   "coverUrl": [string || null],
-  "tags": [string[] || null]
+  "subjects": [string[] || null]
 }</code>
       </td>
     </tr>
