@@ -3,7 +3,7 @@ package com.samrice.readingroomapi.dtos;
 import java.util.List;
 
 public record AuthorResultDto(
-        String key,
+        String libraryKey,
         String name,
         String birthDate,
         String deathDate,

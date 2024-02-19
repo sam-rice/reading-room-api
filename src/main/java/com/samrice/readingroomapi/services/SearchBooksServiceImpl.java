@@ -29,12 +29,12 @@ public class SearchBooksServiceImpl implements SearchBooksService{
     }
 
     @Override
-    public BookDetailsDto getBook(String key) {
+    public BookDetailsDto getBook(String libraryKey) {
         try {
-            return getBookDetails(key);
+            return getBookDetails(libraryKey);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RrBadRequestException("Invalid book key.");
+            throw new RrBadRequestException("Invalid book libraryKey.");
         }
     }
 
@@ -54,8 +54,8 @@ public class SearchBooksServiceImpl implements SearchBooksService{
                     .toList()
                 : null;
         String coverUrl = pojo.cover_i() != null ? "https://covers.openlibrary.org/b/id/" + pojo.cover_i() + "-L.jpg" : null;
-        String formattedKey = OpenLibraryUtils.formatKey(pojo.key());
-        return new BookResultDto(formattedKey,
+        String formattedLibraryBookKey = OpenLibraryUtils.formatKey(pojo.key());
+        return new BookResultDto(formattedLibraryBookKey,
                 pojo.title(),
                 pojo.first_publish_year(),
                 pojo.edition_count(),
@@ -64,12 +64,12 @@ public class SearchBooksServiceImpl implements SearchBooksService{
                 pojo.subject());
     }
 
-    private BookDetailsDto getBookDetails(String key) throws JsonProcessingException {
-        String endpoint = OpenLibraryUtils.WORKS_BASE_URL + "/" + key + ".json";
+    private BookDetailsDto getBookDetails(String libraryKey) throws JsonProcessingException {
+        String endpoint = OpenLibraryUtils.WORKS_BASE_URL + "/" + libraryKey + ".json";
         BookDetailsPojo bookDetails = OpenLibraryUtils.getPojoFromEndpoint(endpoint, BookDetailsPojo.class);
         String coverUrl = OpenLibraryUtils.getPhotoUrl(bookDetails.covers());
         List<BasicAuthor> authors = OpenLibraryUtils.getBasicInfoForAllAuthors(bookDetails.authors());
-        return new BookDetailsDto(key,
+        return new BookDetailsDto(libraryKey,
                 bookDetails.title(),
                 bookDetails.description(),
                 bookDetails.first_publish_date(),

@@ -23,9 +23,9 @@ public class SearchAuthorsController {
         return new ResponseEntity<>(authors, HttpStatus.OK);
     }
 
-    @GetMapping("/{key}")
-    public ResponseEntity<AuthorDetailsDto> getAuthor(@PathVariable("key") String authorKey) {
-        AuthorDetailsDto author = searchAuthorsService.getAuthor(authorKey);
+    @GetMapping("/{libraryKey}")
+    public ResponseEntity<AuthorDetailsDto> getAuthor(@PathVariable("libraryKey") String libraryKey) {
+        AuthorDetailsDto author = searchAuthorsService.getAuthor(libraryKey);
         return new ResponseEntity<>(author, HttpStatus.OK);
     }
 }

@@ -30,12 +30,12 @@ public class SearchAuthorsServiceImpl implements SearchAuthorsService {
     }
 
     @Override
-    public AuthorDetailsDto getAuthor(String key) throws RrBadRequestException {
+    public AuthorDetailsDto getAuthor(String libraryKey) throws RrBadRequestException {
         try {
-            return getAuthorDetails(key);
+            return getAuthorDetails(libraryKey);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RrBadRequestException("Invalid author key.");
+            throw new RrBadRequestException("Invalid author libraryKey.");
         }
     }
 
@@ -57,16 +57,16 @@ public class SearchAuthorsServiceImpl implements SearchAuthorsService {
                 author.top_subjects());
     }
 
-    private AuthorDetailsDto getAuthorDetails(String key) throws JsonProcessingException {
-        String endpoint = OpenLibraryUtils.AUTHORS_BASE_URL + "/" + key + ".json";
+    private AuthorDetailsDto getAuthorDetails(String libraryKey) throws JsonProcessingException {
+        String endpoint = OpenLibraryUtils.AUTHORS_BASE_URL + "/" + libraryKey + ".json";
         AuthorDetailsPojo authorDetails = OpenLibraryUtils.getPojoFromEndpoint(endpoint, AuthorDetailsPojo.class);
         String photoUrl = OpenLibraryUtils.getPhotoUrl(authorDetails.photos());
         String bio = Optional.ofNullable(authorDetails.bio())
                 .map(value -> value instanceof String ? (String) value : ((Map<?, ?>) value).get("value").toString())
                 .orElse(null);
 
-        AuthorBooksResult result = getAuthorBooks(key, authorDetails.name());
-        return new AuthorDetailsDto(key,
+        AuthorBooksResult result = getAuthorBooks(libraryKey, authorDetails.name());
+        return new AuthorDetailsDto(libraryKey,
                 authorDetails.name(),
                 bio,
                 photoUrl,
@@ -75,22 +75,22 @@ public class SearchAuthorsServiceImpl implements SearchAuthorsService {
                 result.works());
     }
 
-    private AuthorBooksResult getAuthorBooks(String authorKey, String authorName) throws JsonProcessingException {
-        String endpoint = OpenLibraryUtils.AUTHORS_BASE_URL + "/" + authorKey + "/works.json?limit=1000";
+    private AuthorBooksResult getAuthorBooks(String libraryAuthorKey, String authorName) throws JsonProcessingException {
+        String endpoint = OpenLibraryUtils.AUTHORS_BASE_URL + "/" + libraryAuthorKey + "/works.json?limit=1000";
         AuthorWorksPojo works = OpenLibraryUtils.getPojoFromEndpoint(endpoint, AuthorWorksPojo.class);
         List<AuthorBookDto> booksList = works.entries()
                 .stream()
                 .filter(w -> w.first_publish_date() != null)
-                .map(w -> mapToAuthorBookDto(w, authorName, authorKey)).toList();
+                .map(w -> mapToAuthorBookDto(w, authorName, libraryAuthorKey)).toList();
         return new AuthorBooksResult(works.size(), booksList);
     }
 
-    private AuthorBookDto mapToAuthorBookDto(AuthorWorkPojo work, String authorName, String authorKey) {
-        String formattedKey = OpenLibraryUtils.formatKey(work.key());
+    private AuthorBookDto mapToAuthorBookDto(AuthorWorkPojo work, String authorName, String authorLibraryKey) {
+        String formattedLibraryBookKey = OpenLibraryUtils.formatKey(work.key());
         String coverUrl = OpenLibraryUtils.getPhotoUrl(work.covers());
-        BasicAuthor author = new BasicAuthor(authorName, authorKey);
+        BasicAuthor author = new BasicAuthor(authorName, authorLibraryKey);
         Boolean byMultipleAuthors = work.authors().size() > 1;
-        return new AuthorBookDto(formattedKey, work.title(), work.first_publish_date(), author, byMultipleAuthors, coverUrl, work.subjects());
+        return new AuthorBookDto(formattedLibraryBookKey, work.title(), work.first_publish_date(), author, byMultipleAuthors, coverUrl, work.subjects());
     }
 
     private record AuthorBooksResult(Integer workCount, List<AuthorBookDto> works){}

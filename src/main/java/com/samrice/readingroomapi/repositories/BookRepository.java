@@ -13,7 +13,7 @@ public interface BookRepository {
 
     Book findBookById(Integer userId, Integer shelfId, Integer bookId) throws RrResourceNotFoundException;
 
-    Integer createBook(Integer shelfId, Integer userId, String olKey, String title, List<BasicAuthor> authorsList, String coverUrl, String userNote) throws RrBadRequestException;
+    Integer createBook(Integer shelfId, Integer userId, String libraryKey, String title, List<BasicAuthor> authorsList, String coverUrl, String userNote) throws RrBadRequestException;
 
     void updateBook(Integer userId, Integer shelfId, Integer bookId, Book book) throws RrBadRequestException;
 

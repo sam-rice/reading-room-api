@@ -33,12 +33,12 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book addBook(Integer shelfId, Integer userId, String key, String userNote) throws RrBadRequestException {
+    public Book addBook(Integer shelfId, Integer userId, String libraryKey, String userNote) throws RrBadRequestException {
         try {
-            BookResult bookResult = getBookResult(key);
+            BookResult bookResult = getBookResult(libraryKey);
             int bookId = bookRepository.createBook(shelfId,
                     userId,
-                    key,
+                    libraryKey,
                     bookResult.bookTitle(),
                     bookResult.authorsList(),
                     bookResult.coverUrl(),
@@ -63,8 +63,8 @@ public class BookServiceImpl implements BookService {
     private record BookResult(String bookTitle, List<BasicAuthor> authorsList, String coverUrl) {
     }
 
-    private BookResult getBookResult(String key) throws JsonProcessingException {
-        String endpoint = OpenLibraryUtils.WORKS_BASE_URL + "/" + key + ".json";
+    private BookResult getBookResult(String libraryKey) throws JsonProcessingException {
+        String endpoint = OpenLibraryUtils.WORKS_BASE_URL + "/" + libraryKey + ".json";
         AuthorWorkPojo workResult = OpenLibraryUtils.getPojoFromEndpoint(endpoint, AuthorWorkPojo.class);
         String coverUrl = OpenLibraryUtils.getPhotoUrl(workResult.covers());
         List<BasicAuthor> authors = OpenLibraryUtils.getBasicInfoForAllAuthors(workResult.authors());

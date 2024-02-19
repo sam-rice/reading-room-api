@@ -22,7 +22,7 @@ import java.util.List;
 @Repository
 public class BookRepositoryImpl implements BookRepository {
 
-    private static final String SQL_CREATE_BOOK = "INSERT INTO rr_saved_books (book_id, shelf_id, user_id, ol_key, title, authors, cover_url, user_note, saved_date) VALUES(NEXTVAL('rr_saved_books_seq'), ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String SQL_CREATE_BOOK = "INSERT INTO rr_saved_books (book_id, shelf_id, user_id, library_key, title, authors, cover_url, user_note, saved_date) VALUES(NEXTVAL('rr_saved_books_seq'), ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String SQL_FIND_BOOK_BY_ID = "SELECT * FROM rr_saved_books WHERE user_id = ? AND shelf_id = ? AND book_id = ?";
     private static final String SQL_FIND_ALL_BOOKS_BY_SHELF_ID = "SELECT * from rr_saved_books WHERE user_id = ? AND shelf_id = ? ORDER BY book_id ASC";
     private static final String SQL_UPDATE_BOOK = "UPDATE rr_saved_books SET user_note = ? WHERE user_id = ? AND shelf_id = ? AND book_id = ?";
@@ -38,7 +38,7 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public Integer createBook(Integer shelfId,
                               Integer userId,
-                              String olKey,
+                              String libraryKey,
                               String title,
                               List<BasicAuthor> authorsList,
                               String coverUrl,
@@ -51,7 +51,7 @@ public class BookRepositoryImpl implements BookRepository {
                 PreparedStatement ps = connection.prepareStatement(SQL_CREATE_BOOK, Statement.RETURN_GENERATED_KEYS);
                 ps.setInt(1, shelfId);
                 ps.setInt(2, userId);
-                ps.setString(3, olKey);
+                ps.setString(3, libraryKey);
                 ps.setString(4, title);
                 ps.setObject(5, stringifiedAuthorList, java.sql.Types.OTHER);
                 ps.setString(6, coverUrl);
@@ -115,7 +115,7 @@ public class BookRepositoryImpl implements BookRepository {
             return new Book(rs.getInt("book_id"),
                     rs.getInt("shelf_id"),
                     rs.getInt("user_id"),
-                    rs.getString("ol_key"),
+                    rs.getString("library_key"),
                     rs.getString("title"),
                     authorsList,
                     rs.getString("cover_url"),
