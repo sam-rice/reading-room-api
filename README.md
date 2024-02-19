@@ -343,12 +343,12 @@ Any book saved to a user's shelf includes a `bookId` and `libraryKey` field. A `
   "libraryKey": [string],
   "title": [string],
   "authors": [{
-      name: [string || null],
+      name: [string | null],
       libraryKey: [string]
     },
-    ...] || null,
-  "coverUrl": [string || null],
-  "userNote": [string || null],
+    ...] | null,
+  "coverUrl": [string | null],
+  "userNote": [string | null],
   "savedDate": [number]
 },
 ...]</code>
@@ -383,12 +383,12 @@ Any book saved to a user's shelf includes a `bookId` and `libraryKey` field. A `
   "libraryKey": [string],
   "title": [string],
   "authors": [{
-      name: [string || null],
+      name: [string | null],
       libraryKey: [string]
     },
-    ...] || null,
-  "coverUrl": [string || null],
-  "userNote": [string || null],
+    ...] | null,
+  "coverUrl": [string | null],
+  "userNote": [string | null],
   "savedDate": [number]
 }</code>
       </td>
@@ -414,7 +414,7 @@ Any book saved to a user's shelf includes a `bookId` and `libraryKey` field. A `
       <td>
 <code>{
   "libraryKey": [string],
-  "userNote": [string || null],
+  "userNote": [string | null],
 }</code>
       </td>
       <td>
@@ -425,12 +425,12 @@ Any book saved to a user's shelf includes a `bookId` and `libraryKey` field. A `
   "libraryKey": [string],
   "title": [string],
   "authors": [{
-      name: [string || null],
+      name: [string | null],
       libraryKey: [string]
     },
-    ...] || null,
-  "coverUrl": [string || null],
-  "userNote": [string || null],
+    ...] | null,
+  "coverUrl": [string | null],
+  "userNote": [string | null],
   "savedDate": [number]
 }</code>
       </td>
@@ -456,7 +456,7 @@ Any book saved to a user's shelf includes a `bookId` and `libraryKey` field. A `
     <tr>
       <td><code>PUT</code></td>
       <td>
-<code>{ "userNote": [string || null] }</code>
+<code>{ "userNote": [string | null] }</code>
       </td>
       <td>
 <code>{ "success": true }</code>
@@ -517,10 +517,10 @@ Note: query parameters in endpoints should replace whitespace with `%20`
 <code>[{
   "libraryKey": [string],
   "name": [string],
-  "birthDate": [string || null],
-  "deathDate": [string || null],
-  "topBook": [string || null],
-  "topSubjects": [string[] || null]
+  "birthDate": [string | null],
+  "deathDate": [string | null],
+  "topBook": [string | null],
+  "topSubjects": [string[] | null]
 },
 ...]</code>
       </td>
@@ -549,10 +549,10 @@ Note: query parameters in endpoints should replace whitespace with `%20`
 <code>{
   "libraryKey": [string],
   "name": [string],
-  "bio": [string || null],
-  "photoUrl": [string || null],
-  "birthDate": [string || null],
-  "deathDate": [string || null],
+  "bio": [string | null],
+  "photoUrl": [string | null],
+  "birthDate": [string | null],
+  "deathDate": [string | null],
   "books": [{
     "libraryKey": [string],
     "title": [string],
@@ -562,10 +562,10 @@ Note: query parameters in endpoints should replace whitespace with `%20`
       "libraryKey": [string]  
     },
     "byMultipleAuthors": [boolean],
-    "coverUrl": [string || null],
-    "subjects": [string[] || null]
+    "coverUrl": [string | null],
+    "subjects": [string[] | null]
   },
-    ...] || null,
+    ...] | null,
 }</code>
       </td>
     </tr>
@@ -601,9 +601,9 @@ Note: query parameters in endpoints should replace whitespace with `%20`
       "name": [string],
       "libraryKey": [string]
     }, 
-    ...] || null,
-  "coverUrl": [string || null],
-  "subjects": [string[] || null]
+    ...] | null,
+  "coverUrl": [string | null],
+  "subjects": [string[] | null]
 },
 ...]</code>
       </td>
@@ -632,15 +632,15 @@ Note: query parameters in endpoints should replace whitespace with `%20`
 <code>{
   "libraryKey": [string],
   "title": [string],
-  "description": [string || null],
-  "publishDate": [string || null],
+  "description": [string | null],
+  "publishDate": [string | null],
   "authors": [{
       "name": [string],
       "libraryKey": [string]
     }, 
-    ...] || null
-  "coverUrl": [string || null],
-  "subjects": [string[] || null]
+    ...] | null
+  "coverUrl": [string | null],
+  "subjects": [string[] | null]
 }</code>
       </td>
     </tr>
