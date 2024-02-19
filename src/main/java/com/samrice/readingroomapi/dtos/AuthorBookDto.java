@@ -5,7 +5,7 @@ import com.samrice.readingroomapi.domains.BasicAuthor;
 import java.util.List;
 
 public record AuthorBookDto(
-        String key,
+        String libraryKey,
         String title,
         String publishDate,
         BasicAuthor primaryAuthor,

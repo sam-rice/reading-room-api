@@ -10,5 +10,5 @@ public interface SearchAuthorsService {
 
     List<AuthorResultDto> searchAuthors(String authorName) throws RrBadRequestException;
 
-    AuthorDetailsDto getAuthor(String authorKey) throws RrBadRequestException;
+    AuthorDetailsDto getAuthor(String libraryKey) throws RrBadRequestException;
 }

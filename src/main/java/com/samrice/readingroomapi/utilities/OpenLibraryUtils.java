@@ -41,15 +41,15 @@ public class OpenLibraryUtils {
         if (authorPojos != null && !authorPojos.isEmpty()) {
             for (BasicAuthorPojo authorPojo : authorPojos) {
                 try {
-                    String formattedKey = formatKey(authorPojo.author().get("key"));
-                    String endpoint = AUTHORS_BASE_URL + "/" + formattedKey + ".json";
+                    String formattedLibraryKey = formatKey(authorPojo.author().get("key"));
+                    String endpoint = AUTHORS_BASE_URL + "/" + formattedLibraryKey + ".json";
                     ResponseEntity<String> authorResponse = restTemplate.getForEntity(endpoint, String.class);
                     if (authorResponse.getStatusCode().is2xxSuccessful()) {
                         JsonNode root = Json.parse(authorResponse.getBody());
                         AuthorDetailsPojo author = Json.fromJson(root, AuthorDetailsPojo.class);
-                        authors.add(new BasicAuthor(author.name(), formattedKey));
+                        authors.add(new BasicAuthor(author.name(), formattedLibraryKey));
                     } else {
-                        authors.add(new BasicAuthor(null, formattedKey));
+                        authors.add(new BasicAuthor(null, formattedLibraryKey));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

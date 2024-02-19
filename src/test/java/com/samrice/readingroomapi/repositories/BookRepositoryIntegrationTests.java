@@ -28,7 +28,7 @@ public class BookRepositoryIntegrationTests {
 
     @Test
     public void testThatBookCanBeCreatedAndQueried() {
-        List<BasicAuthor> exampleAuthorList = Arrays.asList(new BasicAuthor("Author Name", "OL654321"));
+        List<BasicAuthor> exampleAuthorList = List.of(new BasicAuthor("Author Name", "OL654321"));
         Integer bookId = underTest.createBook(3,
                 2,
                 "OL123456",
@@ -41,7 +41,7 @@ public class BookRepositoryIntegrationTests {
         assertEquals(bookId, newBook.bookId());
         assertEquals(3, newBook.shelfId());
         assertEquals(2, newBook.userId());
-        assertEquals("OL123456", newBook.key());
+        assertEquals("OL123456", newBook.libraryKey());
         assertEquals("Book Title", newBook.title());
         assertEquals(exampleAuthorList, newBook.authors());
         assertEquals("https://www.example.com/cover-url.jpg", newBook.coverUrl());
@@ -63,13 +63,13 @@ public class BookRepositoryIntegrationTests {
 
     @Test
     public void testThatExistingBookCanBeQueried() {
-        List<BasicAuthor> authorList = Arrays.asList(new BasicAuthor("Sheila Kirk", "OL2732304A"));
+        List<BasicAuthor> authorList = List.of(new BasicAuthor("Sheila Kirk", "OL2732304A"));
         Book retrievedBook = underTest.findBookById(2, 3, 10_003);
 
         assertEquals(10_003, retrievedBook.bookId());
         assertEquals(3, retrievedBook.shelfId());
         assertEquals(2, retrievedBook.userId());
-        assertEquals("OL8208787W", retrievedBook.key());
+        assertEquals("OL8208787W", retrievedBook.libraryKey());
         assertEquals("Philip Webb: Pioneer of Arts & Crafts Architecture", retrievedBook.title());
         assertEquals(authorList, retrievedBook.authors());
         assertEquals("https://covers.openlibrary.org/b/id/300234-L.jpg", retrievedBook.coverUrl());
@@ -95,7 +95,7 @@ public class BookRepositoryIntegrationTests {
 
     @Test
     public void testThatBookCanBeUpdated() {
-        List<BasicAuthor> authorList = Arrays.asList(new BasicAuthor("Thom Gorst", "OL69317A"));
+        List<BasicAuthor> authorList = List.of(new BasicAuthor("Thom Gorst", "OL69317A"));
         Book updatedBook = new Book(10_005,
                 3,
                 2,
@@ -111,7 +111,7 @@ public class BookRepositoryIntegrationTests {
         assertEquals(10_005, retrievedBook.bookId());
         assertEquals(3, retrievedBook.shelfId());
         assertEquals(2, retrievedBook.userId());
-        assertEquals("OL820369W", retrievedBook.key());
+        assertEquals("OL820369W", retrievedBook.libraryKey());
         assertEquals("Bath", retrievedBook.title());
         assertEquals(authorList, retrievedBook.authors());
         assertEquals("https://covers.openlibrary.org/b/id/946298-L.jpg", retrievedBook.coverUrl());

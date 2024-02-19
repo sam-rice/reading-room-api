@@ -3,7 +3,7 @@ package com.samrice.readingroomapi.dtos;
 import java.util.List;
 
 public record AuthorDetailsDto(
-        String key,
+        String libraryKey,
         String name,
         String bio,
         String photoUrl,

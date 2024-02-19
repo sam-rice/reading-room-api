@@ -23,9 +23,9 @@ public class SearchBooksController {
         return new ResponseEntity<>(bookResults, HttpStatus.OK);
     }
 
-    @GetMapping("/{key}")
-    public ResponseEntity<BookDetailsDto> getBook(@PathVariable("key") String bookKey) {
-        BookDetailsDto book = searchBooksService.getBook(bookKey);
+    @GetMapping("/{libraryKey}")
+    public ResponseEntity<BookDetailsDto> getBook(@PathVariable("libraryKey") String libraryKey) {
+        BookDetailsDto book = searchBooksService.getBook(libraryKey);
         return new ResponseEntity<>(book, HttpStatus.OK);
     }
 }
