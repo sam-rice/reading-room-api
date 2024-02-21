@@ -12,6 +12,9 @@ import com.samrice.readingroomapi.utilities.OpenLibraryUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -43,7 +46,7 @@ public class SearchBooksServiceImpl implements SearchBooksService{
         BookSearchPojo results = OpenLibraryUtils.getPojoFromEndpoint(endpoint, BookSearchPojo.class);
         return results.docs()
                 .stream()
-                .filter(b -> b.first_publish_year() != null)
+                .filter(b -> b.first_publish_year() != null && b.author_key() != null)
                 .map(b -> mapToBookResultDto(b)).toList();
     }
 

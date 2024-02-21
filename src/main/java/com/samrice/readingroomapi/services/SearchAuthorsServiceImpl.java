@@ -44,7 +44,7 @@ public class SearchAuthorsServiceImpl implements SearchAuthorsService {
         AuthorSearchPojo results = OpenLibraryUtils.getPojoFromEndpoint(endpoint, AuthorSearchPojo.class);
         return results.docs()
                 .stream()
-                .filter(a -> a.work_count() != 0)
+                .filter(a -> a.work_count() != 0 && a.name().contains(" ") && a.top_work() != null)
                 .map(a -> mapToAuthorResultDto(a)).toList();
     }
 
