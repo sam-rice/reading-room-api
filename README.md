@@ -514,7 +514,7 @@ Note: query parameters in endpoints should replace whitespace with `%20`
   "name": string,
   "birthDate": string | null,
   "deathDate": string | null,
-  "topBook": string | null,
+  "topBook": string,
   "topSubjects": string[] | null
 }[]</code>
       </td>
