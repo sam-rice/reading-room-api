@@ -102,28 +102,28 @@ Any book saved to a user's shelf includes a `bookId` and `libraryKey` field. A `
       <td><code>POST</code></td>
       <td>
 <code>{
-  "firstName": [string],
-  "lastName": [string],
-  "email": [string],
-  "password": [string]
+  "firstName": string,
+  "lastName": string,
+  "email": string,
+  "password": string
 }</code>
       </td>
       <td>
 <code>{
   "userData": {
-    "firstName": [string],
-    "lastName": [string],
-    "userId": [number],
-    "email": [string]
+    "firstName": string,
+    "lastName": string,
+    "userId": number,
+    "email": string
   },
-  "token": [string]
+  "token": string
 }</code>
       </td>
     </tr>
   </tbody>
 </table>
 
-\* Note that correct email format is required.
+\* Correct email format required.
 
 <br />
 
@@ -142,19 +142,19 @@ Any book saved to a user's shelf includes a `bookId` and `libraryKey` field. A `
       <td><code>POST</code></td>
       <td>
 <code>{
-  "email": [string],
-  "password": [string]
+  "email": string,
+  "password": string
 }</code>
       </td>
       <td>
 <code>{
   "userData": {
-    "firstName": [string],
-    "lastName": [string],
-    "userId": [number],
-    "email": [string]
+    "firstName": string,
+    "lastName": string,
+    "userId": number,
+    "email": string
   },
-  "token": [string]
+  "token": string
 }</code>
       </td>
     </tr>
@@ -183,14 +183,13 @@ Any book saved to a user's shelf includes a `bookId` and `libraryKey` field. A `
         n/a
       </td>
       <td>
-<code>[{
-  "shelfId": [number],
-  "userId": [number],
-  "title": [string],
-  "description": [string],
-  "totalSavedBooks": [number]
-},
-...]</code>
+<code>{
+  "shelfId": number,
+  "userId": number,
+  "title": string,
+  "description": string,
+  "totalSavedBooks": number
+}[]</code>
       </td>
     </tr>
   </tbody>
@@ -216,11 +215,11 @@ Any book saved to a user's shelf includes a `bookId` and `libraryKey` field. A `
       </td>
       <td>
 <code>{
-  "shelfId": [number],
-  "userId": [number],
-  "title": [string],
-  "description": [string],
-  "totalSavedBooks": [number]
+  "shelfId": number,
+  "userId": number,
+  "title": string,
+  "description": string,
+  "totalSavedBooks": number
 }</code>
       </td>
     </tr>
@@ -244,17 +243,17 @@ Any book saved to a user's shelf includes a `bookId` and `libraryKey` field. A `
       <td><code>POST</code></td>
       <td>
 <code>{
-  "title": [string],
-  "description": [string]
+  "title": string,
+  "description": string
 }</code>
       </td>
       <td>
 <code>{
-  "shelfId": [number],
-  "userId": [number],
-  "title": [string],
-  "description": [string],
-  "totalSavedBooks": [number]
+  "shelfId": number,
+  "userId": number,
+  "title": string,
+  "description": string,
+  "totalSavedBooks": number
 }</code>
       </td>
     </tr>
@@ -278,12 +277,12 @@ Any book saved to a user's shelf includes a `bookId` and `libraryKey` field. A `
       <td><code>PUT</code></td>
       <td>
 <code>{
-  "title": [string],
-  "description": [string]
+  "title": string,
+  "description": string
 }</code>
       </td>
       <td>
-<code>{ "success": true }</code>
+<code>{ "success": boolean }</code>
       </td>
     </tr>
   </tbody>
@@ -308,7 +307,7 @@ Any book saved to a user's shelf includes a `bookId` and `libraryKey` field. A `
 <code>n/a</code>
       </td>
       <td>
-<code>{ "success": true }</code>
+<code>{ "success": boolean }</code>
       </td>
     </tr>
   </tbody>
@@ -336,22 +335,20 @@ Any book saved to a user's shelf includes a `bookId` and `libraryKey` field. A `
         n/a
       </td>
       <td>
-<code>[{
-  "bookId": [number],
-  "shelfId": [number],
-  "userId": [number],
-  "libraryKey": [string],
-  "title": [string],
-  "authors": [{
-      name: [string | null],
-      libraryKey: [string]
-    },
-    ...] | null,
-  "coverUrl": [string | null],
-  "userNote": [string | null],
-  "savedDate": [number]
-},
-...]</code>
+<code>{
+  "bookId": number,
+  "shelfId": number,
+  "userId": number,
+  "libraryKey": string,
+  "title": string,
+  "authors": {
+      name: string,
+      libraryKey: string
+    }[],
+  "coverUrl": string | null,
+  "userNote": string | null,
+  "savedDate": number
+}[]</code>
       </td>
     </tr>
   </tbody>
@@ -377,19 +374,18 @@ Any book saved to a user's shelf includes a `bookId` and `libraryKey` field. A `
       </td>
       <td>
 <code>{
-  "bookId": [number],
-  "shelfId": [number],
-  "userId": [number],
-  "libraryKey": [string],
-  "title": [string],
-  "authors": [{
-      name: [string | null],
-      libraryKey: [string]
-    },
-    ...] | null,
-  "coverUrl": [string | null],
-  "userNote": [string | null],
-  "savedDate": [number]
+  "bookId": number,
+  "shelfId": number,
+  "userId": number,
+  "libraryKey": string,
+  "title": string,
+  "authors": {
+      name: string,
+      libraryKey: string
+    }[],
+  "coverUrl": string | null,
+  "userNote": string | null,
+  "savedDate": number
 }</code>
       </td>
     </tr>
@@ -413,25 +409,24 @@ Any book saved to a user's shelf includes a `bookId` and `libraryKey` field. A `
       <td><code>POST</code></td>
       <td>
 <code>{
-  "libraryKey": [string],
-  "userNote": [string | null],
+  "libraryKey": string,
+  "userNote": string | null,
 }</code>
       </td>
       <td>
 <code>{
-  "bookId": [number],
-  "shelfId": [number],
-  "userId": [number],
-  "libraryKey": [string],
-  "title": [string],
-  "authors": [{
-      name: [string | null],
-      libraryKey: [string]
-    },
-    ...] | null,
-  "coverUrl": [string | null],
-  "userNote": [string | null],
-  "savedDate": [number]
+  "bookId": number,
+  "shelfId": number,
+  "userId": number,
+  "libraryKey": string,
+  "title": string,
+  "authors": {
+      name: string,
+      libraryKey: string
+    }[],
+  "coverUrl": string | null,
+  "userNote": string | null,
+  "savedDate": number
 }</code>
       </td>
     </tr>
@@ -456,10 +451,10 @@ Any book saved to a user's shelf includes a `bookId` and `libraryKey` field. A `
     <tr>
       <td><code>PUT</code></td>
       <td>
-<code>{ "userNote": [string | null] }</code>
+<code>{ "userNote": string | null }</code>
       </td>
       <td>
-<code>{ "success": true }</code>
+<code>{ "success": boolean }</code>
       </td>
     </tr>
   </tbody>
@@ -484,7 +479,7 @@ Any book saved to a user's shelf includes a `bookId` and `libraryKey` field. A `
 <code>n/a</code>
       </td>
       <td>
-<code>{ "success": true }</code>
+<code>{ "success": boolean }</code>
       </td>
     </tr>
   </tbody>
@@ -514,15 +509,14 @@ Note: query parameters in endpoints should replace whitespace with `%20`
 <code>n/a</code>
       </td>
       <td>
-<code>[{
-  "libraryKey": [string],
-  "name": [string],
-  "birthDate": [string | null],
-  "deathDate": [string | null],
-  "topBook": [string | null],
-  "topSubjects": [string[] | null]
-},
-...]</code>
+<code>{
+  "libraryKey": string,
+  "name": string,
+  "birthDate": string | null,
+  "deathDate": string | null,
+  "topBook": string | null,
+  "topSubjects": string[] | null
+}[]</code>
       </td>
     </tr>
   </tbody>
@@ -547,25 +541,24 @@ Note: query parameters in endpoints should replace whitespace with `%20`
       </td>
       <td>
 <code>{
-  "libraryKey": [string],
-  "name": [string],
-  "bio": [string | null],
-  "photoUrl": [string | null],
-  "birthDate": [string | null],
-  "deathDate": [string | null],
-  "books": [{
-    "libraryKey": [string],
-    "title": [string],
-    "publishDate": [string],
+  "libraryKey": string,
+  "name": string,
+  "bio": string | null,
+  "photoUrl": string | null,
+  "birthDate": string | null,
+  "deathDate": string | null,
+  "books": {
+    "libraryKey": string,
+    "title": string,
+    "publishDate": string,
     "primaryAuthor": {
-      "name": [string],
-      "libraryKey": [string]  
+      "name": string,
+      "libraryKey": string  
     },
-    "byMultipleAuthors": [boolean],
-    "coverUrl": [string | null],
-    "subjects": [string[] | null]
-  },
-    ...] | null,
+    "byMultipleAuthors": boolean,
+    "coverUrl": string | null,
+    "subjects": string[] | null
+  }[] | null,
 }</code>
       </td>
     </tr>
@@ -592,20 +585,18 @@ Note: query parameters in endpoints should replace whitespace with `%20`
 <code>n/a</code>
       </td>
       <td>
-<code>[{
-  "libraryKey": [string],
-  "title": [string],
-  "publishYear": [number],
-  "editionCount": [number],
-  "authors": [{
-      "name": [string],
-      "libraryKey": [string]
-    }, 
-    ...] | null,
-  "coverUrl": [string | null],
-  "subjects": [string[] | null]
-},
-...]</code>
+<code>{
+  "libraryKey": string,
+  "title": string,
+  "publishYear": number,
+  "editionCount": number,
+  "authors": {
+      "name": string,
+      "libraryKey": string
+    }[],
+  "coverUrl": string | null,
+  "subjects": string[] | null
+}[]</code>
       </td>
     </tr>
   </tbody>
@@ -630,17 +621,16 @@ Note: query parameters in endpoints should replace whitespace with `%20`
       </td>
       <td>
 <code>{
-  "libraryKey": [string],
-  "title": [string],
-  "description": [string | null],
-  "publishDate": [string | null],
-  "authors": [{
-      "name": [string],
-      "libraryKey": [string]
-    }, 
-    ...] | null
-  "coverUrl": [string | null],
-  "subjects": [string[] | null]
+  "libraryKey": string,
+  "title": string,
+  "description": string | null,
+  "publishDate": string | null,
+  "authors": {
+      "name": string,
+      "libraryKey": string
+    }[]
+  "coverUrl": string | null,
+  "subjects": string[] | null
 }</code>
       </td>
     </tr>
