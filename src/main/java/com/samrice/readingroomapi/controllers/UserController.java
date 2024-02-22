@@ -6,12 +6,10 @@ import com.samrice.readingroomapi.services.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -41,7 +39,9 @@ public class UserController {
         String password = (String) userMap.get("password");
         User user = userService.validateUser(email, password);
         Map<String, Object> responseMap = this.createResponseMap(user);
-        return new ResponseEntity<>(responseMap, HttpStatus.OK);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Set-Cookie", this.generateJWTToken(user));
+        return new ResponseEntity<>(responseMap, headers, HttpStatus.OK);
     }
 
     private String generateJWTToken(User user) {

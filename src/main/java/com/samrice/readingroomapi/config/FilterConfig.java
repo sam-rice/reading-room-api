@@ -20,17 +20,17 @@ public class FilterConfig {
         return registrationBean;
     }
 
-    @Bean
-    public FilterRegistrationBean<CorsFilter> corsFilterFilterRegistrationBean() {
-        FilterRegistrationBean<CorsFilter> registrationBean = new FilterRegistrationBean<>();
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOrigin("*");
-        config.addAllowedHeader("*");
-        source.registerCorsConfiguration("/**", config);
-        CorsFilter corsFilter = new CorsFilter(source);
-        registrationBean.setFilter(corsFilter);
-        registrationBean.setOrder(0);
-        return registrationBean;
-    }
+//    @Bean
+//    public FilterRegistrationBean<CorsFilter> corsFilterFilterRegistrationBean() {
+//        FilterRegistrationBean<CorsFilter> registrationBean = new FilterRegistrationBean<>();
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        CorsConfiguration config = new CorsConfiguration();
+//        config.addAllowedOrigin("*");
+//        config.addAllowedHeader("*");
+//        source.registerCorsConfiguration("/**", config);
+//        CorsFilter corsFilter = new CorsFilter(source);
+//        registrationBean.setFilter(corsFilter);
+//        registrationBean.setOrder(0);
+//        return registrationBean;
+//    }
 }
