@@ -50,7 +50,7 @@ Note that when running locally, the project is configured to seed all database t
 
 ### Usage Overview
 
-All [persistence endpoints](#persistence-endpoints) require a valid authentication token in the request header to recieve a successful response. To recieve an auth token, use the `/users/register` endpoint to "login" as a user. Auth tokens are valid for 2 hours. Proper header formatting shown below (note the space between "Bearer" and token):
+All persistence endpoints for [Shelves](#shelf-endpoints) and [Books](#book-endpoints) require a valid authentication token in the request header to recieve a successful response. To recieve an auth token cookie, use the `/users/login` endpoint to login as a user or create a new one using the `/users/register` endpoint ([User endpoints](#user-endpoints)). Auth tokens are valid for 2 hours. Proper header formatting shown below (note the space between "Bearer" and token):
 
 ```
 { "Authorization": "Bearer <Auth Token>" }
