@@ -59,6 +59,7 @@ public class UserController {
         Cookie cookie = new Cookie("token", token);
         cookie.setMaxAge((int) Constants.TOKEN_VALIDITY_DURATION_MS / 100);
         cookie.setHttpOnly(true);
+        cookie.setPath("/");
         cookie.setSecure(true);
         return cookie;
     }
