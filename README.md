@@ -96,7 +96,7 @@ Any book saved to a user's shelf includes a `bookId` and `libraryKey` field. A `
 <table>
   <tbody>
     <tr>
-      <td>Method</td><td>Request Body</td><td>Successful Response</td>
+      <td>Method</td><td>Request Body</td><td>Successful Response</td><td>Set-Cookie Header Value Example</td>
     </tr>
     <tr>
       <td><code>POST</code></td>
@@ -110,14 +110,13 @@ Any book saved to a user's shelf includes a `bookId` and `libraryKey` field. A `
       </td>
       <td>
 <code>{
-  "userData": {
-    "firstName": string,
-    "lastName": string,
-    "userId": number,
-    "email": string
-  },
-  "token": string
+  "firstName": string,
+  "lastName": string,
+  "email": string
 }</code>
+      </td>
+      <td>
+        "token=eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOj; Path=/; Expires=Sat, 01 Jan 72000 08:00:00 GMT; Secure; HttpOnly"
       </td>
     </tr>
   </tbody>
@@ -136,7 +135,7 @@ Any book saved to a user's shelf includes a `bookId` and `libraryKey` field. A `
 <table>
   <tbody>
     <tr>
-      <td>Method</td><td>Request Body</td><td>Successful Response</td>
+      <td>Method</td><td>Request Body</td><td>Successful Response</td><td>Set-Cookie Header Value Example</td>
     </tr>
     <tr>
       <td><code>POST</code></td>
@@ -148,14 +147,13 @@ Any book saved to a user's shelf includes a `bookId` and `libraryKey` field. A `
       </td>
       <td>
 <code>{
-  "userData": {
-    "firstName": string,
-    "lastName": string,
-    "userId": number,
-    "email": string
-  },
-  "token": string
+  "firstName": string,
+  "lastName": string,
+  "email": string
 }</code>
+      </td>
+      <td>
+        "token=eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOj; Path=/; Expires=Sat, 01 Jan 72000 08:00:00 GMT; Secure; HttpOnly"
       </td>
     </tr>
   </tbody>
