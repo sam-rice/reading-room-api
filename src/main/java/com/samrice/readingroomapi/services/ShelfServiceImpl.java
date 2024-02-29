@@ -2,6 +2,7 @@ package com.samrice.readingroomapi.services;
 
 import com.samrice.readingroomapi.domains.Book;
 import com.samrice.readingroomapi.domains.Shelf;
+import com.samrice.readingroomapi.dtos.ShelfDetailsDto;
 import com.samrice.readingroomapi.dtos.ShelfDto;
 import com.samrice.readingroomapi.exceptions.RrBadRequestException;
 import com.samrice.readingroomapi.exceptions.RrResourceNotFoundException;
@@ -27,7 +28,7 @@ public class ShelfServiceImpl implements ShelfService {
     public List<ShelfDto> fetchAllShelvesByUser(Integer userId) {
         List<Shelf> shelves = shelfRepository.findAllShelvesByUserId(userId);
         return shelves.stream().map(s -> {
-            Book firstSavedBook = bookRepository.findFirstSavedBookOnShelf(s.userId(), s.shelfId());
+            Book firstSavedBook = bookRepository.findFirstSavedBookWithCoverOnShelf(s.userId(), s.shelfId());
             return new ShelfDto(s.shelfId(),
                     s.userId(),
                     s.title(),
@@ -38,15 +39,17 @@ public class ShelfServiceImpl implements ShelfService {
     }
 
     @Override
-    public ShelfDto fetchShelfById(Integer userId, Integer shelfId) throws RrResourceNotFoundException {
+    public ShelfDetailsDto fetchShelfById(Integer userId, Integer shelfId) throws RrResourceNotFoundException {
         Shelf shelf = shelfRepository.findShelfById(userId, shelfId);
-        Book firstSavedBook = bookRepository.findFirstSavedBookOnShelf(userId, shelfId);
-        return new ShelfDto(shelf.shelfId(),
+        List<Book> books = bookRepository.findAllBooksByShelfId(userId, shelfId);
+        Book firstSavedBook = bookRepository.findFirstSavedBookWithCoverOnShelf(userId, shelfId);
+        return new ShelfDetailsDto(shelf.shelfId(),
                 shelf.userId(),
                 shelf.title(),
                 shelf.description(),
                 shelf.totalSavedBooks(),
-                firstSavedBook != null ? firstSavedBook.coverUrl() : null);
+                firstSavedBook != null ? firstSavedBook.coverUrl() : null,
+                books);
     }
 
     @Override

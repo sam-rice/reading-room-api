@@ -23,17 +23,12 @@ public class BookServiceImpl implements BookService {
     BookRepository bookRepository;
 
     @Override
-    public List<Book> fetchAllBooksByShelf(Integer userId, Integer shelfId) {
-        return bookRepository.findAllBooksByShelfId(userId, shelfId);
-    }
-
-    @Override
     public Book fetchBookById(Integer userId, Integer shelfId, Integer bookId) throws RrResourceNotFoundException {
         return bookRepository.findBookById(userId, shelfId, bookId);
     }
 
     @Override
-    public Book addBook(Integer shelfId, Integer userId, String libraryKey, String userNote) throws RrBadRequestException {
+    public Book addBook(Integer shelfId, Integer userId, String libraryKey) throws RrBadRequestException {
         try {
             BookResult bookResult = getBookResult(libraryKey);
             int bookId = bookRepository.createBook(shelfId,
@@ -42,7 +37,7 @@ public class BookServiceImpl implements BookService {
                     bookResult.bookTitle(),
                     bookResult.authorsList(),
                     bookResult.coverUrl(),
-                    userNote);
+                    "");
             return bookRepository.findBookById(userId, shelfId, bookId);
         } catch (Exception e) {
             e.printStackTrace();

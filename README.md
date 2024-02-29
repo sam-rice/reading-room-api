@@ -219,7 +219,21 @@ Any book saved to a user's shelf includes a `bookId` and `libraryKey` field. A `
   "userId": number,
   "title": string,
   "description": string,
-  "totalSavedBooks": number
+  "totalSavedBooks": number,
+  "books": {
+    "bookId": number,
+    "shelfId": number,
+    "userId": number,
+    "libraryKey": string,
+    "title": string,
+    "authors": {
+        name: string,
+        libraryKey: string
+      }[],
+    "coverUrl": string | null,
+    "userNote": string | null,
+    "savedDate": number
+  }[] | null
 }</code>
       </td>
     </tr>
@@ -319,43 +333,6 @@ Any book saved to a user's shelf includes a `bookId` and `libraryKey` field. A `
 
 ### `Book` Endpoints
 
-#### Get All Books From Shelf
-
-```http
-  /shelves/{shelfId}/books
-```
-<table>
-  <tbody>
-    <tr>
-      <td>Method</td><td>Request Body</td><td>Successful Response</td>
-    </tr>
-    <tr>
-      <td><code>GET</code></td>
-      <td>
-        n/a
-      </td>
-      <td>
-<code>{
-  "bookId": number,
-  "shelfId": number,
-  "userId": number,
-  "libraryKey": string,
-  "title": string,
-  "authors": {
-      name: string,
-      libraryKey: string
-    }[],
-  "coverUrl": string | null,
-  "userNote": string | null,
-  "savedDate": number
-}[]</code>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<br />
-
 #### Get Book by Id
 
 ```http
@@ -409,8 +386,7 @@ Any book saved to a user's shelf includes a `bookId` and `libraryKey` field. A `
       <td><code>POST</code></td>
       <td>
 <code>{
-  "libraryKey": string,
-  "userNote": string | null,
+  "libraryKey": string
 }</code>
       </td>
       <td>
@@ -630,7 +606,11 @@ Note: query parameters in endpoints should replace whitespace with `%20`
       "libraryKey": string
     }[]
   "coverUrl": string | null,
-  "subjects": string[] | null
+  "subjects": string[] | null,
+  "associatedShelves": {
+    "shelfId": number,
+    "title": string
+  }[]
 }</code>
       </td>
     </tr>

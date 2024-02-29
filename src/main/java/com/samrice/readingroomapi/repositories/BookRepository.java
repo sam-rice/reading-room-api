@@ -2,6 +2,7 @@ package com.samrice.readingroomapi.repositories;
 
 import com.samrice.readingroomapi.domains.BasicAuthor;
 import com.samrice.readingroomapi.domains.Book;
+import com.samrice.readingroomapi.dtos.AssociatedShelfDto;
 import com.samrice.readingroomapi.exceptions.RrBadRequestException;
 import com.samrice.readingroomapi.exceptions.RrResourceNotFoundException;
 
@@ -19,5 +20,7 @@ public interface BookRepository {
 
     void deleteBook(Integer userId, Integer shelfId, Integer bookId) throws RrResourceNotFoundException;
 
-    Book findFirstSavedBookOnShelf(Integer userId, Integer shelfId) throws RrResourceNotFoundException;
+    Book findFirstSavedBookWithCoverOnShelf(Integer userId, Integer shelfId) throws RrResourceNotFoundException;
+
+    List<AssociatedShelfDto> findAssociatedShelves(int userId, String libraryKey) throws RrResourceNotFoundException;
 }
