@@ -15,9 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -80,9 +77,10 @@ public class SearchBooksServiceImpl implements SearchBooksService{
         String coverUrl = OpenLibraryUtils.getPhotoUrl(bookDetails.covers());
         List<BasicAuthor> authors = OpenLibraryUtils.getBasicInfoForAllAuthors(bookDetails.authors());
         List<AssociatedShelfDto> associatedShelves = bookRepository.findAssociatedShelves(userId, libraryKey);
+        String description = bookDetails.description() != null ? bookDetails.description().get("value") : null;
         return new BookDetailsDto(libraryKey,
                 bookDetails.title(),
-                bookDetails.description(),
+                description,
                 bookDetails.first_publish_date(),
                 authors,
                 coverUrl,
