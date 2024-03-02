@@ -11,6 +11,8 @@ public record BookDetailsDto(
         String publishDate,
         List<BasicAuthor> authors,
         String coverUrl,
-        List<String> subjects
+        List<String> subjects,
+        List<AssociatedShelfDto> associatedShelves
 ) {
 }
+

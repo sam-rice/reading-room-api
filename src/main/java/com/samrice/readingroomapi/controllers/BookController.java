@@ -25,8 +25,7 @@ public class BookController {
                                         @RequestBody Map<String, Object> bookMap) {
         int userId = (Integer) request.getAttribute("userId");
         String libraryKey = (String) bookMap.get("libraryKey");
-        String userNote = (String) bookMap.get("userNote");
-        Book book = bookService.addBook(shelfId, userId, libraryKey, userNote);
+        Book book = bookService.addBook(shelfId, userId, libraryKey);
         return new ResponseEntity<>(book, HttpStatus.CREATED);
     }
 
@@ -37,14 +36,6 @@ public class BookController {
         int userId = (Integer) request.getAttribute("userId");
         Book book = bookService.fetchBookById(userId, shelfId, bookId);
         return new ResponseEntity<>(book, HttpStatus.OK);
-    }
-
-    @GetMapping("")
-    public ResponseEntity<List<Book>> getAllBooksFromShelf(HttpServletRequest request,
-                                                           @PathVariable("shelfId") Integer shelfId) {
-        int userId = (Integer) request.getAttribute("userId");
-        List<Book> books = bookService.fetchAllBooksByShelf(userId, shelfId);
-        return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
     @PutMapping("/{bookId}")

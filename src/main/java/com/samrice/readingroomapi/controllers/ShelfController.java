@@ -1,6 +1,7 @@
 package com.samrice.readingroomapi.controllers;
 
 import com.samrice.readingroomapi.domains.Shelf;
+import com.samrice.readingroomapi.dtos.ShelfDetailsDto;
 import com.samrice.readingroomapi.dtos.ShelfDto;
 import com.samrice.readingroomapi.services.ShelfService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,10 +29,10 @@ public class ShelfController {
     }
 
     @GetMapping("/{shelfId}")
-    public ResponseEntity<ShelfDto> getShelfById(HttpServletRequest request,
-                                              @PathVariable("shelfId") Integer shelfId) {
+    public ResponseEntity<ShelfDetailsDto> getShelfById(HttpServletRequest request,
+                                                        @PathVariable("shelfId") Integer shelfId) {
         int userId = (Integer) request.getAttribute("userId");
-        ShelfDto shelf = shelfService.fetchShelfById(userId, shelfId);
+        ShelfDetailsDto shelf = shelfService.fetchShelfById(userId, shelfId);
         return new ResponseEntity<>(shelf, HttpStatus.OK);
     }
 

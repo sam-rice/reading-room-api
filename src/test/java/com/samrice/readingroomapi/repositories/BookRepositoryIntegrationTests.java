@@ -2,6 +2,7 @@ package com.samrice.readingroomapi.repositories;
 
 import com.samrice.readingroomapi.domains.BasicAuthor;
 import com.samrice.readingroomapi.domains.Book;
+import com.samrice.readingroomapi.dtos.AssociatedShelfDto;
 import com.samrice.readingroomapi.exceptions.RrBadRequestException;
 import com.samrice.readingroomapi.exceptions.RrResourceNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -129,8 +131,22 @@ public class BookRepositoryIntegrationTests {
 
     @Test
     public void testThatFirstBookWithCoverUrlCanBeQueried() {
-        Book bookWithCover = underTest.findFirstSavedBookOnShelf(2, 4);
+        Book bookWithCover = underTest.findFirstSavedBookWithCoverOnShelf(2, 4);
         assertEquals(10_007, bookWithCover.bookId());
         assertEquals("https://covers.openlibrary.org/b/id/13344966-L.jpg", bookWithCover.coverUrl());
+
+        Book nonexistentBook = underTest.findFirstSavedBookWithCoverOnShelf(3, 6);
+        assertNull(nonexistentBook);
+    }
+
+    @Test
+    public void testThatAssociatedShelvesCanBeFoundForAnOpenLibraryWork() {
+        List<AssociatedShelfDto> shelves = underTest.findAssociatedShelves(2, "OL8208787W");
+        List<AssociatedShelfDto> expectedResult = Arrays.asList(new AssociatedShelfDto(3,
+                "English & Misc. Architecture"), new AssociatedShelfDto(5, "Books About Led Zeppelin"));
+        assertIterableEquals(shelves, expectedResult);
+
+        List<AssociatedShelfDto> emptyListOfShelves = underTest.findAssociatedShelves(2, "OL00000000");
+        assertIterableEquals(emptyListOfShelves, new ArrayList<>());
     }
 }

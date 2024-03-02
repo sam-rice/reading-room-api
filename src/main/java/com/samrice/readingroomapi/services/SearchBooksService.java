@@ -9,5 +9,5 @@ public interface SearchBooksService {
 
     List<BookResultDto> searchBooks(String query);
 
-    BookDetailsDto getBook(String libraryKey);
+    BookDetailsDto getBook(int userId, String libraryKey);
 }

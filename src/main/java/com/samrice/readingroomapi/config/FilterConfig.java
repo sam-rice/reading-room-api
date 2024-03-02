@@ -14,6 +14,7 @@ public class FilterConfig {
         AuthFilter authFilter = new AuthFilter();
         registrationBean.setFilter(authFilter);
         registrationBean.addUrlPatterns("/api/shelves/*");
+        registrationBean.addUrlPatterns("/api/search/*");
         return registrationBean;
     }
 }

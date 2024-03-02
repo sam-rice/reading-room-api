@@ -3,6 +3,7 @@ package com.samrice.readingroomapi.controllers;
 import com.samrice.readingroomapi.dtos.BookDetailsDto;
 import com.samrice.readingroomapi.dtos.BookResultDto;
 import com.samrice.readingroomapi.services.SearchBooksService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +25,10 @@ public class SearchBooksController {
     }
 
     @GetMapping("/{libraryKey}")
-    public ResponseEntity<BookDetailsDto> getBook(@PathVariable("libraryKey") String libraryKey) {
-        BookDetailsDto book = searchBooksService.getBook(libraryKey);
+    public ResponseEntity<BookDetailsDto> getBookDetails(HttpServletRequest request,
+                                                         @PathVariable("libraryKey") String libraryKey) {
+        int userId = (int) request.getAttribute("userId");
+        BookDetailsDto book = searchBooksService.getBook(userId, libraryKey);
         return new ResponseEntity<>(book, HttpStatus.OK);
     }
 }

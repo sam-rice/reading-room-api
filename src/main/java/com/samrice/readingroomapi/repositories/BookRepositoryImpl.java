@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.samrice.readingroomapi.domains.BasicAuthor;
 import com.samrice.readingroomapi.domains.Book;
+import com.samrice.readingroomapi.dtos.AssociatedShelfDto;
 import com.samrice.readingroomapi.exceptions.RrBadRequestException;
 import com.samrice.readingroomapi.exceptions.RrResourceNotFoundException;
 import com.samrice.readingroomapi.utilities.Json;
@@ -27,7 +28,9 @@ public class BookRepositoryImpl implements BookRepository {
     private static final String SQL_FIND_ALL_BOOKS_BY_SHELF_ID = "SELECT * from rr_saved_books WHERE user_id = ? AND shelf_id = ? ORDER BY book_id ASC";
     private static final String SQL_UPDATE_BOOK = "UPDATE rr_saved_books SET user_note = ? WHERE user_id = ? AND shelf_id = ? AND book_id = ?";
     private static final String SQL_DELETE_BOOK = "DELETE FROM rr_saved_books WHERE user_id = ? AND shelf_id = ? AND book_id = ?";
-    private static final String SQL_FIND_FIRST_SAVED_BOOK_ON_SHELF = "SELECT sb.* FROM rr_saved_books sb WHERE sb.user_id= ? AND sb.shelf_id = ? AND sb.cover_url IS NOT NULL ORDER BY sb.book_id LIMIT 1";
+    private static final String SQL_FIND_FIRST_SAVED_BOOK_ON_SHELF = "SELECT sb.* FROM rr_saved_books sb WHERE sb.user_id = ? AND sb.shelf_id = ? AND sb.cover_url IS NOT NULL ORDER BY sb.book_id LIMIT 1";
+    private static final String SQL_FIND_ASSOCIATED_SHELVES = "SELECT sb.shelf_id, s.title FROM rr_saved_books sb INNER JOIN rr_shelves s ON sb.shelf_id = s.shelf_id WHERE sb.user_id = ? AND sb.library_key = ?";
+
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -100,12 +103,24 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
-    public Book findFirstSavedBookOnShelf(Integer userId, Integer shelfId) throws RrResourceNotFoundException {
+    public Book findFirstSavedBookWithCoverOnShelf(Integer userId, Integer shelfId) throws RrResourceNotFoundException {
         List<Book> books = jdbcTemplate.query(SQL_FIND_FIRST_SAVED_BOOK_ON_SHELF,
                 new Object[]{userId, shelfId},
                 bookRowMapper);
         return books.isEmpty() ? null : books.get(0);
     }
+
+    @Override
+    public List<AssociatedShelfDto> findAssociatedShelves(int userId,
+                                                          String libraryKey) throws RrResourceNotFoundException {
+        return jdbcTemplate.query(SQL_FIND_ASSOCIATED_SHELVES,
+                new Object[]{userId, libraryKey},
+                associatedShelfRowMapper);
+    }
+
+    private RowMapper<AssociatedShelfDto> associatedShelfRowMapper = (rs, rowNum) -> {
+        return new AssociatedShelfDto(rs.getInt("shelf_id"), rs.getString("title"));
+    };
 
     private RowMapper<Book> bookRowMapper = (rs, rowNum) -> {
         try {

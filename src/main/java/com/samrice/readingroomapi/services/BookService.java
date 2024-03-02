@@ -8,11 +8,9 @@ import java.util.List;
 
 public interface BookService {
 
-    List<Book> fetchAllBooksByShelf(Integer userId, Integer shelfId);
-
     Book fetchBookById(Integer userId, Integer shelfId, Integer bookId) throws RrResourceNotFoundException;
 
-    Book addBook(Integer shelfId, Integer userId, String libraryKey, String userNote) throws RrBadRequestException;
+    Book addBook(Integer shelfId, Integer userId, String libraryKey) throws RrBadRequestException;
 
     void updateBook(Integer userId, Integer shelfId, Integer bookId, Book book) throws RrBadRequestException;
 
