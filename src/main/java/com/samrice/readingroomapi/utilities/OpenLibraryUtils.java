@@ -21,9 +21,13 @@ public class OpenLibraryUtils {
     private static final RestTemplate restTemplate = new RestTemplate();
 
     public static <T> T getPojoFromEndpoint(String endpoint, Class<T> pojo) throws JsonProcessingException {
-        ResponseEntity<String> response = restTemplate.getForEntity(endpoint, String.class);
-        JsonNode root = Json.parse(response.getBody());
+        JsonNode root = getRootFromEndpoint(endpoint);
         return Json.fromJson(root, pojo);
+    }
+
+    public static JsonNode getRootFromEndpoint(String endpoint) throws JsonProcessingException {
+        ResponseEntity<String> response = restTemplate.getForEntity(endpoint, String.class);
+        return Json.parse(response.getBody());
     }
 
     public static String formatKey(String key) {

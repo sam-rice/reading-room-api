@@ -1,15 +1,15 @@
 package com.samrice.readingroomapi.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.samrice.readingroomapi.domains.BasicAuthor;
 import com.samrice.readingroomapi.dtos.AssociatedShelfDto;
 import com.samrice.readingroomapi.dtos.BookDetailsDto;
 import com.samrice.readingroomapi.dtos.BookResultDto;
 import com.samrice.readingroomapi.exceptions.RrBadRequestException;
-import com.samrice.readingroomapi.pojos.openlibraryresponses.BookDetailsPojo;
-import com.samrice.readingroomapi.pojos.openlibraryresponses.BookResultPojo;
-import com.samrice.readingroomapi.pojos.openlibraryresponses.BookSearchPojo;
+import com.samrice.readingroomapi.pojos.openlibraryresponses.*;
 import com.samrice.readingroomapi.repositories.BookRepository;
+import com.samrice.readingroomapi.utilities.Json;
 import com.samrice.readingroomapi.utilities.OpenLibraryUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -73,18 +73,31 @@ public class SearchBooksServiceImpl implements SearchBooksService{
 
     private BookDetailsDto getBookDetails(int userId, String libraryKey) throws JsonProcessingException {
         String endpoint = OpenLibraryUtils.WORKS_BASE_URL + "/" + libraryKey + ".json";
-        BookDetailsPojo bookDetails = OpenLibraryUtils.getPojoFromEndpoint(endpoint, BookDetailsPojo.class);
-        String coverUrl = OpenLibraryUtils.getPhotoUrl(bookDetails.covers());
-        List<BasicAuthor> authors = OpenLibraryUtils.getBasicInfoForAllAuthors(bookDetails.authors());
-        List<AssociatedShelfDto> associatedShelves = bookRepository.findAssociatedShelves(userId, libraryKey);
-        String description = bookDetails.description() != null ? bookDetails.description().get("value") : null;
-        return new BookDetailsDto(libraryKey,
-                bookDetails.title(),
-                description,
-                bookDetails.first_publish_date(),
-                authors,
-                coverUrl,
-                bookDetails.subjects(),
-                associatedShelves);
-    }
+        JsonNode root = OpenLibraryUtils.getRootFromEndpoint(endpoint);
+        boolean hasNestedDescriptionField = root.toString().contains("\"description\":{\"type\"");
+        BookDetailsPojo bookDetails;
+        String description;
+
+        if (hasNestedDescriptionField) {
+            BookDetailsNestedDescriptionPojo pojo = Json.<BookDetailsNestedDescriptionPojo>fromJson(root, BookDetailsNestedDescriptionPojo.class);
+            description = pojo.getDescription() != null ? pojo.getDescription().get("value") : null;
+            bookDetails = pojo;
+        } else {
+            BookDetailsUnNestedDetailsPojo pojo = Json.<BookDetailsUnNestedDetailsPojo>fromJson(root, BookDetailsUnNestedDetailsPojo.class);
+            description = pojo.getDescription();
+            bookDetails = pojo;
+        }
+
+            String coverUrl = OpenLibraryUtils.getPhotoUrl(bookDetails.getCovers());
+            List<BasicAuthor> authors = OpenLibraryUtils.getBasicInfoForAllAuthors(bookDetails.getAuthors());
+            List<AssociatedShelfDto> associatedShelves = bookRepository.findAssociatedShelves(userId, libraryKey);
+            return new BookDetailsDto(libraryKey,
+                    bookDetails.getTitle(),
+                    description,
+                    bookDetails.getFirst_publish_date(),
+                    authors,
+                    coverUrl,
+                    bookDetails.getSubjects(),
+                    associatedShelves);
+        }
 }
