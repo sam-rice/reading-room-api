@@ -486,13 +486,18 @@ Note: query parameters in endpoints should replace whitespace with `%20`
       </td>
       <td>
 <code>{
-  "libraryKey": string,
-  "name": string,
-  "birthDate": string | null,
-  "deathDate": string | null,
-  "topBook": string | null,
-  "topSubjects": string[] | null
-}[]</code>
+  "totalResults": number,
+  "pageSize": number,
+  "pageNum": number,
+  "results": {
+    "libraryKey": string,
+    "name": string,
+    "birthDate": string | null,
+    "deathDate": string | null,
+    "topBook": string | null,
+    "topSubjects": string[] | null
+  }[]
+}</code>
       </td>
     </tr>
   </tbody>

@@ -47,8 +47,7 @@ public class SearchAuthorsServiceImpl implements SearchAuthorsService {
     }
 
     private AuthorResultsPageDto getAllAuthorResults(String query, int pageSize, int pageNum) throws JsonProcessingException {
-        int offset = pageSize * (pageNum - 1);
-        String endpoint = OpenLibraryUtils.SEARCH_BASE_URL + "/authors.json?q=" + query + "&fields=key,name,birth_date,death_date,top_work,work_count,top_subjects&limit=" + pageSize + "&offset=" + offset;
+        String endpoint = OpenLibraryUtils.SEARCH_BASE_URL + "/authors.json?q=" + query + "&fields=key,name,birth_date,death_date,top_work,work_count,top_subjects&limit=" + pageSize + "&page=" + pageNum;
         AuthorSearchPojo result = OpenLibraryUtils.getPojoFromEndpoint(endpoint, AuthorSearchPojo.class);
         List<AuthorResultDto> resultDtos = result.docs()
                 .stream()

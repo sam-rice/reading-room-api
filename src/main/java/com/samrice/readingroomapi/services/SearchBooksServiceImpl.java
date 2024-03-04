@@ -55,8 +55,7 @@ public class SearchBooksServiceImpl implements SearchBooksService {
     private BookResultsPageDto getPageOfBookResults(String query,
                                                     int pageSize,
                                                     int pageNum) throws JsonProcessingException {
-        int offset = pageSize * (pageNum - 1);
-        String endpoint = OpenLibraryUtils.SEARCH_BASE_URL + ".json?q=" + query + "&fields=key,title,edition_count,cover_i,first_publish_year,author_key,author_name,subject&limit=" + pageSize + "&offset=" + offset;
+        String endpoint = OpenLibraryUtils.SEARCH_BASE_URL + ".json?q=" + query + "&fields=key,title,edition_count,cover_i,first_publish_year,author_key,author_name,subject&limit=" + pageSize + "&page=" + pageNum;
         BookSearchPojo result = OpenLibraryUtils.getPojoFromEndpoint(endpoint, BookSearchPojo.class);
         List<BookResultDto> resultDtos = result.docs()
                 .stream()
