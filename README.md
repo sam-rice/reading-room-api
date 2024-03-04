@@ -500,9 +500,8 @@ Note: query parameters in endpoints should replace whitespace with `%20`
     "topSubjects": string[] | null
   }[]
 }</code>
-
       </td>
-    </tr>
+      </tr>
   </tbody>
 </table>
 
