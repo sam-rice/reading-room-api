@@ -474,7 +474,7 @@ Note: query parameters in endpoints should replace whitespace with `%20`
 #### Author Search by Name
 
 ```http
-  /search/authors?q={authorName}
+  /search/authors?q={authorName}&size={numberOfResultsPerPage}&page={pageNumber}
 ```
 <table>
   <tbody>
@@ -488,13 +488,19 @@ Note: query parameters in endpoints should replace whitespace with `%20`
       </td>
       <td>
 <code>{
-  "libraryKey": string,
-  "name": string,
-  "birthDate": string | null,
-  "deathDate": string | null,
-  "topBook": string,
-  "topSubjects": string[] | null
-}[]</code>
+  "totalResults": number,
+  "pageSize": number,
+  "pageNum": number,
+  "results": {
+    "libraryKey": string,
+    "name": string,
+    "birthDate": string | null,
+    "deathDate": string | null,
+    "topBook": string | null,
+    "topSubjects": string[] | null
+  }[]
+}</code>
+
       </td>
     </tr>
   </tbody>
@@ -550,7 +556,7 @@ Note: query parameters in endpoints should replace whitespace with `%20`
 #### Book Search by Title
 
 ```http
-  /search/books?q={bookTitle}
+  /search/books?q={bookTitle}&size={numberOfResultsPerPage}&page={pageNumber}
 ```
 <table>
   <tbody>
@@ -564,17 +570,22 @@ Note: query parameters in endpoints should replace whitespace with `%20`
       </td>
       <td>
 <code>{
-  "libraryKey": string,
-  "title": string,
-  "publishYear": number,
-  "editionCount": number,
-  "authors": {
-      "name": string,
-      "libraryKey": string
-    }[],
-  "coverUrl": string | null,
-  "subjects": string[] | null
-}[]</code>
+  "totalResults": number,
+  "pageSize": number,
+  "pageNum": number,
+  "results: {
+    "libraryKey": string,
+    "title": string,
+    "publishYear": number | null,
+    "editionCount": number,
+    "authors": {
+        "name": string,
+        "libraryKey": string
+      }[],
+    "coverUrl": string | null,
+    "subjects": string[] | null
+  }[]
+}</code>
       </td>
     </tr>
   </tbody>

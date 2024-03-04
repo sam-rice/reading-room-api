@@ -1,15 +1,13 @@
 package com.samrice.readingroomapi.controllers;
 
 import com.samrice.readingroomapi.dtos.BookDetailsDto;
-import com.samrice.readingroomapi.dtos.BookResultDto;
+import com.samrice.readingroomapi.dtos.BookResultsPageDto;
 import com.samrice.readingroomapi.services.SearchBooksService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/search/books")
@@ -19,8 +17,10 @@ public class SearchBooksController {
     SearchBooksService searchBooksService;
 
     @GetMapping("")
-    public ResponseEntity<List<BookResultDto>> searchBooks(@RequestParam(value = "q") String query) {
-        List<BookResultDto> bookResults = searchBooksService.searchBooks(query);
+    public ResponseEntity<BookResultsPageDto> searchBooks(@RequestParam(value = "q") String query,
+                                                          @RequestParam(value = "size") int pageSize,
+                                                          @RequestParam(value = "page") int pageNum) {
+        BookResultsPageDto bookResults = searchBooksService.searchBooks(query, pageSize, pageNum);
         return new ResponseEntity<>(bookResults, HttpStatus.OK);
     }
 
