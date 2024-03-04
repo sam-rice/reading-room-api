@@ -1,5 +1,9 @@
 # Reading Room API
 
+UI Repository: [Reading Room UI](https://github.com/sam-rice/reading-room-ui/) (in-progress)
+
+<br />
+
 <p>
   <img src="https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" />
   <img src="https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=spring&logoColor=white" />
@@ -50,7 +54,7 @@ Note that when running locally, the project is configured to seed all database t
 
 ### Usage Overview
 
-All [persistence endpoints](#persistence-endpoints) require a valid authentication token in the request header to recieve a successful response. To recieve an auth token, use the `/users/register` endpoint to "login" as a user. Auth tokens are valid for 2 hours. Proper header formatting shown below (note the space between "Bearer" and token):
+All persistence endpoints for [Shelves](#shelf-endpoints) and [Books](#book-endpoints) require a valid authentication token in the request header to recieve a successful response. To recieve an auth token cookie, use the `/users/login` endpoint to login as a user or create a new one using the `/users/register` endpoint ([User endpoints](#user-endpoints)). Auth tokens are valid for 2 hours. Proper header formatting shown below (note the space between "Bearer" and token):
 
 ```
 { "Authorization": "Bearer <Auth Token>" }
@@ -96,7 +100,7 @@ Any book saved to a user's shelf includes a `bookId` and `libraryKey` field. A `
 <table>
   <tbody>
     <tr>
-      <td>Method</td><td>Request Body</td><td>Successful Response</td>
+      <td>Method</td><td>Request Body</td><td>Successful Response</td><td>Set-Cookie Header Value Example</td>
     </tr>
     <tr>
       <td><code>POST</code></td>
@@ -110,14 +114,13 @@ Any book saved to a user's shelf includes a `bookId` and `libraryKey` field. A `
       </td>
       <td>
 <code>{
-  "userData": {
-    "firstName": string,
-    "lastName": string,
-    "userId": number,
-    "email": string
-  },
-  "token": string
+  "firstName": string,
+  "lastName": string,
+  "email": string
 }</code>
+      </td>
+      <td>
+        "token=eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOj; Path=/; Expires=Sat, 01 Jan 72000 08:00:00 GMT; Secure; HttpOnly"
       </td>
     </tr>
   </tbody>
@@ -136,7 +139,7 @@ Any book saved to a user's shelf includes a `bookId` and `libraryKey` field. A `
 <table>
   <tbody>
     <tr>
-      <td>Method</td><td>Request Body</td><td>Successful Response</td>
+      <td>Method</td><td>Request Body</td><td>Successful Response</td><td>Set-Cookie Header Value Example</td>
     </tr>
     <tr>
       <td><code>POST</code></td>
@@ -148,14 +151,13 @@ Any book saved to a user's shelf includes a `bookId` and `libraryKey` field. A `
       </td>
       <td>
 <code>{
-  "userData": {
-    "firstName": string,
-    "lastName": string,
-    "userId": number,
-    "email": string
-  },
-  "token": string
+  "firstName": string,
+  "lastName": string,
+  "email": string
 }</code>
+      </td>
+      <td>
+        "token=eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOj; Path=/; Expires=Sat, 01 Jan 72000 08:00:00 GMT; Secure; HttpOnly"
       </td>
     </tr>
   </tbody>
@@ -472,7 +474,7 @@ Note: query parameters in endpoints should replace whitespace with `%20`
 #### Author Search by Name
 
 ```http
-  /search/authors?q={authorName}
+  /search/authors?q={authorName}&size={numberOfResultsPerPage}&page={pageNumber}
 ```
 <table>
   <tbody>
@@ -498,6 +500,7 @@ Note: query parameters in endpoints should replace whitespace with `%20`
     "topSubjects": string[] | null
   }[]
 }</code>
+
       </td>
     </tr>
   </tbody>
@@ -553,7 +556,7 @@ Note: query parameters in endpoints should replace whitespace with `%20`
 #### Book Search by Title
 
 ```http
-  /search/books?q={bookTitle}&limit={numberOfResults}&page={pageNumber}
+  /search/books?q={bookTitle}&size={numberOfResultsPerPage}&page={pageNumber}
 ```
 <table>
   <tbody>
