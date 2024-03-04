@@ -1,13 +1,14 @@
 package com.samrice.readingroomapi.services;
 
 import com.samrice.readingroomapi.dtos.BookDetailsDto;
-import com.samrice.readingroomapi.dtos.BookResultDto;
+import com.samrice.readingroomapi.dtos.BookResultsPageDto;
+import com.samrice.readingroomapi.exceptions.RrBadRequestException;
 
 import java.util.List;
 
 public interface SearchBooksService {
 
-    List<BookResultDto> searchBooks(String query);
+    BookResultsPageDto searchBooks(String query, int pageSize, int pageNum) throws RrBadRequestException;
 
-    BookDetailsDto getBook(int userId, String libraryKey);
+    BookDetailsDto getBook(int userId, String libraryKey) throws RrBadRequestException;
 }

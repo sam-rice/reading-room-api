@@ -548,7 +548,7 @@ Note: query parameters in endpoints should replace whitespace with `%20`
 #### Book Search by Title
 
 ```http
-  /search/books?q={bookTitle}
+  /search/books?q={bookTitle}&limit={numberOfResults}&page={pageNumber}
 ```
 <table>
   <tbody>
@@ -562,17 +562,22 @@ Note: query parameters in endpoints should replace whitespace with `%20`
       </td>
       <td>
 <code>{
-  "libraryKey": string,
-  "title": string,
-  "publishYear": number,
-  "editionCount": number,
-  "authors": {
-      "name": string,
-      "libraryKey": string
-    }[],
-  "coverUrl": string | null,
-  "subjects": string[] | null
-}[]</code>
+  "totalResults": number,
+  "pageSize": number,
+  "pageNum": number,
+  "results: {
+    "libraryKey": string,
+    "title": string,
+    "publishYear": number | null,
+    "editionCount": number,
+    "authors": {
+        "name": string,
+        "libraryKey": string
+      }[],
+    "coverUrl": string | null,
+    "subjects": string[] | null
+  }[]
+}</code>
       </td>
     </tr>
   </tbody>

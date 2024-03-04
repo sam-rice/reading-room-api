@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.samrice.readingroomapi.domains.BasicAuthor;
 import com.samrice.readingroomapi.dtos.AuthorDetailsDto;
 import com.samrice.readingroomapi.dtos.AuthorBookDto;
+import com.samrice.readingroomapi.dtos.AuthorResultsPageDto;
 import com.samrice.readingroomapi.exceptions.RrBadRequestException;
 import com.samrice.readingroomapi.dtos.AuthorResultDto;
 import com.samrice.readingroomapi.pojos.openlibraryresponses.*;
@@ -20,9 +21,15 @@ import java.util.Optional;
 public class SearchAuthorsServiceImpl implements SearchAuthorsService {
 
     @Override
-    public List<AuthorResultDto> searchAuthors(String query) throws RrBadRequestException {
+    public AuthorResultsPageDto searchAuthors(String query, int pageSize, int pageNum) throws RrBadRequestException {
         try {
-            return getAllAuthorResults(query);
+            AuthorResultsPageDto resultsPage = getAllAuthorResults(query, pageSize, pageNum);
+            int lastPageNum = (int) Math.ceil((float) resultsPage.totalResults() / resultsPage.pageSize());
+            if (pageNum > lastPageNum && pageNum != 1) {
+                throw new RrBadRequestException("Page number out of bounds.");
+            } else {
+                return resultsPage;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             throw new RrBadRequestException("Something went wrong. Failed to query authors.");
@@ -39,13 +46,16 @@ public class SearchAuthorsServiceImpl implements SearchAuthorsService {
         }
     }
 
-    private List<AuthorResultDto> getAllAuthorResults(String query) throws JsonProcessingException {
-        String endpoint = OpenLibraryUtils.SEARCH_BASE_URL + "/authors.json?q=" + query;
-        AuthorSearchPojo results = OpenLibraryUtils.getPojoFromEndpoint(endpoint, AuthorSearchPojo.class);
-        return results.docs()
+    private AuthorResultsPageDto getAllAuthorResults(String query, int pageSize, int pageNum) throws JsonProcessingException {
+        int offset = pageSize * (pageNum - 1);
+        String endpoint = OpenLibraryUtils.SEARCH_BASE_URL + "/authors.json?q=" + query + "&fields=key,name,birth_date,death_date,top_work,work_count,top_subjects&limit=" + pageSize + "&offset=" + offset;
+        AuthorSearchPojo result = OpenLibraryUtils.getPojoFromEndpoint(endpoint, AuthorSearchPojo.class);
+        List<AuthorResultDto> resultDtos = result.docs()
                 .stream()
-                .filter(a -> a.work_count() != 0 && a.name().contains(" ") && a.top_work() != null)
                 .map(a -> mapToAuthorResultDto(a)).toList();
+
+        return new AuthorResultsPageDto(result.numFound(), pageSize, pageNum, resultDtos);
+//                .filter(a -> a.work_count() != 0 && a.name().contains(" ") && a.top_work() != null)
     }
 
     private AuthorResultDto mapToAuthorResultDto(AuthorResultPojo author) {
@@ -75,7 +85,8 @@ public class SearchAuthorsServiceImpl implements SearchAuthorsService {
                 result.works());
     }
 
-    private AuthorBooksResult getAuthorBooks(String libraryAuthorKey, String authorName) throws JsonProcessingException {
+    private AuthorBooksResult getAuthorBooks(String libraryAuthorKey,
+                                             String authorName) throws JsonProcessingException {
         String endpoint = OpenLibraryUtils.AUTHORS_BASE_URL + "/" + libraryAuthorKey + "/works.json?limit=1000";
         AuthorWorksPojo works = OpenLibraryUtils.getPojoFromEndpoint(endpoint, AuthorWorksPojo.class);
         List<AuthorBookDto> booksList = works.entries()
@@ -90,8 +101,15 @@ public class SearchAuthorsServiceImpl implements SearchAuthorsService {
         String coverUrl = OpenLibraryUtils.getPhotoUrl(work.covers());
         BasicAuthor author = new BasicAuthor(authorName, authorLibraryKey);
         Boolean byMultipleAuthors = work.authors().size() > 1;
-        return new AuthorBookDto(formattedLibraryBookKey, work.title(), work.first_publish_date(), author, byMultipleAuthors, coverUrl, work.subjects());
+        return new AuthorBookDto(formattedLibraryBookKey,
+                work.title(),
+                work.first_publish_date(),
+                author,
+                byMultipleAuthors,
+                coverUrl,
+                work.subjects());
     }
 
-    private record AuthorBooksResult(Integer workCount, List<AuthorBookDto> works){}
+    private record AuthorBooksResult(Integer workCount, List<AuthorBookDto> works) {
+    }
 }
