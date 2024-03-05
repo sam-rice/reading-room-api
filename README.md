@@ -4,7 +4,7 @@
 
 <br />
 
-This is the home of the Reading Room API, a full-stack personal project still in development. 
+This is the home of the Reading Room API, the back-end service of a full-stack personal project still in development. 
 
 Repository for the project's React/Next.JS UI [can be found here](https://github.com/sam-rice/reading-room-ui/).
 
@@ -85,13 +85,9 @@ All endpoints besides "User" endpoints (user log in and register) require a vali
 
 To get started, login as an existing demo user or register a new user.
 
-Demo User:
-```
-{
-  "email": "jimmy@mail.com",
-  "password": "guitar"
-}
-```
+#### Demo User:
+<code>email: `jimmy@mail.com`
+password: `guitar`</code>
 
 ### A Note on Semantics
 
