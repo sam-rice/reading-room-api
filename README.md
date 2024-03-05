@@ -1,20 +1,43 @@
 # Reading Room API
 
-UI Repository: [Reading Room UI](https://github.com/sam-rice/reading-room-ui/) (in-progress)
+**[Deployed Site](https://reading-room-ui.vercel.app/)**
 
 <br />
 
-<p>
+This is the home of the Reading Room API, a full-stack personal project still in development. 
+
+Repository for the project's React/Next.JS UI [can be found here](https://github.com/sam-rice/reading-room-ui/).
+
+<br />
+
+#### Back End
+
+<p align="left">
   <img src="https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" />
   <img src="https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=spring&logoColor=white" />
   <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" />
-  <img src="https://img.shields.io/badge/Docker-%23039BE5.svg?&style=for-the-badge&logo=Docker&logoColor=white" />
+  <img src="https://img.shields.io/badge/JUnit-ED8B00?style=for-the-badge&logoColor=white" />
   <img src="https://img.shields.io/badge/Heroku-430098?style=for-the-badge&logo=heroku&logoColor=white" />
 </p>
 
-Reading Room is a REST API for a book cataloging application built with Java/Spring Boot, Docker, and PostgreSQL. Individual users can be registered—and once authenticated—create, modify, or delete "shelves" from their virtual library. Books can be added and removed from a user's shelf, and can be browsed through via the app's [Library Search endpoints](#library-search-endpoints). The API leverages the [Open Library API](https://openlibrary.org/developers/api) for all book and author data.
+#### [Front End](https://github.com/sam-rice/reading-room-ui/)
 
-The API is deployed via Heroku and configured with unrestricted access for demoing purposes. See [API Reference](#api-reference) below for demoing the API with Postman. Instructions for registering/authenticating users via JSON Web Token, creating/updating/deleting shelves and books, and querying data are also outlined below, in addition to [project setup instructions](#local-setup-instructions) for running the application locally. 
+<p align="left">
+  <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" />
+  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
+  <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" />
+  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" />
+  <img src="https://img.shields.io/badge/prettier-1A2C34?style=for-the-badge&logo=prettier&logoColor=F7BA3E" />
+  <img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white" />
+  <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" />
+</p>
+
+## Abstract
+
+Reading Room is a full-stack web application that allows users to browse and catalogue a virtual library of books. New users can be registered, authenticated, and create custom "shelves"—individual collections of books. Books with corresponding user notes can then be edited or added/removed from each shelf. Within the "browse" section of the app, users can search for new books by title or author name. The app's target users are modern book-lovers who need an instant, mobile way to search for new books and keep track of thier book collections.
+
+The REST API is built with Java/Spring Boot, Docker, and PostgreSQL, and leverages the [Open Library API](https://openlibrary.org/developers/api) for all book and author data. The service is deployed via Heroku and configured with unrestricted access for demoing purposes. See [API Reference](#api-reference) below for demoing the API with Postman. Instructions for registering/authenticating users via JSON Web Token, creating/updating/deleting shelves and books, and querying data are also outlined below, in addition to [project setup instructions](#local-setup-instructions) for running the application locally. 
 
 The project also includes a JUnit integration test suite for all repository classes, which leverages an H2 in-memory database.
 
@@ -54,7 +77,7 @@ Note that when running locally, the project is configured to seed all database t
 
 ### Usage Overview
 
-All persistence endpoints for [Shelves](#shelf-endpoints) and [Books](#book-endpoints) require a valid authentication token in the request header to recieve a successful response. To recieve an auth token cookie, use the `/users/login` endpoint to login as a user or create a new one using the `/users/register` endpoint ([User endpoints](#user-endpoints)). Auth tokens are valid for 2 hours. Proper header formatting shown below (note the space between "Bearer" and token):
+All endpoints besides "User" endpoints (user log in and register) require a valid authentication token in the request header to recieve a successful response. To recieve an auth token cookie, use the `/users/login` endpoint to log in as an existing user or create a new one using the `/users/register` endpoint ([User endpoints](#user-endpoints)). Auth tokens are valid for 2 hours. Proper header formatting shown below (note the space between "Bearer" and token):
 
 ```
 { "Authorization": "Bearer <Auth Token>" }
@@ -130,7 +153,7 @@ Any book saved to a user's shelf includes a `bookId` and `libraryKey` field. A `
 
 <br />
 
-#### Login Existing User
+#### Log In Existing User
 
 ```http
   /users/login
