@@ -4,7 +4,7 @@
 
 <br />
 
-This is the home of the Reading Room API, the back-end service of a full-stack personal project still in development. 
+This is the home of the Reading Room API, the back-end service of a full-stack personal project. 
 
 Repository for the project's React/Next.JS UI [can be found here](https://github.com/sam-rice/reading-room-ui/).
 
