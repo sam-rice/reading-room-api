@@ -45,6 +45,7 @@ The project also includes a JUnit integration test suite for all repository clas
 
 ## Table of Contents
 
+- [Project Diagrams](#project-architecture-diagram)
 - [Local Setup Instructions](#local-setup-instructions)
 - [API Reference](#api-reference)
   - [Usage Overview](#usage-overview)
@@ -59,6 +60,12 @@ The project also includes a JUnit integration test suite for all repository clas
     - [Book Details](#book-details)
 
 <br />
+
+## Project Architecture Diagram
+![RR High-Level Architecture Diagram](https://github.com/sam-rice/reading-room-ui/assets/108169988/afb39bba-cba9-4bc4-8f72-28899ade4688)
+
+## Entity Relationship Diagram
+![RR Entity Relationship Diagram copy](https://github.com/sam-rice/reading-room-ui/assets/108169988/27235b4b-4dc7-4b8d-bc1f-48e6457a9f39)
 
 ## Local Setup Instructions
 
